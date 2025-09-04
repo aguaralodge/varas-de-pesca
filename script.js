@@ -26,18 +26,25 @@ gateBtn?.addEventListener('click', ()=>{
 
 // === GALERÍA SIN DESCRIPCIONES ===
 const galleryItems = [
-  'assets/images/foto_01.svg',
-  'assets/images/foto_02.svg',
-  'assets/images/foto_03.svg',
-  'assets/images/foto_04.svg',
-  'assets/images/foto_05.svg',
-  'assets/images/foto_06.svg',
-  'assets/images/foto_07.svg',
-  'assets/images/foto_08.svg',
-  'assets/images/foto_09.svg',
-  'assets/images/foto_10.svg',
-  'assets/images/foto_11.svg',
-  'assets/images/foto_12.svg',
+  
+  'assets/images/FOTO1.JPEG',
+  'assets/images/FOTO2.JPEG',
+  'assets/images/FOTO3.JPEG',
+  'assets/images/FOTO4.JPEG',
+  'assets/images/FOTO5.JPEG',
+  'assets/images/FOTO6.JPEG',
+  'assets/images/FOTO7.JPEG',
+  'assets/images/FOTO8.JPEG',
+  'assets/images/FOTO9.JPEG',
+  'assets/images/FOTO10.JPEG',
+  'assets/images/FOTO11.JPEG',
+  'assets/images/FOTO12.JPEG',
+  'assets/images/FOTO13.JPEG',
+  'assets/images/FOTO14.JPEG',
+  'assets/images/FOTO15.JPEG',
+  'assets/images/FOTO16.JPEG',
+  'assets/images/FOTO17.JPEG',
+  'assets/images/FOTO18.JPEG',
 ];
 
 const grid = document.getElementById('galleryGrid');
