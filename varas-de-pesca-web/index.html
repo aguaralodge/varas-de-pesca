@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Emiliano Lorenzini - Varas de Pesca</title>
+  <meta name="description" content="Armado y reparación de cañas de pesca en Reconquista, Santa Fe. Personalizá tu vara con Emiliano Lorenzini." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="whatsapp-fab" href="https://wa.me/5493482632269?text=Hola%20Emiliano%2C%20vengo%20de%20tu%20web%20y%20quiero%20hacer%20una%20consulta." target="_blank" rel="noopener" aria-label="Escribime por WhatsApp">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M19.11 17.05c-.27-.14-1.6-.8-1.85-.9-.25-.09-.43-.14-.61.14-.18.27-.7.9-.86 1.08-.16.18-.32.2-.59.07-.27-.14-1.12-.41-2.13-1.31-.79-.7-1.32-1.57-1.47-1.84-.16-.27-.02-.42.12-.56.12-.12.27-.32.4-.48.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.14-.61-1.47-.84-2.01-.22-.54-.45-.46-.61-.46-.16 0-.34-.02-.52-.02-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.29 0 1.35.98 2.65 1.12 2.83.14.18 1.94 2.96 4.69 4.15.65.28 1.16.45 1.56.58.65.2 1.24.17 1.71.1.52-.08 1.6-.65 1.83-1.28.23-.63.23-1.17.16-1.28-.07-.11-.25-.18-.52-.32zM16 3C8.82 3 3 8.82 3 16c0 2.3.62 4.47 1.7 6.35L3 29l6.79-1.78C11.58 28.4 13.71 29 16 29c7.18 0 13-5.82 13-13S23.18 3 16 3zm0 23.6c-2.1 0-4.05-.62-5.68-1.68l-.41-.26-4.02 1.06 1.07-3.92-.27-.41C5.62 19.74 5 17.8 5 15.71 5 9.93 9.93 5 15.71 5 18.5 5 21 6.1 22.85 7.95 24.7 9.8 25.8 12.3 25.8 15.1 25.8 20.87 20.87 26.6 16 26.6z"/></svg>
+  </a>
+
+  <header class="site-header">
+    <div class="container header-grid">
+      <div class="brand">
+        <div class="logo">🎣</div>
+        <div>
+          <h1>Emiliano Lorenzini</h1>
+          <p class="subtitle">Varas de Pesca</p>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="#inicio">Inicio</a>
+        <a href="#galeria">Galería</a>
+        <a href="#config">Configurar mi caña</a>
+        <a class="cta" href="https://wa.me/5493482632269?text=Hola%20Emiliano%2C%20vengo%20de%20tu%20web%20y%20quiero%20hacer%20una%20consulta." target="_blank" rel="noopener">WhatsApp</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="inicio">
+    <section class="hero container">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <h2>Armado y reparación de cañas, a tu estilo</h2>
+          <p>Desde Reconquista, Santa Fe, diseño, armo y reparo varas para que disfrutes cada lance. Materiales de calidad, terminaciones prolijas y asesoramiento honesto.</p>
+          <div class="hero-actions">
+            <a href="#config" class="btn-primary">Configurar mi caña</a>
+            <a class="btn-ghost" href="#galeria">Ver trabajos</a>
+          </div>
+        </div>
+        <div class="hero-card">
+          <img src="assets/images/foto_01.svg" alt="Detalle de atado de pasahilo" loading="eager" />
+        </div>
+      </div>
+    </section>
+
+    <section id="galeria" class="gallery-section">
+      <div class="container">
+        <h3>Galería</h3>
+        <p class="section-lead">Un vistazo a mis trabajos recientes. Hacé clic para ampliar.</p>
+        <div class="gallery-grid" id="galleryGrid">
+          <!-- Items generados por script.js -->
+        </div>
+      </div>
+    </section>
+
+    <section id="config" class="config-section">
+      <div class="container config-grid">
+        <div>
+          <h3>Configurar mi caña</h3>
+          <p>Completá este formulario y te respondo por WhatsApp con una cotización orientativa.</p>
+          <form id="configForm">
+            <div class="field">
+              <label for="tipo">Tipo de pesca</label>
+              <select id="tipo" required>
+                <option value="">Elegí una opción</option>
+                <option>Pejerrey</option>
+                <option>Spinning</option>
+                <option>Baitcasting</option>
+                <option>Variada de río</option>
+                <option>Costa/Mar</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="largo">Largo (m)</label>
+              <input id="largo" type="number" min="1.2" max="4.5" step="0.1" placeholder="Ej: 2.4" required />
+            </div>
+            <div class="field">
+              <label for="accion">Acción</label>
+              <select id="accion" required>
+                <option value="">Elegí una opción</option>
+                <option>Rápida</option>
+                <option>Media</option>
+                <option>Lenta</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="componentes">Componentes</label>
+              <select id="componentes" required>
+                <option value="">Elegí una opción</option>
+                <option>Pasahilos cerámica</option>
+                <option>Pasahilos SIC</option>
+                <option>Guías micro</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="presupuesto">Presupuesto estimado (ARS)</label>
+              <input id="presupuesto" type="number" min="0" step="1000" placeholder="Ej: 150000" />
+            </div>
+            <div class="field">
+              <label for="nota">Notas</label>
+              <textarea id="nota" rows="4" placeholder="Contame detalles, colores, marcas, uso..."></textarea>
+            </div>
+            <div class="actions">
+              <button type="submit" class="btn-primary">Pedir cotización por WhatsApp</button>
+            </div>
+          </form>
+        </div>
+        <aside class="config-aside">
+          <h4>¿Cómo trabajo?</h4>
+          <ul>
+            <li>Asesoramiento personalizado según tu estilo de pesca.</li>
+            <li>Componentes de calidad y terminaciones prolijas.</li>
+            <li>Entrega acordada y soporte post-venta.</li>
+          </ul>
+          <div class="mini-card">
+            <strong>Horario</strong>
+            <p>Lun a Sáb · 9 a 18 h</p>
+          </div>
+          <div class="mini-card">
+            <strong>Ubicación</strong>
+            <p>Reconquista, Santa Fe</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="cta-strip">
+      <div class="container">
+        <p>¿Listo para tu próxima salida? Armemos tu vara juntos.</p>
+        <a href="https://wa.me/5493482632269?text=Hola%20Emiliano%2C%20quiero%20configurar%20mi%20ca%C3%B1a" target="_blank" rel="noopener" class="btn-primary">Escribime</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <h5>Emiliano Lorenzini · Varas de Pesca</h5>
+        <p class="small">Diseño, armado y reparación de cañas de pesca. Reconquista, Santa Fe.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#inicio">Inicio</a>
+        <a href="#galeria">Galería</a>
+        <a href="#config">Configurar</a>
+        <a href="https://wa.me/5493482632269" target="_blank" rel="noopener">WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-label="Visor de imágenes">
+    <button class="lightbox-close" aria-label="Cerrar">&times;</button>
+    <img class="lightbox-img" alt="Imagen ampliada" />
+    <div class="lightbox-caption"></div>
+    <button class="lightbox-prev" aria-label="Anterior">&#10094;</button>
+    <button class="lightbox-next" aria-label="Siguiente">&#10095;</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
