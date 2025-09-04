@@ -1,33 +1,58 @@
-// Populate gallery and lightbox
+// === Acceso con código ===
+const ACCESS_CODE = 'EMI2025'; // <-- Cambiá este valor por el código que le darás a tus clientes
+const gateCard = document.getElementById('gateCard');
+const gateCode = document.getElementById('gateCode');
+const gateBtn = document.getElementById('gateBtn');
+const gateMsg = document.getElementById('gateMsg');
+const formEl = document.getElementById('configForm');
+
+function unlock(){
+  formEl.classList.remove('locked');
+  gateCard.style.display = 'none';
+  localStorage.setItem('calcAccessOk','1');
+}
+
+if(localStorage.getItem('calcAccessOk') === '1'){
+  unlock();
+}
+
+gateBtn?.addEventListener('click', ()=>{
+  if((gateCode.value || '').trim() === ACCESS_CODE){
+    unlock();
+  } else {
+    gateMsg.textContent = 'Código incorrecto. Volvé a intentar.';
+  }
+});
+
+// === GALERÍA SIN DESCRIPCIONES ===
 const galleryItems = [
-  {src:'assets/images/foto_01.svg', caption:'Personalización de varas: acción y potencia a tu medida.'},
-  {src:'assets/images/foto_02.svg', caption:'Reparación de punteras y pasahilos con terminaciones prolijas.'},
-  {src:'assets/images/foto_03.svg', caption:'Armado completo con componentes de calidad.'},
-  {src:'assets/images/foto_04.svg', caption:'Alineación precisa para un mejor lance.'},
-  {src:'assets/images/foto_05.svg', caption:'Acabados resistentes al agua salada.'},
-  {src:'assets/images/foto_06.svg', caption:'Grip confortable para jornadas largas.'},
-  {src:'assets/images/foto_07.svg', caption:'Balanceo y ajuste fino del blank.'},
-  {src:'assets/images/foto_08.svg', caption:'Restauración de cañas antiguas.'},
-  {src:'assets/images/foto_09.svg', caption:'Pasahilos SIC y micro guías a elección.'},
-  {src:'assets/images/foto_10.svg', caption:'Detalles prolijos en atados y terminaciones.'},
-  {src:'assets/images/foto_11.svg', caption:'Varas pensadas para tu estilo de pesca.'},
-  {src:'assets/images/foto_12.svg', caption:'Asesoramiento honesto y post-venta.'},
+  'assets/images/foto_01.svg',
+  'assets/images/foto_02.svg',
+  'assets/images/foto_03.svg',
+  'assets/images/foto_04.svg',
+  'assets/images/foto_05.svg',
+  'assets/images/foto_06.svg',
+  'assets/images/foto_07.svg',
+  'assets/images/foto_08.svg',
+  'assets/images/foto_09.svg',
+  'assets/images/foto_10.svg',
+  'assets/images/foto_11.svg',
+  'assets/images/foto_12.svg',
 ];
 
 const grid = document.getElementById('galleryGrid');
 if(grid){
-  galleryItems.forEach((item, idx)=>{
+  galleryItems.forEach((src, idx)=>{
     const fig = document.createElement('figure');
-    fig.innerHTML = `<img src="${item.src}" alt="Trabajo ${idx+1}" loading="lazy"><figcaption>${item.caption}</figcaption>`;
+    fig.innerHTML = `<img src="${src}" alt="Foto ${idx+1}" loading="lazy">`;
     fig.dataset.index = idx;
     grid.appendChild(fig);
   });
 }
 
-// Simple lightbox
+// Lightbox básico
 const lb = document.getElementById('lightbox');
 const lbImg = lb?.querySelector('.lightbox-img');
-const lbCap = lb?.querySelector('.lightbox-caption');
 const btnClose = lb?.querySelector('.lightbox-close');
 const btnPrev = lb?.querySelector('.lightbox-prev');
 const btnNext = lb?.querySelector('.lightbox-next');
@@ -35,9 +60,7 @@ let current = 0;
 
 function openLB(i){
   current = i;
-  const item = galleryItems[i];
-  lbImg.src = item.src;
-  lbCap.textContent = item.caption;
+  lbImg.src = galleryItems[i];
   lb.classList.add('open');
   lb.setAttribute('aria-hidden','false');
 }
@@ -64,30 +87,137 @@ document.addEventListener('keydown', e=>{
   if(e.key === 'ArrowRight') next();
 });
 
-// Form -> WhatsApp
-const form = document.getElementById('configForm');
-form?.addEventListener('submit', (e)=>{
+// === CALCULADORA DE PRESUPUESTO (lista ampliada) ===
+const tipoVaraEl = document.getElementById('tipoVara');
+const colorEl = document.getElementById('color');
+const largoEl = document.getElementById('largo');
+const pasahilosEl = document.getElementById('pasahilos');
+const portaReelEl = document.getElementById('portaReel');
+const portaAnzueloEl = document.getElementById('portaAnzuelo');
+const nombreLogoEl = document.getElementById('nombreLogo');
+const tipoMangoEl = document.getElementById('tipoMango');
+const taconEl = document.getElementById('tacon');
+const quoteTotal = document.getElementById('quoteTotal');
+const quoteDetail = document.getElementById('quoteDetail');
+const notaEl = document.getElementById('nota');
+
+const precios = {
+  tipoVara: {
+    'Tournament': 30000,
+    'ya tengo Vara': 0,
+  },
+  color: {
+    'blanco': 20000,
+    'negro': 0,
+    'rojo': 25000,
+    'azul': 25000,
+    'verde': 25000,
+  },
+  largo: {
+    '2,40': 0,
+    '2,30': 0,
+    '2,20': 0,
+    '2,10': 0,
+  },
+  pasahilos: {
+    '8 + puntera': 45000,
+    '9 + puntera': 50000,
+    '10 + puntera': 55000,
+    '11 + puntera': 60000,
+  },
+  portaReel: {
+    'fuji': 25000,
+    'Masterguil': 10000,
+  },
+  portaAnzuelo: {
+    'con porta anzuelo': 5000,
+    'sin porta anzuelo': 0,
+  },
+  nombreLogo: {
+    'nombre + logo': 8000,
+    'nombre o logo solo': 5000,
+  },
+  tipoMango: {
+    'soga': 5000,
+    'termocontraible sin relleno': 10000,
+    'termocontraible con relleno': 15000,
+    'corcho aglomerado': 25000,
+  },
+  tacon: {
+    'con taco de goma': 3000,
+    'sin taco de goma': 0,
+  }
+};
+
+function formatMoney(n){
+  return n.toLocaleString('es-AR', {style:'currency', currency:'ARS', maximumFractionDigits:0});
+}
+
+function calcular(){
+  const tv = precios.tipoVara[tipoVaraEl.value] ?? 0;
+  const col = precios.color[colorEl.value] ?? 0;
+  const lar = precios.largo[largoEl.value] ?? 0;
+  const pas = precios.pasahilos[pasahilosEl.value] ?? 0;
+  const pr  = precios.portaReel[portaReelEl.value] ?? 0;
+  const paz = precios.portaAnzuelo[portaAnzueloEl.value] ?? 0;
+  const nl  = precios.nombreLogo[nombreLogoEl.value] ?? 0;
+  const man = precios.tipoMango[tipoMangoEl.value] ?? 0;
+  const tac = precios.tacon[taconEl.value] ?? 0;
+
+  if([tipoVaraEl, colorEl, largoEl, pasahilosEl, portaReelEl, portaAnzueloEl, nombreLogoEl, tipoMangoEl, taconEl].some(el=>!el.value)){
+    quoteTotal.textContent = '$0';
+    quoteDetail.textContent = 'Completá todas las opciones para ver el presupuesto.';
+    return 0;
+  }
+
+  const total = tv + col + lar + pas + pr + paz + nl + man + tac;
+  quoteTotal.textContent = formatMoney(total);
+
+  quoteDetail.textContent = [
+    `Tipo de vara: ${formatMoney(tv)}`,
+    `Color: ${formatMoney(col)}`,
+    `Largo: ${formatMoney(lar)}`,
+    `Pasahilos: ${formatMoney(pas)}`,
+    `Porta reel: ${formatMoney(pr)}`,
+    `Porta anzuelo: ${formatMoney(paz)}`,
+    `Nombre/Logo: ${formatMoney(nl)}`,
+    `Tipo de mango: ${formatMoney(man)}`,
+    `Talón (taco): ${formatMoney(tac)}`
+  ].join(' + ');
+
+  return total;
+}
+
+[tipoVaraEl, colorEl, largoEl, pasahilosEl, portaReelEl, portaAnzueloEl, nombreLogoEl, tipoMangoEl, taconEl].forEach(el=>{
+  el?.addEventListener('change', calcular);
+  el?.addEventListener('input', calcular);
+});
+calcular();
+
+formEl?.addEventListener('submit', (e)=>{
   e.preventDefault();
-  const tipo = document.getElementById('tipo').value;
-  const largo = document.getElementById('largo').value;
-  const accion = document.getElementById('accion').value;
-  const comp = document.getElementById('componentes').value;
-  const presup = document.getElementById('presupuesto').value;
+  const total = calcular();
+  const msgLines = [
+    'Hola Emiliano, quiero una cotización:',
+    `• Tipo de vara: ${tipoVaraEl.value}`,
+    `• Color: ${colorEl.value}`,
+    `• Largo: ${largoEl.value}`,
+    `• Cantidad de pasahilos: ${pasahilosEl.value}`,
+    `• Porta reel: ${portaReelEl.value}`,
+    `• Porta anzuelo: ${portaAnzueloEl.value}`,
+    `• Nombre/Logo: ${nombreLogoEl.value}`,
+    `• Tipo de mango: ${tipoMangoEl.value}`,
+    `• Talón: ${taconEl.value}`,
+    `• Presupuesto estimado: ${formatMoney(total)}`,
+  ];
   const nota = document.getElementById('nota').value;
-
-  const msg = `Hola Emiliano, quiero una cotización:%0A` +
-              `• Tipo: ${tipo}%0A` +
-              `• Largo: ${largo} m%0A` +
-              `• Acción: ${accion}%0A` +
-              `• Componentes: ${comp}%0A` +
-              (presup ? `• Presupuesto estimado: $${presup}%0A` : '') +
-              (nota ? `• Notas: ${encodeURIComponent(nota)}%0A` : '');
-
+  if(nota) msgLines.push(`• Notas: ${nota}`);
+  const msg = encodeURIComponent(msgLines.join('\n'));
   const url = `https://wa.me/5493482632269?text=${msg}`;
   window.open(url, '_blank');
 });
 
-// Smooth anchor scroll for nicer UX
+// Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(a=>{
   a.addEventListener('click', (e)=>{
     const id = a.getAttribute('href').slice(1);

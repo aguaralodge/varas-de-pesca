@@ -45,7 +45,7 @@
           </div>
         </div>
         <div class="hero-card">
-          <img src="assets/images/foto_01.svg" alt="Detalle de atado de pasahilo" loading="eager" />
+          <img src="assets/images/foto_01.svg" alt="Trabajo de vara" loading="eager" />
         </div>
       </div>
     </section>
@@ -53,10 +53,8 @@
     <section id="galeria" class="gallery-section">
       <div class="container">
         <h3>Galería</h3>
-        <p class="section-lead">Un vistazo a mis trabajos recientes. Hacé clic para ampliar.</p>
-        <div class="gallery-grid" id="galleryGrid">
-          <!-- Items generados por script.js -->
-        </div>
+        <p class="section-lead">Hacé clic para ampliar. (Sin descripciones)</p>
+        <div class="gallery-grid" id="galleryGrid"></div>
       </div>
     </section>
 
@@ -64,49 +62,118 @@
       <div class="container config-grid">
         <div>
           <h3>Configurar mi caña</h3>
-          <p>Completá este formulario y te respondo por WhatsApp con una cotización orientativa.</p>
-          <form id="configForm">
+          <div id="gateCard" class="gate-card">
+            <p><strong>Acceso restringido.</strong> Ingresá el código para usar la calculadora.</p>
+            <div class="gate-row">
+              <input id="gateCode" type="password" placeholder="Código de acceso" />
+              <button id="gateBtn" class="btn-primary" type="button">Ingresar</button>
+            </div>
+            <p class="small" id="gateMsg"></p>
+          </div>
+
+          <p class="config-note">El presupuesto se calcula automáticamente según tu selección.</p>
+          <form id="configForm" class="locked">
             <div class="field">
-              <label for="tipo">Tipo de pesca</label>
-              <select id="tipo" required>
+              <label for="tipoVara">Tipo de vara</label>
+              <select id="tipoVara" required>
                 <option value="">Elegí una opción</option>
-                <option>Pejerrey</option>
-                <option>Spinning</option>
-                <option>Baitcasting</option>
-                <option>Variada de río</option>
-                <option>Costa/Mar</option>
+                <option>Tournament</option>
+                <option>ya tengo Vara</option>
               </select>
             </div>
+
             <div class="field">
-              <label for="largo">Largo (m)</label>
-              <input id="largo" type="number" min="1.2" max="4.5" step="0.1" placeholder="Ej: 2.4" required />
-            </div>
-            <div class="field">
-              <label for="accion">Acción</label>
-              <select id="accion" required>
-                <option value="">Elegí una opción</option>
-                <option>Rápida</option>
-                <option>Media</option>
-                <option>Lenta</option>
+              <label for="color">Color</label>
+              <select id="color" required>
+                <option value="">Elegí un color</option>
+                <option>blanco</option>
+                <option>negro</option>
+                <option>rojo</option>
+                <option>azul</option>
+                <option>verde</option>
               </select>
             </div>
+
             <div class="field">
-              <label for="componentes">Componentes</label>
-              <select id="componentes" required>
-                <option value="">Elegí una opción</option>
-                <option>Pasahilos cerámica</option>
-                <option>Pasahilos SIC</option>
-                <option>Guías micro</option>
+              <label for="largo">Largo</label>
+              <select id="largo" required>
+                <option value="">Elegí un largo</option>
+                <option>2,40</option>
+                <option>2,30</option>
+                <option>2,20</option>
+                <option>2,10</option>
               </select>
             </div>
+
             <div class="field">
-              <label for="presupuesto">Presupuesto estimado (ARS)</label>
-              <input id="presupuesto" type="number" min="0" step="1000" placeholder="Ej: 150000" />
+              <label for="pasahilos">Cantidad de pasahilos</label>
+              <select id="pasahilos" required>
+                <option value="">Elegí una opción</option>
+                <option>8 + puntera</option>
+                <option>9 + puntera</option>
+                <option>10 + puntera</option>
+                <option>11 + puntera</option>
+              </select>
             </div>
+
             <div class="field">
-              <label for="nota">Notas</label>
-              <textarea id="nota" rows="4" placeholder="Contame detalles, colores, marcas, uso..."></textarea>
+              <label for="portaReel">Tipo de porta reel</label>
+              <select id="portaReel" required>
+                <option value="">Elegí una opción</option>
+                <option>fuji</option>
+                <option>Masterguil</option>
+              </select>
             </div>
+
+            <div class="field">
+              <label for="portaAnzuelo">Porta anzuelo</label>
+              <select id="portaAnzuelo" required>
+                <option value="">Elegí una opción</option>
+                <option>con porta anzuelo</option>
+                <option>sin porta anzuelo</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="nombreLogo">Nombre / logo</label>
+              <select id="nombreLogo" required>
+                <option value="">Elegí una opción</option>
+                <option>nombre + logo</option>
+                <option>nombre o logo solo</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="tipoMango">Tipo de mango</label>
+              <select id="tipoMango" required>
+                <option value="">Elegí una opción</option>
+                <option>soga</option>
+                <option>termocontraible sin relleno</option>
+                <option>termocontraible con relleno</option>
+                <option>corcho aglomerado</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="tacon">Talón de la caña (parte inferior)</label>
+              <select id="tacon" required>
+                <option value="">Elegí una opción</option>
+                <option>con taco de goma</option>
+                <option>sin taco de goma</option>
+              </select>
+            </div>
+
+            <div class="quote-card" id="quoteCard">
+              <div><strong>Presupuesto estimado:</strong></div>
+              <div class="quote-total" id="quoteTotal">$0</div>
+              <p class="small" id="quoteDetail"></p>
+            </div>
+
+            <div class="field">
+              <label for="nota">Notas (opcional)</label>
+              <textarea id="nota" rows="4" placeholder="Colores específicos, detalles, etc."></textarea>
+            </div>
+
             <div class="actions">
               <button type="submit" class="btn-primary">Pedir cotización por WhatsApp</button>
             </div>
@@ -157,7 +224,6 @@
   <div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-label="Visor de imágenes">
     <button class="lightbox-close" aria-label="Cerrar">&times;</button>
     <img class="lightbox-img" alt="Imagen ampliada" />
-    <div class="lightbox-caption"></div>
     <button class="lightbox-prev" aria-label="Anterior">&#10094;</button>
     <button class="lightbox-next" aria-label="Siguiente">&#10095;</button>
   </div>
