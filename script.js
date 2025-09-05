@@ -1,5 +1,5 @@
-// === Acceso con código ===
-const ACCESS_CODE = 'EMI2025'; // <-- Cambiá este valor por el código que le darás a tus clientes
+// v6 - Galería apunta a FOTO1..FOTO15.png
+const ACCESS_CODE = 'EMI2025';
 const gateCard = document.getElementById('gateCard');
 const gateCode = document.getElementById('gateCode');
 const gateBtn = document.getElementById('gateBtn');
@@ -11,22 +11,14 @@ function unlock(){
   gateCard.style.display = 'none';
   localStorage.setItem('calcAccessOk','1');
 }
-
-if(localStorage.getItem('calcAccessOk') === '1'){
-  unlock();
-}
-
+if(localStorage.getItem('calcAccessOk') === '1'){ unlock(); }
 gateBtn?.addEventListener('click', ()=>{
-  if((gateCode.value || '').trim() === ACCESS_CODE){
-    unlock();
-  } else {
-    gateMsg.textContent = 'Código incorrecto. Volvé a intentar.';
-  }
+  if((gateCode.value || '').trim() === ACCESS_CODE){ unlock(); }
+  else { gateMsg.textContent = 'Código incorrecto. Volvé a intentar.'; }
 });
 
-// === GALERÍA SIN DESCRIPCIONES ===
 const galleryItems = [
-  
+  'assets/images/FOTO1.png',
   'assets/images/FOTO2.png',
   'assets/images/FOTO3.png',
   'assets/images/FOTO4.png',
@@ -41,8 +33,7 @@ const galleryItems = [
   'assets/images/FOTO13.png',
   'assets/images/FOTO14.png',
   'assets/images/FOTO15.png',
- ];
-
+];
 const grid = document.getElementById('galleryGrid');
 if(grid){
   galleryItems.forEach((src, idx)=>{
@@ -53,32 +44,17 @@ if(grid){
   });
 }
 
-// Lightbox básico
 const lb = document.getElementById('lightbox');
 const lbImg = lb?.querySelector('.lightbox-img');
 const btnClose = lb?.querySelector('.lightbox-close');
 const btnPrev = lb?.querySelector('.lightbox-prev');
 const btnNext = lb?.querySelector('.lightbox-next');
 let current = 0;
-
-function openLB(i){
-  current = i;
-  lbImg.src = galleryItems[i];
-  lb.classList.add('open');
-  lb.setAttribute('aria-hidden','false');
-}
-function closeLB(){
-  lb.classList.remove('open');
-  lb.setAttribute('aria-hidden','true');
-}
+function openLB(i){ current = i; lbImg.src = galleryItems[i]; lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); }
+function closeLB(){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); }
 function prev(){ openLB((current-1+galleryItems.length)%galleryItems.length); }
 function next(){ openLB((current+1)%galleryItems.length); }
-
-grid?.addEventListener('click', e=>{
-  const fig = e.target.closest('figure');
-  if(!fig) return;
-  openLB(parseInt(fig.dataset.index,10));
-});
+grid?.addEventListener('click', e=>{ const fig = e.target.closest('figure'); if(!fig) return; openLB(parseInt(fig.dataset.index,10)); });
 btnClose?.addEventListener('click', closeLB);
 btnPrev?.addEventListener('click', prev);
 btnNext?.addEventListener('click', next);
@@ -90,7 +66,6 @@ document.addEventListener('keydown', e=>{
   if(e.key === 'ArrowRight') next();
 });
 
-// === CALCULADORA DE PRESUPUESTO (lista ampliada) ===
 const tipoVaraEl = document.getElementById('tipoVara');
 const colorEl = document.getElementById('color');
 const largoEl = document.getElementById('largo');
@@ -102,60 +77,20 @@ const tipoMangoEl = document.getElementById('tipoMango');
 const taconEl = document.getElementById('tacon');
 const quoteTotal = document.getElementById('quoteTotal');
 const quoteDetail = document.getElementById('quoteDetail');
-const notaEl = document.getElementById('nota');
 
 const precios = {
-  tipoVara: {
-    'Tournament': 30000,
-    'ya tengo Vara': 0,
-  },
-  color: {
-    'blanco': 15000,
-    'negro': 0,
-    'rojo': 20000,
-    'azul': 20000,
-    'verde': 20000,
-  },
-  largo: {
-    '2,40': 0,
-    '2,30': 0,
-    '2,20': 0,
-    '2,10': 0,
-  },
-  pasahilos: {
-    '8 + puntera': 36000,
-    '9 + puntera': 40000,
-    '10 + puntera': 44000,
-    '11 + puntera': 48000,
-  },
-  portaReel: {
-    'fuji': 30000,
-    'Masterguil': 10000,
-  },
-  portaAnzuelo: {
-    'con porta anzuelo': 4000,
-    'sin porta anzuelo': 0,
-  },
-  nombreLogo: {
-    'nombre + logo': 8000,
-    'nombre o logo solo': 5000,
-  },
-  tipoMango: {
-    'soga': 8000,
-    'termocontraible sin relleno': 10000,
-    'termocontraible con relleno': 15000,
-    'corcho aglomerado': 25000,
-  },
-  tacon: {
-    'con taco de goma': 3000,
-    'sin taco de goma': 0,
-  }
+  tipoVara: { 'Tournament': 30000, 'ya tengo Vara': 0 },
+  color: { 'blanco': 20000, 'negro': 0, 'rojo': 25000, 'azul': 25000, 'verde': 25000 },
+  largo: { '2,40': 0, '2,30': 0, '2,20': 0, '2,10': 0 },
+  pasahilos: { '8 + puntera': 45000, '9 + puntera': 50000, '10 + puntera': 55000, '11 + puntera': 60000 },
+  portaReel: { 'fuji': 25000, 'Masterguil': 10000 },
+  portaAnzuelo: { 'con porta anzuelo': 5000, 'sin porta anzuelo': 0 },
+  nombreLogo: { 'nombre + logo': 8000, 'nombre o logo solo': 5000 },
+  tipoMango: { 'soga': 5000, 'termocontraible sin relleno': 10000, 'termocontraible con relleno': 15000, 'corcho aglomerado': 25000 },
+  tacon: { 'con taco de goma': 3000, 'sin taco de goma': 0 }
 };
 
-function formatMoney(n){
-  return n.toLocaleString('es-AR', {style:'currency', currency:'ARS', maximumFractionDigits:0});
-}
-
+function formatMoney(n){ return n.toLocaleString('es-AR', {style:'currency', currency:'ARS', maximumFractionDigits:0}); }
 function calcular(){
   const tv = precios.tipoVara[tipoVaraEl.value] ?? 0;
   const col = precios.color[colorEl.value] ?? 0;
@@ -172,10 +107,8 @@ function calcular(){
     quoteDetail.textContent = 'Completá todas las opciones para ver el presupuesto.';
     return 0;
   }
-
   const total = tv + col + lar + pas + pr + paz + nl + man + tac;
   quoteTotal.textContent = formatMoney(total);
-
   quoteDetail.textContent = [
     `Tipo de vara: ${formatMoney(tv)}`,
     `Color: ${formatMoney(col)}`,
@@ -187,17 +120,15 @@ function calcular(){
     `Tipo de mango: ${formatMoney(man)}`,
     `Talón (taco): ${formatMoney(tac)}`
   ].join(' + ');
-
   return total;
 }
-
 [tipoVaraEl, colorEl, largoEl, pasahilosEl, portaReelEl, portaAnzueloEl, nombreLogoEl, tipoMangoEl, taconEl].forEach(el=>{
   el?.addEventListener('change', calcular);
   el?.addEventListener('input', calcular);
 });
 calcular();
 
-formEl?.addEventListener('submit', (e)=>{
+document.getElementById('configForm')?.addEventListener('submit', (e)=>{
   e.preventDefault();
   const total = calcular();
   const msgLines = [
@@ -220,7 +151,6 @@ formEl?.addEventListener('submit', (e)=>{
   window.open(url, '_blank');
 });
 
-// Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(a=>{
   a.addEventListener('click', (e)=>{
     const id = a.getAttribute('href').slice(1);
