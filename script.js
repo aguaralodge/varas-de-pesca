@@ -114,11 +114,11 @@ const precios = {
     'ya tengo Vara': 0,
   },
   color: {
-    'blanco': 20000,
+    'blanco': 15000,
     'negro': 0,
-    'rojo': 25000,
-    'azul': 25000,
-    'verde': 25000,
+    'rojo': 20000,
+    'azul': 20000,
+    'verde': 20000,
   },
   largo: {
     '2,40': 0,
@@ -127,17 +127,17 @@ const precios = {
     '2,10': 0,
   },
   pasahilos: {
-    '8 + puntera': 45000,
-    '9 + puntera': 50000,
-    '10 + puntera': 55000,
-    '11 + puntera': 60000,
+    '8 + puntera': 36000,
+    '9 + puntera': 40000,
+    '10 + puntera': 44000,
+    '11 + puntera': 48000,
   },
   portaReel: {
-    'fuji': 25000,
+    'fuji': 30000,
     'Masterguil': 10000,
   },
   portaAnzuelo: {
-    'con porta anzuelo': 5000,
+    'con porta anzuelo': 4000,
     'sin porta anzuelo': 0,
   },
   nombreLogo: {
@@ -145,7 +145,7 @@ const precios = {
     'nombre o logo solo': 5000,
   },
   tipoMango: {
-    'soga': 5000,
+    'soga': 8000,
     'termocontraible sin relleno': 10000,
     'termocontraible con relleno': 15000,
     'corcho aglomerado': 25000,
