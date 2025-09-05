@@ -41,10 +41,7 @@ const galleryItems = [
   'assets/images/FOTO13.png',
   'assets/images/FOTO14.png',
   'assets/images/FOTO15.png',
-  'assets/images/FOTO16.png',
-  'assets/images/FOTO17.png',
-  'assets/images/FOTO18.png',
-];
+ ];
 
 const grid = document.getElementById('galleryGrid');
 if(grid){
