@@ -27,7 +27,6 @@ gateBtn?.addEventListener('click', ()=>{
 // === GALERÍA SIN DESCRIPCIONES ===
 const galleryItems = [
   
-  'assets/images/FOTO1.PNG',
   'assets/images/FOTO2.png',
   'assets/images/FOTO3.png',
   'assets/images/FOTO4.png',
