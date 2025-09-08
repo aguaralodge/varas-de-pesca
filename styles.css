@@ -1,8 +1,8 @@
 /* v6 estilos generales (idénticos a v5) */
 :root{
-  --bg: #1E3A5F;
+  --bg: #6b7280;
   --text:#111827;
-  --blue:#d1d5db;
+  --blue:#1E3A5F;
   --olive:#556B2F;
   --muted:#6b7280;
   --muted-200:#e5e7eb;
@@ -71,7 +71,7 @@ img{max-width:100%;display:block}
   position:relative;
   cursor:zoom-in;
   box-shadow: var(--shadow);
-  background: rgba(243, 244, 246, 0.9);
+  background: #1E3A5F;
   transition: transform .25s ease, box-shadow .25s ease;
 }
 .gallery-grid img{
