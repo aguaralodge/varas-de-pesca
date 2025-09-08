@@ -71,7 +71,7 @@ img{max-width:100%;display:block}
   position:relative;
   cursor:zoom-in;
   box-shadow: var(--shadow);
-  background: #1E3A5F;
+  background: #374151;
   transition: transform .25s ease, box-shadow .25s ease;
 }
 .gallery-grid img{
