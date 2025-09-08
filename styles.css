@@ -52,7 +52,7 @@ img{max-width:100%;display:block}
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: .3px;
-  color: #ffffff; /* gris oscuro */
+  color: #000000; /* gris oscuro */
   text-shadow:
     -1px -1px 2px #ffffff,
      1px -1px 2px #ffffff,
