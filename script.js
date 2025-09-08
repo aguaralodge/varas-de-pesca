@@ -1,4 +1,4 @@
-// v7: Galería con fotos finales y calculadora con acceso por código
+// v6 estable: galería a FOTO1..FOTO15 y calculadora con acceso por código
 const ACCESS_CODE = 'EMI2025';
 const gateCard = document.getElementById('gateCard');
 const gateCode = document.getElementById('gateCode');

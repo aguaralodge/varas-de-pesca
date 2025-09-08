@@ -1,4 +1,4 @@
-/* v7 base (sin tocar colores de fondo) */
+/* v6 base estable: NO toca tus fondos, tal como venías usándolos */
 :root{
   --bg:#f3f4f6;
   --text:#111827;
@@ -9,7 +9,6 @@
   --muted-300:#d1d5db;
   --radius:16px;
   --shadow:0 8px 24px rgba(0,0,0,.08);
-  --fluor:#39FF14; /* borde flúor */
 }
 
 *{box-sizing:border-box}
@@ -33,12 +32,7 @@ img{max-width:100%;display:block}
 
 .hero{padding:48px 0}
 .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
-.hero-card{
-  border-radius: var(--radius);
-  overflow:hidden;
-  box-shadow: 0 16px 40px rgba(0,0,0,0.45);
-  background: transparent;
-}
+.hero-card{border-radius: var(--radius);overflow:hidden;box-shadow: var(--shadow);background:rgba(255,255,255,.6)}
 .hero-copy h2{font-size:2.2rem;margin:0 0 10px}
 .hero-actions{display:flex;gap:12px;margin-top:14px}
 
@@ -50,7 +44,7 @@ img{max-width:100%;display:block}
   padding: 12px 18px;
   border-radius: 14px;
   box-shadow: var(--shadow);
-  border: 1.5px solid var(--fluor);
+  border: 1.5px solid var(--olive);
   cursor: pointer;
   font-weight: 600;
 }
@@ -117,7 +111,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);bo
 .mini-card{background:rgba(255,255,255,.8);border:1px solid var(--muted-300);border-radius:12px;padding:12px;margin-top:12px}
 
 .cta-strip{padding:28px 0;background:linear-gradient(135deg,#1E3A5F,#1E3A5F);color:white;text-align:center;border-top:1px solid var(--olive); border-bottom:1px solid var(--olive)}
-.cta-strip .btn-primary{background:rgba(255,255,255,.1);border:1.5px solid var(--fluor)}
+.cta-strip .btn-primary{background:rgba(255,255,255,.1);border:1.5px solid var(--olive)}
 
 .site-footer{padding:22px 0;background:rgba(255,255,255,.7);border-top:1px solid var(--muted-200)}
 .footer-grid{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}
@@ -138,87 +132,4 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);bo
 }
 @media (max-width: 480px){
   .gallery-grid{grid-template-columns:1fr}
-}
-
-
-/* === Tipografía elegante para el título del hero con degradado + contorno blanco === */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap');
-
-.hero-copy h2{
-  font-family: 'Playfair Display', serif;
-  font-size: 2.8rem;
-  font-weight: 600;
-  line-height: 1.25;
-  letter-spacing: .3px;
-  background: linear-gradient(135deg, #1E3A5F, #556B2F);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
-
-  /* contorno blanco sutil para legibilidad */
-  text-shadow:
-    -1px -1px 2px rgba(255,255,255,0.85),
-     1px -1px 2px rgba(255,255,255,0.85),
-    -1px  1px 2px rgba(255,255,255,0.85),
-     1px  1px 2px rgba(255,255,255,0.85);
-}
-
-/* WhatsApp del header siempre con texto blanco */
-.nav .btn-primary.subtle{
-  color:#fff !important;
-  border-color: var(--fluor);
-}
-
-/* Asegurar todos los .btn-primary con borde flúor y texto blanco */
-.btn-primary{ border-color: var(--fluor); color:#fff; }
-/* === FIX: Título del hero con degradado + contorno blanco === */
-/* (no toca tus fondos) */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap');
-
-.hero-copy h2{
-  font-family: 'Playfair Display', serif;
-  font-size: 2.8rem;
-  font-weight: 600;
-  line-height: 1.25;
-  letter-spacing: .3px;
-
-  /* Degradado metálico consistente con tu paleta */
-  background: linear-gradient(135deg, #1E3A5F, #556B2F);
-  -webkit-background-clip: text;
-  background-clip: text;
-
-  /* Asegura que se vea el degradado (por si alguna regla anterior puso color sólido) */
-  -webkit-text-fill-color: transparent !important;
-  color: transparent !important;
-
-  /* Contorno blanco sutil para que destaque sobre fondos oscuros/claros */
-  text-shadow:
-    -1px -1px 2px rgba(255,255,255,0.85),
-     1px -1px 2px rgba(255,255,255,0.85),
-    -1px  1px 2px rgba(255,255,255,0.85),
-     1px  1px 2px rgba(255,255,255,0.85);
-}
-
-/* === FIX: Botones con borde verde flúor y texto blanco (sin tocar fondos) === */
-:root{
-  --fluor:#39FF14; /* nuevo borde flúor */
-}
-
-/* Todos los primarios */
-.btn-primary{
-  border: 1.5px solid var(--fluor) !important;
-  color: #fff !important;
-}
-
-/* CTA inferior también */
-.cta-strip .btn-primary{
-  border: 1.5px solid var(--fluor) !important;
-  color: #fff !important;
-}
-
-/* Botón de WhatsApp en el header con letra blanca sí o sí */
-.nav .btn-primary.subtle{
-  color: #fff !important;
-  border: 1.5px solid var(--fluor) !important;
 }
