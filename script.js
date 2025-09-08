@@ -1,4 +1,4 @@
-// v6 - Galería apunta a FOTO1..FOTO15.png
+// v7: Galería con fotos finales y calculadora con acceso por código
 const ACCESS_CODE = 'EMI2025';
 const gateCard = document.getElementById('gateCard');
 const gateCode = document.getElementById('gateCode');
@@ -18,21 +18,11 @@ gateBtn?.addEventListener('click', ()=>{
 });
 
 const galleryItems = [
-  'assets/images/FOTO1.png',
-  'assets/images/FOTO2.png',
-  'assets/images/FOTO3.png',
-  'assets/images/FOTO4.png',
-  'assets/images/FOTO5.png',
-  'assets/images/FOTO6.png',
-  'assets/images/FOTO7.png',
-  'assets/images/FOTO8.png',
-  'assets/images/FOTO9.png',
-  'assets/images/FOTO10.png',
-  'assets/images/FOTO11.png',
-  'assets/images/FOTO12.png',
-  'assets/images/FOTO13.png',
-  'assets/images/FOTO14.png',
-  'assets/images/FOTO15.png',
+  'assets/images/FOTO1.png','assets/images/FOTO2.png','assets/images/FOTO3.png',
+  'assets/images/FOTO4.png','assets/images/FOTO5.png','assets/images/FOTO6.png',
+  'assets/images/FOTO7.png','assets/images/FOTO8.png','assets/images/FOTO9.png',
+  'assets/images/FOTO10.png','assets/images/FOTO11.png','assets/images/FOTO12.png',
+  'assets/images/FOTO13.png','assets/images/FOTO14.png','assets/images/FOTO15.png',
 ];
 const grid = document.getElementById('galleryGrid');
 if(grid){

@@ -45,7 +45,7 @@
           </div>
         </div>
         <div class="hero-card">
-          <img src="assets/images/FOTO4.png" alt="Trabajo de vara" loading="eager" />
+          <img src="assets/images/FOTO1.png" alt="Trabajo de vara" loading="eager" />
         </div>
       </div>
     </section>
@@ -73,7 +73,6 @@
 
           <p class="config-note">El presupuesto se calcula automáticamente según tu selección.</p>
           <form id="configForm" class="locked">
-            <!-- Campos de la calculadora -->
             <div class="field">
               <label for="tipoVara">Tipo de vara</label>
               <select id="tipoVara" required>
@@ -82,6 +81,7 @@
                 <option>ya tengo Vara</option>
               </select>
             </div>
+
             <div class="field">
               <label for="color">Color</label>
               <select id="color" required>
@@ -93,6 +93,7 @@
                 <option>verde</option>
               </select>
             </div>
+
             <div class="field">
               <label for="largo">Largo</label>
               <select id="largo" required>
@@ -103,6 +104,7 @@
                 <option>2,10</option>
               </select>
             </div>
+
             <div class="field">
               <label for="pasahilos">Cantidad de pasahilos</label>
               <select id="pasahilos" required>
@@ -113,6 +115,7 @@
                 <option>11 + puntera</option>
               </select>
             </div>
+
             <div class="field">
               <label for="portaReel">Tipo de porta reel</label>
               <select id="portaReel" required>
@@ -121,6 +124,7 @@
                 <option>Masterguil</option>
               </select>
             </div>
+
             <div class="field">
               <label for="portaAnzuelo">Porta anzuelo</label>
               <select id="portaAnzuelo" required>
@@ -129,6 +133,7 @@
                 <option>sin porta anzuelo</option>
               </select>
             </div>
+
             <div class="field">
               <label for="nombreLogo">Nombre / logo</label>
               <select id="nombreLogo" required>
@@ -137,6 +142,7 @@
                 <option>nombre o logo solo</option>
               </select>
             </div>
+
             <div class="field">
               <label for="tipoMango">Tipo de mango</label>
               <select id="tipoMango" required>
@@ -147,6 +153,7 @@
                 <option>corcho aglomerado</option>
               </select>
             </div>
+
             <div class="field">
               <label for="tacon">Talón de la caña (parte inferior)</label>
               <select id="tacon" required>
@@ -155,15 +162,18 @@
                 <option>sin taco de goma</option>
               </select>
             </div>
+
             <div class="quote-card" id="quoteCard">
               <div><strong>Presupuesto estimado:</strong></div>
               <div class="quote-total" id="quoteTotal">$0</div>
               <p class="small" id="quoteDetail"></p>
             </div>
+
             <div class="field">
               <label for="nota">Notas (opcional)</label>
               <textarea id="nota" rows="4" placeholder="Colores específicos, detalles, etc."></textarea>
             </div>
+
             <div class="actions">
               <button type="submit" class="btn-primary">Pedir cotización por WhatsApp</button>
             </div>
