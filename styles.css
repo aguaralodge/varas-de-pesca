@@ -172,3 +172,53 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);bo
 
 /* Asegurar todos los .btn-primary con borde flúor y texto blanco */
 .btn-primary{ border-color: var(--fluor); color:#fff; }
+/* === FIX: Título del hero con degradado + contorno blanco === */
+/* (no toca tus fondos) */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap');
+
+.hero-copy h2{
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: .3px;
+
+  /* Degradado metálico consistente con tu paleta */
+  background: linear-gradient(135deg, #1E3A5F, #556B2F);
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  /* Asegura que se vea el degradado (por si alguna regla anterior puso color sólido) */
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+
+  /* Contorno blanco sutil para que destaque sobre fondos oscuros/claros */
+  text-shadow:
+    -1px -1px 2px rgba(255,255,255,0.85),
+     1px -1px 2px rgba(255,255,255,0.85),
+    -1px  1px 2px rgba(255,255,255,0.85),
+     1px  1px 2px rgba(255,255,255,0.85);
+}
+
+/* === FIX: Botones con borde verde flúor y texto blanco (sin tocar fondos) === */
+:root{
+  --fluor:#39FF14; /* nuevo borde flúor */
+}
+
+/* Todos los primarios */
+.btn-primary{
+  border: 1.5px solid var(--fluor) !important;
+  color: #fff !important;
+}
+
+/* CTA inferior también */
+.cta-strip .btn-primary{
+  border: 1.5px solid var(--fluor) !important;
+  color: #fff !important;
+}
+
+/* Botón de WhatsApp en el header con letra blanca sí o sí */
+.nav .btn-primary.subtle{
+  color: #fff !important;
+  border: 1.5px solid var(--fluor) !important;
+}
