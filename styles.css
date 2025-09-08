@@ -133,3 +133,34 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);bo
 @media (max-width: 480px){
   .gallery-grid{grid-template-columns:1fr}
 }
+
+
+/* === Agregados mínimos: tipografía elegante + degradado + contorno === */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap');
+
+.hero .hero-copy .hero-title{
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: .3px;
+  background: linear-gradient(135deg, #1E3A5F, #556B2F);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  text-shadow:
+    -1px -1px 2px rgba(255,255,255,0.85),
+     1px -1px 2px rgba(255,255,255,0.85),
+    -1px  1px 2px rgba(255,255,255,0.85),
+     1px  1px 2px rgba(255,255,255,0.85);
+}
+
+/* WhatsApp header: texto blanco + borde flúor (sin tocar fondos) */
+.nav .btn-primary.subtle{
+  color:#fff !important;
+  border:1.5px solid #39FF14 !important;
+}
+
+/* (Opcional) Todos los .btn-primary con borde flúor */
+.btn-primary{ border-color:#39FF14; color:#fff; }
