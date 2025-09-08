@@ -35,7 +35,7 @@ img{max-width:100%;display:block}
 .hero-card{
   border-radius: var(--radius);
   overflow:hidden;
-  box-shadow: var(--shadow);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.45);
   background: transparent;
 }
 .hero-copy h2{font-size:2.2rem;margin:0 0 10px}
