@@ -97,7 +97,7 @@ img{max-width:100%;display:block}
   position:relative;
   cursor:zoom-in;
   background: var(--gallery-blue) !important;     /* FONDOS DE LAS FOTOS: azul oscuro opaco */
-  border:2px solid var(--fluor) !important;       /* CONTORNO VERDE FLÚO */
+  border:1px solid var(--fluor) !important;       /* CONTORNO VERDE FLÚO */
   box-shadow: var(--shadow-strong) !important;    /* SOMBRA AL MÁXIMO */
   transition: transform .25s ease, box-shadow .25s ease;
 }
