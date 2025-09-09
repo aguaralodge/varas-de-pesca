@@ -215,7 +215,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#60a5fa;box-sh
 #inicio .hero-title{
   font-family: 'Italianno', 'Great Vibes', 'Allura', 'Parisienne', 'Playfair Display', serif;
   font-weight: 400;            /* scripts suelen ir finas */
-  line-height: 1.08;
+  line-height: 2.08;
   letter-spacing: .01em;       /* ajustar si hace falta */
   color:#000;
   -webkit-text-stroke: 3.2px #fff;  /* contorno blanco como tu diseño */
