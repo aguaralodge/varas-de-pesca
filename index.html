@@ -268,58 +268,64 @@
   </div>
 
   <script src="script.js"></script>
+  
   <!-- Inline: render de galerías sin tocar tu script.js existente -->
   <script>
   // ========= GALERÍAS =========
-  // 1) Cargá aquí tus fotos reales
-  //    - Armado de cañas:
+  // Rutas demo "a prueba de fallos": repetimos FOTO11.png (que ya existe) para que algo se vea YA.
+  // Luego reemplazá estas rutas por tus fotos reales.
+  const fallbackIMG = 'assets/images/FOTO11.png';
+  function repeat(src, n){ return Array.from({length:n}, () => src); }
+
+  // 1) Listas reales (modificá estas cuando subas más fotos)
   const IMGS_ARMADO = [
-    'assets/images/FOTO1.JPEG',
-    'assets/images/FOTO2.JPEG',
-    'assets/images/FOTO3.JPEG',
-    'assets/images/FOTO4.JPEG',
-    'assets/images/FOTO5.JPEG',
-    'assets/images/FOTO6.JPEG',
-    'assets/images/FOTO7.JPEG',
-    'assets/images/FOTO8.JPEG',
-    'assets/images/FOTO9.JPEG',
-    'assets/images/FOTO10.JPEG',
-    'assets/images/FOTO11.JPEG',
-    'assets/images/FOTO12.JPEG',
+    // Si no tenés todas, podés repetir de inicio. Cambiá estas rutas cuando subas tus imágenes.
+    ...repeat(fallbackIMG, 12)
+    // Ejemplo real:
+    // 'assets/images/FOTO01.png','assets/images/FOTO02.png',... etc.
   ];
 
-  //    - Mantenimiento de reeles: (vos las cargás después)
   const IMGS_REELES = [
-    // 'assets/images/REEL01.png',
-    // 'assets/images/REEL02.png',
-    // 'assets/images/REEL03.png',
-    // 'assets/images/REEL04.png',
-    // 'assets/images/REEL05.png',
-    // ...agregá más
+    // Cuando tengas fotos de reeles, agregalas acá. Por ahora repetimos para que se vea algo.
+    ...repeat(fallbackIMG, 8)
+    // Ejemplo real:
+    // 'assets/images/REEL01.png','assets/images/REEL02.png',... etc.
   ];
 
-  // 2) Función para renderizar una cuadrícula
+  // 2) Render helper
   function renderGallery(containerId, arr) {
     const el = document.getElementById(containerId);
-    if (!el) return;
-    el.innerHTML = (arr || []).map((src, i) => \`
+    if (!el) return false;
+    el.innerHTML = (arr || []).map((src, i) => `
       <figure>
-        <img src="\${src}" alt="Trabajo \${i + 1}" loading="lazy" decoding="async" />
+        <img src="${src}" alt="Trabajo ${i + 1}" loading="lazy" decoding="async" />
       </figure>
-    \`).join('');
+    `).join('');
+    return true;
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    // 3) Inicio: ARMADO (10) con título + REELES (5) con título
+    // HOME: primero Armado (10) con título; luego Reeles (5) con título
     const diezArmado = IMGS_ARMADO.slice(0, 10);
     const cincoReeles = IMGS_REELES.slice(0, 5);
-    renderGallery('galleryGridArmadoHome', diezArmado);
-    renderGallery('galleryGridReelesHome', cincoReeles);
 
-    // 4) Secciones completas
+    const okArmadoHome = renderGallery('galleryGridArmadoHome', diezArmado);
+    const okReelesHome = renderGallery('galleryGridReelesHome', cincoReeles);
+
+    // Fallback: si por alguna razón no existen esos contenedores, cargamos el antiguo #galleryGrid
+    if (!okArmadoHome && !okReelesHome) {
+      const mix = [...diezArmado, ...cincoReeles];
+      renderGallery('galleryGrid', mix);
+    }
+
+    // Secciones completas (si existen)
     renderGallery('galleryArmado', IMGS_ARMADO);
     renderGallery('galleryReeles', IMGS_REELES);
+
+    // Log rápido en consola por si hay errores de rutas
+    console.log('[Galería] Armado:', IMGS_ARMADO.length, 'Reeles:', IMGS_REELES.length);
   });
   </script>
+</script>
 </body>
 </html>
