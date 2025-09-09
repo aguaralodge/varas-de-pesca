@@ -25,16 +25,15 @@
         </div>
       </div>
       <nav class="nav">
-        <a href="#inicio">Inicio</a>
-        <a href="#galeria">Galería</a>
-        <a href="#galeria-armado">Armados</a>
-        <a href="#galeria-reeles">Reeles</a>
-        <a href="#config">Configurar mi caña</a>
+        <a href="index.html#inicio">Inicio</a>
+        <a href="index.html#galeria">Galería</a>
+        <a href="armados.html">Armados</a>
+        <a href="reeles.html">Reeles</a>
+        <a href="index.html#config">Configurar mi caña</a>
         <a class="btn-primary subtle" href="https://wa.me/5493482632269?text=Hola%20Emiliano%2C%20vengo%20de%20tu%20web%20y%20quiero%20hacer%20una%20consulta." target="_blank" rel="noopener">WhatsApp</a>
       </nav>
     </div>
   </header>
-
   <main id="inicio">
     <section class="hero container">
       <div class="hero-grid">
@@ -42,8 +41,8 @@
           <h2 class="hero-title">Armado y reparación de cañas, a tu estilo</h2>
           <p>Desde Reconquista, Santa Fe, diseño, armo y reparo varas para que disfrutes cada lance. Materiales de calidad, terminaciones prolijas y asesoramiento honesto.</p>
           <div class="hero-actions">
-            <a href="#config" class="btn-primary">Configurar mi caña</a>
-            <a class="btn-ghost" href="#galeria">Ver trabajos</a>
+            <a href="index.html#config" class="btn-primary">Configurar mi caña</a>
+            <a class="btn-ghost" href="index.html#galeria">Ver trabajos</a>
           </div>
         </div>
         <div class="hero-card">
@@ -71,27 +70,9 @@
         </div>
 
         <div class="actions" style="margin-top:14px; display:flex; gap:12px;">
-          <a href="#galeria-armado" class="btn-primary">Ver galería completa de armados</a>
-          <a href="#galeria-reeles" class="btn-ghost">Ver galería de reeles</a>
+          <a href="armados.html" class="btn-primary">Ver galería completa de armados</a>
+          <a href="reeles.html" class="btn-ghost">Ver galería de reeles</a>
         </div>
-      </div>
-    </section>
-
-    <!-- GALERÍA COMPLETA: Armado de cañas -->
-    <section id="galeria-armado" class="gallery-section">
-      <div class="container">
-        <h3>Galería · Armado de cañas</h3>
-        <p class="section-lead">Trabajos de armado y personalización.</p>
-        <div class="gallery-grid" id="galleryArmado"></div>
-      </div>
-    </section>
-
-    <!-- GALERÍA COMPLETA: Mantenimiento de reeles -->
-    <section id="galeria-reeles" class="gallery-section">
-      <div class="container">
-        <h3>Galería · Mantenimiento de reeles</h3>
-        <p class="section-lead">Servicio de limpieza, cambio de piezas y puesta a punto.</p>
-        <div class="gallery-grid" id="galleryReeles"></div>
       </div>
     </section>
 
@@ -250,11 +231,11 @@
         <p class="small">Diseño, armado y reparación de cañas de pesca. Reconquista, Santa Fe.</p>
       </div>
       <div class="footer-links">
-        <a href="#inicio">Inicio</a>
-        <a href="#galeria">Galería</a>
-        <a href="#galeria-armado">Armados</a>
-        <a href="#galeria-reeles">Reeles</a>
-        <a href="#config">Configurar</a>
+        <a href="index.html#inicio">Inicio</a>
+        <a href="index.html#galeria">Galería</a>
+        <a href="armados.html">Armados</a>
+        <a href="reeles.html">Reeles</a>
+        <a href="index.html#config">Configurar</a>
         <a href="https://wa.me/5493482632269" target="_blank" rel="noopener">WhatsApp</a>
       </div>
     </div>
@@ -268,64 +249,16 @@
   </div>
 
   <script src="script.js"></script>
-  
-  <!-- Inline: render de galerías sin tocar tu script.js existente -->
+  <script src="gallery-data.js"></script>
+  <script src="gallery-utils.js"></script>
+  <!-- Página: Home — render de 10 + 5 -->
   <script>
-  // ========= GALERÍAS =========
-  // Rutas demo "a prueba de fallos": repetimos FOTO11.png (que ya existe) para que algo se vea YA.
-  // Luego reemplazá estas rutas por tus fotos reales.
-  const fallbackIMG = 'assets/images/FOTO11.png';
-  function repeat(src, n){ return Array.from({length:n}, () => src); }
-
-  // 1) Listas reales (modificá estas cuando subas más fotos)
-  const IMGS_ARMADO = [
-    // Si no tenés todas, podés repetir de inicio. Cambiá estas rutas cuando subas tus imágenes.
-    ...repeat(fallbackIMG, 12)
-    // Ejemplo real:
-    // 'assets/images/FOTO01.png','assets/images/FOTO02.png',... etc.
-  ];
-
-  const IMGS_REELES = [
-    // Cuando tengas fotos de reeles, agregalas acá. Por ahora repetimos para que se vea algo.
-    ...repeat(fallbackIMG, 8)
-    // Ejemplo real:
-    // 'assets/images/REEL01.png','assets/images/REEL02.png',... etc.
-  ];
-
-  // 2) Render helper
-  function renderGallery(containerId, arr) {
-    const el = document.getElementById(containerId);
-    if (!el) return false;
-    el.innerHTML = (arr || []).map((src, i) => `
-      <figure>
-        <img src="${src}" alt="Trabajo ${i + 1}" loading="lazy" decoding="async" />
-      </figure>
-    `).join('');
-    return true;
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    // HOME: primero Armado (10) con título; luego Reeles (5) con título
-    const diezArmado = IMGS_ARMADO.slice(0, 10);
-    const cincoReeles = IMGS_REELES.slice(0, 5);
-
-    const okArmadoHome = renderGallery('galleryGridArmadoHome', diezArmado);
-    const okReelesHome = renderGallery('galleryGridReelesHome', cincoReeles);
-
-    // Fallback: si por alguna razón no existen esos contenedores, cargamos el antiguo #galleryGrid
-    if (!okArmadoHome && !okReelesHome) {
-      const mix = [...diezArmado, ...cincoReeles];
-      renderGallery('galleryGrid', mix);
-    }
-
-    // Secciones completas (si existen)
-    renderGallery('galleryArmado', IMGS_ARMADO);
-    renderGallery('galleryReeles', IMGS_REELES);
-
-    // Log rápido en consola por si hay errores de rutas
-    console.log('[Galería] Armado:', IMGS_ARMADO.length, 'Reeles:', IMGS_REELES.length);
-  });
+    document.addEventListener('DOMContentLoaded', function(){ 
+      var diezArmado = IMGS_ARMADO.slice(0, 10);
+      var cincoReeles = IMGS_REELES.slice(0, 5);
+      renderGallery('galleryGridArmadoHome', diezArmado);
+      renderGallery('galleryGridReelesHome', cincoReeles);
+    });
   </script>
-</script>
 </body>
 </html>

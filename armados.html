@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Emiliano Lorenzini - Varas de Pesca</title>
+  <meta name="description" content="Armado y reparación de cañas de pesca en Reconquista, Santa Fe. Personalizá tu vara con Emiliano Lorenzini." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <title>Armados - Emiliano Lorenzini</title>
+</head>
+<body>
+  <a class="whatsapp-fab" href="https://wa.me/5493482632269?text=Hola%20Emiliano%2C%20vengo%20de%20tu%20web%20y%20quiero%20hacer%20una%20consulta." target="_blank" rel="noopener" aria-label="Escribime por WhatsApp">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M19.11 17.05c-.27-.14-1.6-.8-1.85-.9-.25-.09-.43-.14-.61.14-.18.27-.7.9-.86 1.08-.16.18-.32.2-.59.07-.27-.14-1.12-.41-2.13-1.31-.79-.7-1.32-1.57-1.47-1.84-.16-.27-.02-.42.12-.56.12-.12.27-.32.4-.48.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.14-.61-1.47-.84-2.01-.22-.54-.45-.46-.61-.46-.16 0-.34-.02-.52-.02-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.29 0 1.35.98 2.65 1.12 2.83.14.18 1.94 2.96 4.69 4.15.65.28 1.16.45 1.56.58.65.2 1.24.17 1.71.1.52-.08 1.6-.65 1.83-1.28.23-.63.23-1.17.16-1.28-.07-.11-.25-.18-.52-.32zM16 3C8.82 3 3 8.82 3 16c0 2.3.62 4.47 1.7 6.35L3 29l6.79-1.78C11.58 28.4 13.71 29 16 29c7.18 0 13-5.82 13-13S23.18 3 16 3zm0 23.6c-2.1 0-4.05-.62-5.68-1.68l-.41-.26-4.02 1.06 1.07-3.92-.27-.41C5.62 19.74 5 17.8 5 15.71 5 9.93 9.93 5 15.71 5 18.5 5 21 6.1 22.85 7.95 24.7 9.8 25.8 12.3 25.8 15.1 25.8 20.87 20.87 26.6 16 26.6z"/></svg>
+  </a>
+
+  <header class="site-header">
+    <div class="container header-grid">
+      <div class="brand">
+        <div class="logo">🎣</div>
+        <div>
+          <h1>Emiliano Lorenzini</h1>
+          <p class="subtitle">Varas de Pesca</p>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="index.html#inicio">Inicio</a>
+        <a href="index.html#galeria">Galería</a>
+        <a href="armados.html">Armados</a>
+        <a href="reeles.html">Reeles</a>
+        <a href="index.html#config">Configurar mi caña</a>
+        <a class="btn-primary subtle" href="https://wa.me/5493482632269?text=Hola%20Emiliano%2C%20vengo%20de%20tu%20web%20y%20quiero%20hacer%20una%20consulta." target="_blank" rel="noopener">WhatsApp</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section id="galeria-armado" class="gallery-section">
+      <div class="container">
+        <h3>Galería · Armado de cañas</h3>
+        <p class="section-lead">Trabajos de armado y personalización.</p>
+        <div class="gallery-grid" id="galleryArmado"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <h5>Emiliano Lorenzini · Varas de Pesca</h5>
+        <p class="small">Diseño, armado y reparación de cañas de pesca. Reconquista, Santa Fe.</p>
+      </div>
+      <div class="footer-links">
+        <a href="index.html#inicio">Inicio</a>
+        <a href="index.html#galeria">Galería</a>
+        <a href="armados.html">Armados</a>
+        <a href="reeles.html">Reeles</a>
+        <a href="index.html#config">Configurar</a>
+        <a href="https://wa.me/5493482632269" target="_blank" rel="noopener">WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-label="Visor de imágenes">
+    <button class="lightbox-close" aria-label="Cerrar">&times;</button>
+    <img class="lightbox-img" alt="Imagen ampliada" />
+    <button class="lightbox-prev" aria-label="Anterior">&#10094;</button>
+    <button class="lightbox-next" aria-label="Siguiente">&#10095;</button>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="gallery-data.js"></script>
+  <script src="gallery-utils.js"></script>
+  <!-- Página: Armados — render completo -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){ 
+      renderGallery('galleryArmado', IMGS_ARMADO);
+    });
+  </script>
+</body>
+</html>
