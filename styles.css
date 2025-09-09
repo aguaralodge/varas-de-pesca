@@ -214,7 +214,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#60a5fa;box-sh
 /* ===== Título del héroe con Cinzel (equivalente Google Fonts) ===== */
 #inicio .hero-title{
   font-family: 'Cinzel', 'Playfair Display', serif;
-  font-weight: 700;          /* probá 800 si lo querés más “contundente” */
+  font-weight: 800;          /* probá 800 si lo querés más “contundente” */
   letter-spacing: .2px;      /* ajustá fino si lo ves muy separado/junto */
   line-height: 1.1;
   color: #000;
