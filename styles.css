@@ -96,6 +96,8 @@ img{max-width:100%;display:block}
   overflow:hidden;
   position:relative;
   cursor:zoom-in;
+  object-fit: cover; /* recorta y llena el cuadrado */
+  object-position: center; /* centra la imagen */
   background: var(--gallery-blue) !important;     /* FONDOS DE LAS FOTOS: azul oscuro opaco */
   border:2px solid var(--fluor) !important;       /* CONTORNO VERDE FLÚO */
   box-shadow: var(--shadow-strong) !important;    /* SOMBRA AL MÁXIMO */
@@ -103,8 +105,6 @@ img{max-width:100%;display:block}
 }
 .gallery-grid img{
   aspect-ratio:4/3;
-  object-fit: cover; /* recorta y llena el cuadrado */
-  object-position: center; /* centra la imagen */
   padding:10px;
   transition: transform .35s ease;
 }
