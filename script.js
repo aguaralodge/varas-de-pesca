@@ -18,11 +18,18 @@ gateBtn?.addEventListener('click', ()=>{
 });
 
 const galleryItems = [
-  'assets/images/FOTO1.png','assets/images/FOTO2.png','assets/images/FOTO3.png',
-  'assets/images/FOTO4.png','assets/images/FOTO5.png','assets/images/FOTO6.png',
-  'assets/images/FOTO7.png','assets/images/FOTO8.png','assets/images/FOTO9.png',
-  'assets/images/FOTO10.png','assets/images/FOTO11.png','assets/images/FOTO12.png',
-  'assets/images/FOTO13.png','assets/images/FOTO14.png','assets/images/FOTO15.png',
+  'assets/images/FOTO1.jpeg','assets/images/FOTO2.jpeg','assets/images/FOTO3.jpeg',
+  'assets/images/FOTO4.jpeg','assets/images/FOTO5.jpeg','assets/images/FOTO6.jpeg',
+  'assets/images/FOTO7.jpeg','assets/images/FOTO8.jpeg','assets/images/FOTO9.jpeg',
+  'assets/images/FOTO10.jpeg','assets/images/FOTO11.jpeg','assets/images/FOTO12.jpeg',
+  'assets/images/FOTO13.jpeg','assets/images/FOTO14.jpeg','assets/images/FOTO15.jpeg',
+  'assets/images/FOTO16.jpeg','assets/images/FOTO17.jpeg','assets/images/FOTO18.jpeg',
+  'assets/images/FOTO19.jpeg','assets/images/FOTO20.jpeg','assets/images/FOTO21.jpeg',
+  'assets/images/FOTO22.jpeg','assets/images/FOTO23.jpeg','assets/images/FOTO24.jpeg',
+  'assets/images/FOTO25.jpeg','assets/images/FOTO26.jpeg','assets/images/FOTO27.jpeg',
+  'assets/images/FOTO28.jpeg','assets/images/FOTO29.jpeg','assets/images/FOTO30.jpeg',
+  'assets/images/FOTO31.jpeg','assets/images/FOTO32.jpeg','assets/images/FOTO33.jpeg',
+  'assets/images/FOTO34.jpeg',
 ];
 const grid = document.getElementById('galleryGrid');
 if(grid){
