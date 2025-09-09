@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Emiliano Lorenzini - Varas de Pesca - Mantenimiento de reeles</title>
+  <title>Emiliano Lorenzini - Varas de Pesca</title>
   <meta name="description" content="Armado y reparación de cañas de pesca en Reconquista, Santa Fe. Personalizá tu vara con Emiliano Lorenzini." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,12 +21,14 @@
         <div class="logo">🎣</div>
         <div>
           <h1>Emiliano Lorenzini</h1>
-          <p class="subtitle">Varas de Pesca - Mantenimiento de reeles</p>
+          <p class="subtitle">Varas de Pesca</p>
         </div>
       </div>
       <nav class="nav">
         <a href="#inicio">Inicio</a>
         <a href="#galeria">Galería</a>
+        <a href="#galeria-armado">Armados</a>
+        <a href="#galeria-reeles">Reeles</a>
         <a href="#config">Configurar mi caña</a>
         <a class="btn-primary subtle" href="https://wa.me/5493482632269?text=Hola%20Emiliano%2C%20vengo%20de%20tu%20web%20y%20quiero%20hacer%20una%20consulta." target="_blank" rel="noopener">WhatsApp</a>
       </nav>
@@ -50,11 +52,46 @@
       </div>
     </section>
 
+    <!-- INICIO: primero ARMADO (10) con título; debajo REELES (5) con título -->
     <section id="galeria" class="gallery-section">
       <div class="container">
-        <h3>Galería</h3>
-        <p class="section-lead">Hacé clic para ampliar.</p>
-        <div class="gallery-grid" id="galleryGrid"></div>
+        <h3>Galería (inicio)</h3>
+        <p class="section-lead">Una selección rápida. Hacé clic para ampliar.</p>
+
+        <div class="home-gallery-group">
+          <h4 class="home-gallery-title">Armado de cañas</h4>
+          <div class="gallery-grid" id="galleryGridArmadoHome"></div>
+        </div>
+
+        <div class="home-separator" role="separator" aria-hidden="true"></div>
+
+        <div class="home-gallery-group">
+          <h4 class="home-gallery-title">Mantenimiento de reeles</h4>
+          <div class="gallery-grid" id="galleryGridReelesHome"></div>
+        </div>
+
+        <div class="actions" style="margin-top:14px; display:flex; gap:12px;">
+          <a href="#galeria-armado" class="btn-primary">Ver galería completa de armados</a>
+          <a href="#galeria-reeles" class="btn-ghost">Ver galería de reeles</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALERÍA COMPLETA: Armado de cañas -->
+    <section id="galeria-armado" class="gallery-section">
+      <div class="container">
+        <h3>Galería · Armado de cañas</h3>
+        <p class="section-lead">Trabajos de armado y personalización.</p>
+        <div class="gallery-grid" id="galleryArmado"></div>
+      </div>
+    </section>
+
+    <!-- GALERÍA COMPLETA: Mantenimiento de reeles -->
+    <section id="galeria-reeles" class="gallery-section">
+      <div class="container">
+        <h3>Galería · Mantenimiento de reeles</h3>
+        <p class="section-lead">Servicio de limpieza, cambio de piezas y puesta a punto.</p>
+        <div class="gallery-grid" id="galleryReeles"></div>
       </div>
     </section>
 
@@ -215,6 +252,8 @@
       <div class="footer-links">
         <a href="#inicio">Inicio</a>
         <a href="#galeria">Galería</a>
+        <a href="#galeria-armado">Armados</a>
+        <a href="#galeria-reeles">Reeles</a>
         <a href="#config">Configurar</a>
         <a href="https://wa.me/5493482632269" target="_blank" rel="noopener">WhatsApp</a>
       </div>
@@ -229,5 +268,58 @@
   </div>
 
   <script src="script.js"></script>
+  <!-- Inline: render de galerías sin tocar tu script.js existente -->
+  <script>
+  // ========= GALERÍAS =========
+  // 1) Cargá aquí tus fotos reales
+  //    - Armado de cañas:
+  const IMGS_ARMADO = [
+    'assets/images/FOTO01.png',
+    'assets/images/FOTO02.png',
+    'assets/images/FOTO03.png',
+    'assets/images/FOTO04.png',
+    'assets/images/FOTO05.png',
+    'assets/images/FOTO06.png',
+    'assets/images/FOTO07.png',
+    'assets/images/FOTO08.png',
+    'assets/images/FOTO09.png',
+    'assets/images/FOTO10.png',
+    'assets/images/FOTO11.png',
+    'assets/images/FOTO12.png',
+  ];
+
+  //    - Mantenimiento de reeles: (vos las cargás después)
+  const IMGS_REELES = [
+    // 'assets/images/REEL01.png',
+    // 'assets/images/REEL02.png',
+    // 'assets/images/REEL03.png',
+    // 'assets/images/REEL04.png',
+    // 'assets/images/REEL05.png',
+    // ...agregá más
+  ];
+
+  // 2) Función para renderizar una cuadrícula
+  function renderGallery(containerId, arr) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    el.innerHTML = (arr || []).map((src, i) => \`
+      <figure>
+        <img src="\${src}" alt="Trabajo \${i + 1}" loading="lazy" decoding="async" />
+      </figure>
+    \`).join('');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // 3) Inicio: ARMADO (10) con título + REELES (5) con título
+    const diezArmado = IMGS_ARMADO.slice(0, 10);
+    const cincoReeles = IMGS_REELES.slice(0, 5);
+    renderGallery('galleryGridArmadoHome', diezArmado);
+    renderGallery('galleryGridReelesHome', cincoReeles);
+
+    // 4) Secciones completas
+    renderGallery('galleryArmado', IMGS_ARMADO);
+    renderGallery('galleryReeles', IMGS_REELES);
+  });
+  </script>
 </body>
 </html>

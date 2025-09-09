@@ -161,25 +161,53 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#60a5fa;box-sh
 @media (max-width: 480px){
   .gallery-grid{grid-template-columns:1fr}
 }
+
+
 /* ===========================
-   GALERÍA (override seguro)
+   GALERÍAS (override seguro)
    Miniaturas cuadradas + imagen ajustada
    =========================== */
-#galeria .gallery-grid figure{
-  aspect-ratio: 1 / 1;   /* el contenedor pasa a ser cuadrado */
-  overflow: hidden;       /* recorte prolijo de la imagen */
+#galeria .gallery-grid figure,
+#galeria-armado .gallery-grid figure,
+#galeria-reeles .gallery-grid figure{
+  aspect-ratio: 1 / 1;  /* miniatura cuadrada */
+  overflow: hidden;
 }
 
-#galeria .gallery-grid figure > img{
+#galeria .gallery-grid figure > img,
+#galeria-armado .gallery-grid figure > img,
+#galeria-reeles .gallery-grid figure > img{
   width: 100%;
   height: 100%;
   display: block;
-  object-fit: cover;      /* la imagen llena el cuadrado sin deformarse */
+  object-fit: cover;     /* llena el cuadrado sin deformarse */
   object-position: center;
-  padding: 0 !important;  /* anula el padding:10px del img en galería */
+  padding: 0 !important; /* anula cualquier padding previo */
 }
 
-/* evita que el aspect-ratio previo (4/3) del img interfiera */
-#galeria .gallery-grid img{
+/* por si algún <img> trae aspect-ratio heredado */
+#galeria .gallery-grid img,
+#galeria-armado .gallery-grid img,
+#galeria-reeles .gallery-grid img{
   aspect-ratio: auto !important;
+}
+
+
+/* ===========================
+   HOME GALERÍA: títulos por grupo
+   =========================== */
+#galeria .home-gallery-group{ margin-bottom: 20px; }
+#galeria .home-gallery-title{ margin: 6px 0 10px; font-size: 1.05rem; color: var(--text); }
+
+
+/* ===========================
+   HOME GALERÍA: separador entre grupos
+   =========================== */
+#galeria .home-separator{
+  height: 2px;
+  background: var(--fluor);
+  box-shadow: 0 0 16px rgba(57,255,20,.55), 0 0 40px rgba(57,255,20,.25);
+  border-radius: 9999px;
+  margin: 18px 0 12px;
+  opacity: .95;
 }
