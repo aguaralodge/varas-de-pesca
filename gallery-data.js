@@ -44,6 +44,36 @@ var IMGS_ARMADO = [
 if (!IMGS_ARMADO.length) { IMGS_ARMADO = repeat(fallbackIMG, 12); }
 
 var IMGS_REELES = [
+'/assets/images/R1.jpeg',
+'/assets/images/R10.jpeg',
+'/assets/images/R11.jpeg',
+'/assets/images/R12.jpeg',
+'/assets/images/R13.jpeg',
+'/assets/images/R14.jpeg',
+'/assets/images/R15.jpeg',
+'/assets/images/R16.jpeg',
+'/assets/images/R17.jpeg',
+'/assets/images/R18.jpeg',
+'/assets/images/R19.jpeg',
+'/assets/images/R2.jpeg',
+'/assets/images/R20.jpeg',
+'/assets/images/R21.jpeg',
+'/assets/images/R22.jpeg',
+'/assets/images/R23.jpeg',
+'/assets/images/R24.jpeg',
+'/assets/images/R25.jpeg',
+'/assets/images/R26.jpeg',
+'/assets/images/R27.jpeg',
+'/assets/images/R28.jpeg',
+'/assets/images/R29.jpeg',
+'/assets/images/R3.jpeg',
+'/assets/images/R30.jpeg',
+'/assets/images/R4.jpeg',
+'/assets/images/R5.jpeg',
+'/assets/images/R6.jpeg',
+'/assets/images/R7.jpeg',
+'/assets/images/R8.jpeg',
+'/assets/images/R9.jpeg',
   // Ejemplo: 'assets/images/REEL01.png','assets/images/REEL02.png',...
 ];
 if (!IMGS_REELES.length) { IMGS_REELES = repeat(fallbackIMG, 8); }
