@@ -4,7 +4,9 @@ var fallbackIMG = 'assets/images/FOTO1.jpeg';
 function repeat(src, n){ return Array.from({length:n}, function(){ return src; }); }
 
 // Reemplazá por tus rutas reales cuando subas tus imágenes
-var IMGS_ARMADO = [  // Ejemplo: 'assets/images/FOTO01.png','assets/images/FOTO02.png',...
+var IMGS_ARMADO = [ 
+ 'assets/images/FOTO1.jpeg','assets/images/FOTO2.jpeg',
+  'assets/images/FOTO3.jpeg', // Ejemplo: 'assets/images/FOTO01.png','assets/images/FOTO02.png',...
 ];
 if (!IMGS_ARMADO.length) { IMGS_ARMADO = repeat(fallbackIMG, 12); }
 
