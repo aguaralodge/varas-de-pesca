@@ -219,9 +219,9 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#60a5fa;box-sh
   font-size: clamp(42px, 6.2vw, 88px);
   letter-spacing: .01em;       /* ajustar si hace falta */
   color:#005fad;
-  -webkit-text-stroke: 1px #39ff00;   /* contorno blanco principal (podés subirlo a 1.4–1.6px si querés aún más) */
+  -webkit-text-stroke: 1px #003a6a;   /* contorno blanco principal (podés subirlo a 1.4–1.6px si querés aún más) */
   text-shadow:
-    -1px -1px 2px #000000, 1px -1px 2px #000000,
+    -1px -1px 2px #39ff00, 1px -1px 2px #39ff00,
     -1px  1px 2px #000000, 1px  1px 2px #000000;
   text-shadow:
     0 0 0 #000,      /* define borde interno nítido */
