@@ -218,8 +218,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#60a5fa;box-sh
   line-height: 1.08;
   font-size: clamp(42px, 6.2vw, 88px);
   letter-spacing: .01em;       /* ajustar si hace falta */
-  color:#005fad;
-  -webkit-text-stroke: 1px #003a6a;   /* contorno blanco principal (podés subirlo a 1.4–1.6px si querés aún más) */
+  color:#000000;
+  -webkit-text-stroke: 1px #005fad;   /* contorno blanco principal (podés subirlo a 1.4–1.6px si querés aún más) */
   text-shadow:
     -1px -1px 2px #39ff00, 1px -1px 2px #39ff00,
     -1px  1px 2px #000000, 1px  1px 2px #000000;
