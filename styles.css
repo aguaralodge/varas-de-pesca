@@ -221,8 +221,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#60a5fa;box-sh
   color:#000;
   -webkit-text-stroke: 1px #008f11;   /* contorno blanco principal (podés subirlo a 1.4–1.6px si querés aún más) */
   text-shadow:
-    -1px -1px 2px #fff, 1px -1px 2px #fff,
-    -1px  1px 2px #fff, 1px  1px 2px #fff;
+    -1px -1px 2px #fff, 1px -1px 2px #008f11,
+    -1px  1px 2px #fff, 1px  1px 2px #008f11;
   text-shadow:
     0 0 0 #000,      /* define borde interno nítido */
     0.5px 0 #000,
