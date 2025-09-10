@@ -5,7 +5,7 @@ function repeat(src, n){ return Array.from({length:n}, function(){ return src; }
 
 // Reemplazá por tus rutas reales cuando subas tus imágenes
 var IMGS_ARMADO = [
-  'assets/images/FOTO1.JPEG','assets/images/FOTO2.JPEG','assets/images/FOTO3.JPEG','assets/images/FOTO4.JPEG'
+  'assets/images/FOTO1.jpeg','assets/images/FOTO2.JPEG','assets/images/FOTO3.JPEG','assets/images/FOTO4.JPEG'
   'assets/images/FOTO5.JPEG','assets/images/FOTO6.JPEG','assets/images/FOTO7.JPEG','assets/images/FOTO8.JPEG'
   'assets/images/FOTO9.JPEG','assets/images/FOTO10.JPEG','assets/images/FOTO11.JPEG','assets/images/FOTO12.JPEG'
   'assets/images/FOTO13.JPEG','assets/images/FOTO14.JPEG','assets/images/FOTO15.JPEG','assets/images/FOTO16.JPEG'
