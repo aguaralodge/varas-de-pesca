@@ -12,40 +12,40 @@
 
   /* ---------- CONFIGURACIÓN ---------- */
   // Cambiá la clave acá. Si querés, podés moverla a un atributo data- del HTML.
-  const PASSWORD = "EL2025";
+  const PASSWORD = "EMI2025";
 
   // Mapa de precios por ID de select y por texto de opción EXACTO
   const PRECIOS = {
     tipoVara: {
-      "Tournament": 0,
+      "Tournament": 30000,
       "ya tengo Vara": 0
     },
     color: {
-      "blanco": 0, "negro": 0, "rojo": 0, "azul": 0, "verde": 0
+      "blanco": 20000, "negro": 0, "rojo": 25000, "azul": 25000, "verde": 25000
     },
     largo: {
-      "2,40": 60000, "2,30": 55000, "2,20": 50000, "2,10": 45000
+      "2,40": 0, "2,30": 0, "2,20": 0, "2,10": 0
     },
     pasahilos: {
-      "8 + puntera": 0, "9 + puntera": 4000, "10 + puntera": 8000, "11 + puntera": 12000
+      "8 + puntera": 45000, "9 + puntera": 50000, "10 + puntera": 55000, "11 + puntera": 60000
     },
     portaReel: {
-      "fuji": 45000, "Masterguil": 30000
+      "Fuji(Japon)": 30000, "Masterguil(Generico)": 10000, "Con gatillo (Generico)": 20000,
     },
     portaAnzuelo: {
       "con porta anzuelo": 5000, "sin porta anzuelo": 0
     },
     nombreLogo: {
-      "nombre + logo": 15000, "nombre o logo solo": 8000
+      "nombre + logo": 15000, "nombre o logo solo": 8000, "sin logo o nombre": 0,
     },
     tipoMango: {
-      "soga": 0,
+      "soga": 8000,
       "termocontraible sin relleno": 12000,
-      "termocontraible con relleno": 18000,
-      "corcho aglomerado": 28000
+      "termocontraible con relleno": 20000,
+      "corcho aglomerado": 30000,
     },
     tacon: {
-      "con taco de goma": 7000, "sin taco de goma": 0
+      "con taco de goma": 5000, "sin taco de goma": 0
     }
   };
 
