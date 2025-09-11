@@ -11,21 +11,21 @@
   "use strict";
 
   /* ----- CONFIG ----- */
-  const PASSWORD = "EL2025";         // Cambiá acá si querés otra clave
+  const PASSWORD = "EMI2025";         // Cambiá acá si querés otra clave
   const WHATSAPP = "5493482632269";  // Número para el envío (con código de país sin '+')
   const WHATSAPP_DISPLAY = "3482632269"; // Texto que se ve en el mensaje de error
 
   // Mapa de precios (ajustá montos si querés)
   const PRECIOS = {
-    tipoVara: { "Tournament": 0, "ya tengo Vara": 0 },
-    color: { "blanco": 0, "negro": 0, "rojo": 0, "azul": 0, "verde": 0 },
-    largo: { "2,40": 60000, "2,30": 55000, "2,20": 50000, "2,10": 45000 },
-    pasahilos: { "8 + puntera": 0, "9 + puntera": 4000, "10 + puntera": 8000, "11 + puntera": 12000 },
-    portaReel: { "fuji": 45000, "Masterguil": 30000 },
+    tipoVara: { "Tournament": 30000, "ya tengo Vara": 0 },
+    color: { "blanco": 20000, "negro": 0, "rojo": 25000, "azul": 25000, "verde": 25000 },
+    largo: { "2,40": 0, "2,30": 0, "2,20": 0, "2,10": 0 },
+    pasahilos: { "8 + puntera": 45000 , "9 + puntera": 50000, "10 + puntera": 55000, "11 + puntera": 60000 },
+    portaReel: { "fuji (Japon)": 30000, "Masterguil": 10000 , "Genérico con gatillo": 20000 },
     portaAnzuelo: { "con porta anzuelo": 5000, "sin porta anzuelo": 0 },
-    nombreLogo: { "nombre + logo": 15000, "nombre o logo solo": 8000 },
-    tipoMango: { "soga": 0, "termocontraible sin relleno": 12000, "termocontraible con relleno": 18000, "corcho aglomerado": 28000 },
-    tacon: { "con taco de goma": 7000, "sin taco de goma": 0 }
+    nombreLogo: { "nombre + logo": 8000, "nombre o logo solo": 5000 , "sin nombre o logo" : 0 },
+    tipoMango: { "soga": 8000, "termocontraible sin relleno": 12000, "termocontraible con relleno": 18000, "corcho aglomerado": 28000 },
+    tacon: { "con taco de goma": 3000, "sin taco de goma": 0 }
   };
 
   /* ----- HELPERS ----- */
