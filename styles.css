@@ -234,3 +234,19 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#60a5fa;box-sh
   
 
 
+
+
+/* === Overrides solicitados (Emiliano) === */
+/* Lightbox: mostrar tamaño real (1:1) y permitir scroll si excede viewport */
+.lightbox{ overflow:auto; }
+.lightbox-img{ 
+  max-width: none !important; 
+  max-height: none !important; 
+  width: auto; height: auto; 
+}
+
+/* Header en color grafito */
+.site-header{
+  background: #2b2f36 !important; /* grafito */
+  backdrop-filter: none; /* evitar que se aclare con blur */
+}
