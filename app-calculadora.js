@@ -1,157 +1,144 @@
 
 /* =======================================================
-   Calculadora Varas de Pesca — JS standalone
-   - No modifica tu HTML ni tu CSS
-   - Bloqueo por clave ANTES de la calculadora
-   - Cálculo PARCIAL (suma lo que haya seleccionado)
-   - Breakdown y envío por WhatsApp
+   Calculadora Varas de Pesca — v3
+   Cambio: mensaje de clave incorrecta con LINK a WhatsApp.
+   Además mantiene:
+   - Envío con texto libre (sin selecciones)
+   - Cálculo parcial
+   - Clave antes de usar
    ======================================================= */
-
 (function(){
   "use strict";
 
-  /* ---------- CONFIGURACIÓN ---------- */
-  // Cambiá la clave acá. Si querés, podés moverla a un atributo data- del HTML.
-  const PASSWORD = "EMI2025";
+  /* ----- CONFIG ----- */
+  const PASSWORD = "EL2025";         // Cambiá acá si querés otra clave
+  const WHATSAPP = "5493482632269";  // Número para el envío (con código de país sin '+')
+  const WHATSAPP_DISPLAY = "3482632269"; // Texto que se ve en el mensaje de error
 
-  // Mapa de precios por ID de select y por texto de opción EXACTO
+  // Mapa de precios (ajustá montos si querés)
   const PRECIOS = {
-    tipoVara: {
-      "Tournament": 30000,
-      "ya tengo Vara": 0
-    },
-    color: {
-      "blanco": 20000, "negro": 0, "rojo": 25000, "azul": 25000, "verde": 25000
-    },
-    largo: {
-      "2,40": 0, "2,30": 0, "2,20": 0, "2,10": 0
-    },
-    pasahilos: {
-      "8 + puntera": 45000, "9 + puntera": 50000, "10 + puntera": 55000, "11 + puntera": 60000
-    },
-    portaReel: {
-      "Fuji(Japon)": 30000, "Masterguil(Generico)": 10000, "Con gatillo (Generico)": 20000,
-    },
-    portaAnzuelo: {
-      "con porta anzuelo": 5000, "sin porta anzuelo": 0
-    },
-    nombreLogo: {
-      "nombre + logo": 15000, "nombre o logo solo": 8000, "sin logo o nombre": 0,
-    },
-    tipoMango: {
-      "soga": 8000,
-      "termocontraible sin relleno": 12000,
-      "termocontraible con relleno": 20000,
-      "corcho aglomerado": 30000,
-    },
-    tacon: {
-      "con taco de goma": 5000, "sin taco de goma": 0
-    }
+    tipoVara: { "Tournament": 0, "ya tengo Vara": 0 },
+    color: { "blanco": 0, "negro": 0, "rojo": 0, "azul": 0, "verde": 0 },
+    largo: { "2,40": 60000, "2,30": 55000, "2,20": 50000, "2,10": 45000 },
+    pasahilos: { "8 + puntera": 0, "9 + puntera": 4000, "10 + puntera": 8000, "11 + puntera": 12000 },
+    portaReel: { "fuji": 45000, "Masterguil": 30000 },
+    portaAnzuelo: { "con porta anzuelo": 5000, "sin porta anzuelo": 0 },
+    nombreLogo: { "nombre + logo": 15000, "nombre o logo solo": 8000 },
+    tipoMango: { "soga": 0, "termocontraible sin relleno": 12000, "termocontraible con relleno": 18000, "corcho aglomerado": 28000 },
+    tacon: { "con taco de goma": 7000, "sin taco de goma": 0 }
   };
 
-  // Teléfono de WhatsApp (con código país, sin +)
-  const WHATSAPP = "5493482632269";
-
-  /* ---------- HELPERS ---------- */
-  const $ = sel => document.querySelector(sel);
-  const $$ = sel => Array.from(document.querySelectorAll(sel));
-
-  function money(n){
-    return n.toLocaleString("es-AR", { style:"currency", currency:"ARS", maximumFractionDigits: 0 });
-  }
-
-  function valorSelect(id){
-    const el = $("#"+id);
-    if(!el) return "";
-    return (el.value || "").trim();
-  }
-
-  function textoLabel(id){
+  /* ----- HELPERS ----- */
+  const $ = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
+  const money = n => n.toLocaleString("es-AR", {style:"currency", currency:"ARS", maximumFractionDigits:0});
+  const labelText = id => {
     const lab = $$(`label[for="${id}"]`)[0];
     return lab ? lab.textContent.trim() : id;
+  };
+  const valueOf = id => {
+    const el = $("#"+id);
+    return el ? (el.value||"").trim() : "";
+  };
+
+  /* ----- GATE / CLAVE ----- */
+  function relaxRequired(form){
+    // Permitir envío parcial o solo texto: quitamos validaciones HTML5
+    form?.querySelectorAll("[required]").forEach(el => el.removeAttribute("required"));
   }
 
-  /* ---------- BLOQUEO POR CLAVE ---------- */
   function initGate(){
-    const gateCard  = $("#gateCard");
-    const gateCode  = $("#gateCode");
-    const gateBtn   = $("#gateBtn");
-    const gateMsg   = $("#gateMsg");
-    const form      = $("#configForm");
+    const form    = $("#configForm");
+    const gate    = $("#gateCard");
+    const gateBtn = $("#gateBtn");
+    const gateInp = $("#gateCode");
+    const gateMsg = $("#gateMsg");
 
-    if(!gateCard || !gateCode || !gateBtn || !form) return;
+    if(!form || !gate || !gateBtn || !gateInp) return;
 
-    // Aseguramos que arranca bloqueado
     form.classList.add("locked");
 
-    gateBtn.addEventListener("click", () => {
-      const code = (gateCode.value || "").trim();
+    gateBtn.addEventListener("click", function(){
+      const code = (gateInp.value||"").trim();
       if(code === PASSWORD){
         form.classList.remove("locked");
-        gateCard.style.display = "none";
+        gate.style.display = "none";
         gateMsg.textContent = "";
-        // Calcula apenas se desbloquea
+        relaxRequired(form);
         try{ calcular(); }catch(e){}
       }else{
-        gateMsg.textContent = "Clave incorrecta";
+        // Mensaje personalizado con LINK a WhatsApp
+        const href = `https://wa.me/${WHATSAPP}`;
+        gateMsg.innerHTML = ` clave incorrecta, comunicate al whatsapp para recibir la clave si no te la acordas <a href="${href}" target="_blank" rel="noopener">${WHATSAPP_DISPLAY}</a>`;
         gateMsg.style.color = "salmon";
-        gateCode.focus();
-        gateCode.select();
+        gateInp.focus();
+        gateInp.select();
       }
     });
   }
 
-  /* ---------- CÁLCULO PARCIAL ---------- */
+  /* ----- CÁLCULO PARCIAL ----- */
   function calcular(){
-    const campos = Object.keys(PRECIOS);
     let total = 0;
     const detalles = [];
 
-    campos.forEach(id => {
-      const val = valorSelect(id);
-      if(!val){ return; } // vacío suma 0
+    Object.keys(PRECIOS).forEach(function(id){
+      const val = valueOf(id);
+      if(!val) return; // vacío no suma
       const mapa = PRECIOS[id] || {};
-      const precio = (val in mapa) ? (mapa[val] || 0) : 0;
+      const precio = (val in mapa) ? (mapa[val]||0) : 0;
       total += precio;
-      if(precio>0){
-        detalles.push(`${textoLabel(id)}: ${val} (${money(precio)})`);
-      }else{
-        detalles.push(`${textoLabel(id)}: ${val}`);
-      }
+      detalles.push(precio>0 ? `${labelText(id)}: ${val} (${money(precio)})` : `${labelText(id)}: ${val}`);
     });
 
     const quoteTotal = $("#quoteTotal");
     const quoteDetail = $("#quoteDetail");
-
     if(quoteTotal) quoteTotal.textContent = money(total);
     if(quoteDetail) quoteDetail.textContent = detalles.join(" · ");
-    return total;
+
+    return { total, detalles };
   }
 
-  function bindEvents(){
-    // Recalcular ante cualquier cambio en selects o inputs del form
-    $("#configForm")?.addEventListener("change", e => {
-      if(e.target.matches("select, input, textarea")) calcular();
-    });
-    $("#configForm")?.addEventListener("input", e => {
-      if(e.target.matches("input, textarea")) calcular();
-    });
+  function countSelections(){
+    return Object.keys(PRECIOS).reduce((acc,id)=> acc + (valueOf(id)?1:0), 0);
+  }
 
-    // Envío a WhatsApp con resumen
-    $("#configForm")?.addEventListener("submit", e => {
-      e.preventDefault();
-      const total = calcular();
-      const partes = [];
+  /* ----- SUBMIT A WHATSAPP ----- */
+  function bindSubmit(){
+    const form = $("#configForm");
+    if(!form) return;
 
-      Object.keys(PRECIOS).forEach(id => {
-        const val = valorSelect(id);
-        if(val) partes.push(`${textoLabel(id)}: ${val}`);
-      });
+    form.addEventListener("submit", function(e){
+      relaxRequired(form); // por si acaso
+
+      if(form.classList.contains("locked")){
+        e.preventDefault();
+        alert("Ingresá la clave para usar la calculadora.");
+        return;
+      }
+
+      const { total } = calcular();
       const nota = ($("#nota")?.value || "").trim();
+      const selections = countSelections();
+
+      // Ahora permitimos enviar con 0 selecciones y SIN nota, si querés eso cambiá este bloque:
+      // En esta versión, exigimos ALGO: o selecciones o nota.
+      if(selections < 1 && !nota){
+        e.preventDefault();
+        alert("Escribí una nota o elegí al menos un ítem para enviar por WhatsApp.");
+        return;
+      }
+
+      e.preventDefault();
+      const partes = [];
+      Object.keys(PRECIOS).forEach(id => {
+        const v = valueOf(id);
+        if(v) partes.push(`${labelText(id)}: ${v}`);
+      });
       if(nota) partes.push(`Notas: ${nota}`);
 
       const msg = `Hola, quiero pedir una cotización:%0A` +
-                  partes.map(p=>`- ${p}`).join("%0A") +
+                  (partes.length ? partes.map(p=>`- ${p}`).join("%0A") : "- (sin selecciones)") +
                   `%0A%0ATotal estimado: ${money(total)}`;
 
       const url = `https://wa.me/${WHATSAPP}?text=${msg}`;
@@ -159,11 +146,22 @@
     });
   }
 
-  /* ---------- INIT ---------- */
-  document.addEventListener("DOMContentLoaded", () => {
+  function bindRecalc(){
+    const form = $("#configForm");
+    if(!form) return;
+    form.addEventListener("change", function(e){
+      if(e.target.matches("select, input, textarea")) calcular();
+    });
+    form.addEventListener("input", function(e){
+      if(e.target.matches("input, textarea")) calcular();
+    });
+  }
+
+  /* ----- INIT ----- */
+  document.addEventListener("DOMContentLoaded", function(){
     initGate();
-    bindEvents();
-    // Primer cálculo (por si hay valores precargados)
+    bindRecalc();
+    bindSubmit();
     try{ calcular(); }catch(e){}
   });
 
