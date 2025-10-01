@@ -11,7 +11,7 @@
   "use strict";
 
   /* ----- CONFIG ----- */
-  const PASSWORD = "EMI2025";         // Cambiá acá si querés otra clave
+  const PASSWORD = "AGUARA25";         // Cambiá acá si querés otra clave
   const WHATSAPP = "5493482632269";  // Número para el envío (con código de país sin '+')
   const WHATSAPP_DISPLAY = "3482632269"; // Texto que se ve en el mensaje de error
 
