@@ -469,4 +469,6 @@ button.btn-presupuesto:hover{
 @media (max-width: 700px){
   .catalogo-wrap{ padding: 14px 0 36px; }
 }
-
+/* TEST: si esto NO se ve, catalogo.html no está cargando style.css */
+body{ outline: 6px solid #39FF14; }
+}
