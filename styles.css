@@ -24,17 +24,18 @@ img{max-width:100%;display:block}
 .small{font-size:.9rem;color:#cbd5e1}
 
 .site-header{position:sticky;top:0;background:rgba(15,23,42,.75);backdrop-filter:saturate(130%) blur(8px);border-bottom:1px solid rgba(255,255,255,.08);z-index:20}
-.header-grid{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
+.header-grid{display:flex;  flex-direction:column;  align-items:flex-start;  gap:12px;  padding:12px 0}
 .brand{display:flex;gap:12px;align-items:center}
 .logo{font-size:32px}
 .brand h1{margin:0;font-size:1.2rem}
 .subtitle{margin:0;color:#94a3b8;font-size:.95rem}
-
-.nav{display:flex;gap:14px;align-items:center}
+.nav{  display:flex;  flex-wrap:wrap;  gap:10px 14px;  align-items:center;  width:100%}
 .nav a{color:var(--text);text-decoration:none;padding:8px 12px;border-radius:12px}
 .nav a:hover{background:rgba(255,255,255,.06)}
 .nav .btn-primary.subtle{padding:8px 12px;color:#fff !important;border:2px solid var(--fluor) !important}
-
+@media (max-width: 700px){
+  .nav{    flex-direction:column;    align-items:flex-start;    gap:10px}
+}
 .hero{padding:48px 0}
 .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
 .hero-card{
