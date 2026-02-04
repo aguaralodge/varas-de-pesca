@@ -98,19 +98,22 @@ function cardHTML(p) {
   const stockTxt = p.stock > 0 ? `Stock: ${p.stock}` : "Sin stock";
 
   return `
-  <article class="card">
+  <article class="producto-card">
     <img src="${p.foto}" alt="${escapeHtml(p.nombre)}" loading="lazy" />
-    <div class="info">
-      <h3 style="margin:0;">${escapeHtml(p.nombre)}</h3>
-      <div class="meta">
-        <span><strong>${price}</strong></span>
+    <div class="producto-info">
+      <h3>${escapeHtml(p.nombre)}</h3>
+
+      <div class="producto-meta">
+        <span class="precio">${price}</span>
         <span style="opacity:.85;">${stockTxt}</span>
       </div>
-      <div class="actions">
+
+      <div class="producto-acciones">
         <label style="display:flex;align-items:center;gap:8px;">
           <input id="chk_${p.id}" type="checkbox" ${p.stock <= 0 ? "disabled" : ""} />
           Agregar
         </label>
+
         <label style="display:flex;align-items:center;gap:8px;">
           Cant:
           <input class="qty" id="qty_${p.id}" type="number" min="1" value="1" ${p.stock <= 0 ? "disabled" : ""} />
@@ -152,7 +155,7 @@ function renderCarrito() {
     total += sub;
 
     return `
-      <div class="row">
+      <div class="carrito-row">
         <div>
           <div><strong>${escapeHtml(it.nombre)}</strong></div>
           <div style="opacity:.85;">${it.cantidad} × ${money(it.precio)}</div>
