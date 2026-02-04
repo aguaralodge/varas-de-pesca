@@ -5,12 +5,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Catálogo | Artículos de pesca</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .wrap{max-width:1100px;margin:0 auto;padding:18px}
+    .toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:12px 0 18px}
+    .toolbar input{flex:1;min-width:240px;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:inherit}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+    .card{border-radius:16px;overflow:hidden;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);box-shadow:0 10px 28px rgba(0,0,0,.22)}
+    .card img{width:100%;height:200px;object-fit:cover;display:block}
+    .info{padding:12px}
+    .meta{display:flex;justify-content:space-between;gap:10px;opacity:.92;margin:8px 0 10px}
+    .actions{display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .qty{width:74px;padding:6px 8px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:inherit}
+    .carrito{margin-top:26px;padding:14px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+    .row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    button{padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:inherit;cursor:pointer}
+    button:hover{background:rgba(255,255,255,.10)}
+  </style>
 </head>
 <body>
-  <main style="max-width: 1100px; margin: 0 auto; padding: 18px;">
+
+  <!-- reutiliza tu header pegando el mismo bloque si querés,
+       por ahora dejé algo simple -->
+  <div class="wrap">
     <h1>Catálogo de artículos</h1>
-    <p>En breve vas a poder seleccionar productos y enviarme el pedido por WhatsApp.</p>
-    <a href="index.html">← Volver</a>
-  </main>
+    <p>Seleccioná productos, elegí cantidades y enviame el pedido por WhatsApp.</p>
+    <p><a href="index.html">← Volver</a></p>
+
+    <div class="toolbar">
+      <input id="search" type="search" placeholder="Buscar (reel, señuelo, tanza…)" />
+      <label style="display:flex;align-items:center;gap:8px;">
+        <input id="soloStock" type="checkbox" checked />
+        Solo con stock
+      </label>
+    </div>
+
+    <section id="grid" class="grid"></section>
+
+    <aside class="carrito">
+      <h2>Carrito</h2>
+      <div id="carritoItems" style="opacity:.9;"></div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;">
+        <strong>Total:</strong>
+        <strong id="total">$0</strong>
+      </div>
+
+      <div class="btns">
+        <button id="btnVaciar" type="button">Vaciar</button>
+        <button id="btnWhatsApp" type="button">Enviar pedido por WhatsApp</button>
+      </div>
+
+      <p style="opacity:.75;margin-top:10px;font-size:.95rem;">
+        Nota: el pedido se confirma por mensaje. Precios sujetos a stock.
+      </p>
+    </aside>
+  </div>
+
+  <script>
+    // Tu WhatsApp (formato internacional, sin +)
+    window.WHATSAPP_NUMBER = "5493482632269";
+  </script>
+  <script src="catalogo.js"></script>
 </body>
 </html>
