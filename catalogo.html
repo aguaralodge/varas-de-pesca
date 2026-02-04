@@ -25,45 +25,70 @@
 </head>
 <body>
 
-  <!-- reutiliza tu header pegando el mismo bloque si querés,
-       por ahora dejé algo simple -->
-  <div class="wrap">
-    <h1>Catálogo de artículos</h1>
-    <p>Seleccioná productos, elegí cantidades y enviame el pedido por WhatsApp.</p>
-    <p><a href="index.html">← Volver</a></p>
+  <header class="site-header">
+    <div class="container header-grid">
+      <div class="brand">
+        <div class="logo">🎣</div>
+        <div>
+          <h1>Emiliano Lorenzini</h1>
+          <p class="subtitle">Varas de Pesca</p>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="index.html#inicio">Inicio</a>
+        <a href="index.html#galeria">Galería</a>
+        <a href="armados.html">Varas</a>
+        <a href="reeles.html">Reeles</a>
+        <a href="index.html#config">Configurar mi caña nueva</a>
+        <a href="catalogo.html">Comprar artículos</a>
+        <a class="btn-presupuesto" href="presupuesto.html" target="_blank" rel="noopener">Presupuesto de reparación al instante</a>
+        <a class="btn-primary subtle" href="https://wa.me/5493482632269?text=Hola%20Emiliano%2C%20vengo%20de%20tu%20web%20y%20quiero%20hacer%20una%20consulta." target="_blank" rel="noopener">WhatsApp</a>
+      </nav>
+    </div>
+  </header>
 
-    <div class="toolbar">
-      <input id="search" type="search" placeholder="Buscar (reel, señuelo, tanza…)" />
-      <label style="display:flex;align-items:center;gap:8px;">
-        <input id="soloStock" type="checkbox" checked />
-        Solo con stock
-      </label>
+  <main class="container catalogo-wrap">
+    <div class="catalogo-head">
+      <h2 class="catalogo-title">Artículos de pesca</h2>
+      <p class="catalogo-sub">
+        Seleccioná productos, elegí cantidades y enviame el pedido por WhatsApp para coordinar entrega.
+      </p>
+
+      <div class="catalogo-toolbar">
+        <input id="search" class="catalogo-search" type="search" placeholder="Buscar (reel, señuelo, tanza…)" />
+        <label class="catalogo-stock">
+          <input id="soloStock" type="checkbox" checked />
+          Solo con stock
+        </label>
+      </div>
     </div>
 
-    <section id="grid" class="grid"></section>
+    <section id="grid" class="catalogo-grid"></section>
 
-    <aside class="carrito">
-      <h2>Carrito</h2>
-      <div id="carritoItems" style="opacity:.9;"></div>
+    <aside class="catalogo-carrito">
+      <div class="carrito-top">
+        <h3>Carrito</h3>
+        <button id="btnVaciar" type="button" class="btn-primary subtle">Vaciar</button>
+      </div>
 
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;">
+      <div id="carritoItems" class="carrito-items"></div>
+
+      <div class="carrito-total">
         <strong>Total:</strong>
         <strong id="total">$0</strong>
       </div>
 
-      <div class="btns">
-        <button id="btnVaciar" type="button">Vaciar</button>
-        <button id="btnWhatsApp" type="button">Enviar pedido por WhatsApp</button>
+      <div class="carrito-actions">
+        <button id="btnWhatsApp" type="button" class="btn-presupuesto">Enviar pedido por WhatsApp</button>
       </div>
 
-      <p style="opacity:.75;margin-top:10px;font-size:.95rem;">
+      <p class="carrito-note">
         Nota: el pedido se confirma por mensaje. Precios sujetos a stock.
       </p>
     </aside>
-  </div>
+  </main>
 
   <script>
-    // Tu WhatsApp (formato internacional, sin +)
     window.WHATSAPP_NUMBER = "5493482632269";
   </script>
   <script src="catalogo.js"></script>
