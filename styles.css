@@ -469,7 +469,7 @@ button.btn-presupuesto:hover{
 @media (max-width: 700px){
   .catalogo-wrap{ padding: 14px 0 36px; }
 }
-/* Header que se retrae al scrollear */
+/* Header retráctil */
 .site-header{
   transition: transform .22s ease, opacity .22s ease;
   will-change: transform;
@@ -480,8 +480,8 @@ button.btn-presupuesto:hover{
   opacity: 0.98;
 }
 
-/* Opcional: cuando vuelve, que se note firme */
 .site-header.is-shown{
   transform: translateY(0);
 }
+
 
