@@ -221,3 +221,53 @@ function escapeHtml(s) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
+// HEADER QUE SE OCULTA AL BAJAR Y APARECE AL SUBIR
+(() => {
+  const header = document.querySelector('.site-header');
+  if (!header) return;
+
+  let lastY = window.scrollY;
+  let ticking = false;
+
+  const show = () => {
+    header.classList.remove('is-hidden');
+    header.classList.add('is-shown');
+  };
+
+  const hide = () => {
+    header.classList.add('is-hidden');
+    header.classList.remove('is-shown');
+  };
+
+  const onScroll = () => {
+    const y = window.scrollY;
+
+    // Siempre visible cerca del inicio
+    if (y < 80) {
+      show();
+      lastY = y;
+      return;
+    }
+
+    // Bajando → ocultar
+    if (y > lastY + 6) hide();
+    // Subiendo → mostrar
+    else if (y < lastY - 6) show();
+
+    lastY = y;
+  };
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          onScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    },
+    { passive: true }
+  );
+})();
