@@ -1,0 +1,16 @@
+[
+  {
+    "id": "reel_fx_2500",
+    "nombre": "Reel Shimano FX 2500",
+    "precio": 45000,
+    "stock": 3,
+    "foto": "https://via.placeholder.com/600x400?text=Reel+Shimano+FX+2500"
+  },
+  {
+    "id": "senuelo_xrap_10",
+    "nombre": "Señuelo Rapala X-Rap 10 cm",
+    "precio": 12000,
+    "stock": 8,
+    "foto": "https://via.placeholder.com/600x400?text=Se%C3%B1uelo+Rapala+X-Rap"
+  }
+]
