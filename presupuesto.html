@@ -5,47 +5,38 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Presupuesto al instante</title>
 
-  <!-- Usa tu CSS actual -->
-  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 
-  <!-- CSS mínimo extra (opcional) -->
-  <style>
-    .presu-wrap{max-width:980px;margin:0 auto;padding:24px 16px}
-    .presu-card{background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:16px}
-    .presu-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-    @media (max-width:820px){.presu-grid{grid-template-columns:1fr}}
-
-    .presu-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    .presu-row > *{flex:1}
-
-    label{font-weight:650}
-    input, select, button{
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(0,0,0,.22);
-      color:inherit;
-      padding:.65rem .75rem;
-      outline:none;
-    }
-    input::placeholder{opacity:.7}
-    button{cursor:pointer;font-weight:750}
-    button:hover{filter:brightness(1.06)}
-    .muted{opacity:.85;font-size:.95rem;line-height:1.25rem}
-    .divider{height:1px;background:rgba(255,255,255,.12);margin:12px 0}
-    .total{font-size:1.3rem;font-weight:900}
-    .pill{display:inline-flex;gap:8px;align-items:center;padding:.35rem .6rem;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.18)}
-    .hide{display:none!important}
-
-    /* Overlay contraseña */
-    .lock{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter: blur(4px);display:flex;align-items:center;justify-content:center;z-index:9999}
-    .lockbox{width:min(520px,92vw);background:rgba(20,20,20,.92);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:18px}
-    .lockbox h2{margin:0 0 10px 0}
-    .lockbox .presu-row{margin-top:10px}
-    .error{color:#ffd3d3;background:rgba(255,80,80,.10);border:1px solid rgba(255,80,80,.22);padding:.6rem .75rem;border-radius:12px;margin-top:10px}
-  </style>
+  <!-- IMPORTANTE: tu web usa styles.css -->
+  <link rel="stylesheet" href="styles.css?v=999" />
 </head>
 
+
 <body>
+  <header class="site-header">
+  <div class="container header-grid">
+    <div class="brand">
+      <div class="logo">🎣</div>
+      <div>
+        <h1>Emiliano Lorenzini</h1>
+        <p class="subtitle">Varas de Pesca</p>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="index.html#inicio">Inicio</a>
+      <a href="index.html#galeria">Galería</a>
+      <a href="armados.html">Varas</a>
+      <a href="reeles.html">Reeles</a>
+      <a href="index.html#config">Configurar mi caña nueva</a>
+      <a href="catalogo.html">Comprar artículos</a>
+      <a class="btn-presupuesto" href="presupuesto.html">Presupuesto de reparación al instante</a>
+      <a class="btn-primary subtle" href="https://wa.me/5493482632269?text=Hola%20Emiliano%2C%20vengo%20de%20tu%20web%20y%20quiero%20hacer%20una%20consulta." target="_blank" rel="noopener">WhatsApp</a>
+    </nav>
+  </div>
+</header>
 
   <!-- Gate de contraseña -->
   <div id="lock" class="lock">
@@ -66,7 +57,7 @@
     </div>
   </div>
 
-  <main class="presu-wrap">
+  <main class="container presu-wrap">
     <h1 style="margin:0 0 10px 0">Presupuesto al instante</h1>
     <div class="muted">
       Elegí el servicio, cargá los detalles y generá el PDF. Luego podés enviar el resumen por WhatsApp para iniciar el trabajo. 🧰🎣
