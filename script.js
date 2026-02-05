@@ -55,7 +55,7 @@ console.log("✅ script.js cargó");
     if(t === btnNext) next();
   });
 
-  // Escape key closes
+    // Escape key closes
   document.addEventListener('keydown', function(e){
     if(e.key === 'Escape'){
       close();
@@ -64,56 +64,11 @@ console.log("✅ script.js cargó");
     }else if(e.key === 'ArrowRight'){
       next();
     }
- // HEADER QUE SE OCULTA AL BAJAR Y APARECE AL SUBIR
-(() => {
-  const header = document.querySelector('.site-header');
-  if (!header) return;
+  });
 
-  let lastY = window.scrollY;
-  let ticking = false;
+})(); // <- cierre del (function(){ ... }) del lightbox
 
-  const show = () => {
-    header.classList.remove('is-hidden');
-    header.classList.add('is-shown');
-  };
 
-  const hide = () => {
-    header.classList.add('is-hidden');
-    header.classList.remove('is-shown');
-  };
-
-  const onScroll = () => {
-    const y = window.scrollY;
-
-    // Siempre visible cerca del inicio
-    if (y < 80) {
-      show();
-      lastY = y;
-      return;
-    }
-
-    // Bajando → ocultar
-    if (y > lastY + 6) hide();
-    // Subiendo → mostrar
-    else if (y < lastY - 6) show();
-
-    lastY = y;
-  };
-
-  window.addEventListener(
-    "scroll",
-    () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          onScroll();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    },
-    { passive: true }
-  );
-})();
 // === Header retráctil (robusto) ===
 (function initHideHeader() {
   function setup() {
@@ -164,19 +119,15 @@ console.log("✅ script.js cargó");
       { passive: true }
     );
 
-    // Estado inicial
     show();
     return true;
   }
 
-  // 1) Intento inmediato (por si ya está el DOM)
   if (setup()) return;
 
-  // 2) Intento cuando el DOM esté listo
   document.addEventListener("DOMContentLoaded", () => {
     if (setup()) return;
 
-    // 3) Último recurso: reintentos cortos (por si algo se renderiza después)
     let tries = 0;
     const t = setInterval(() => {
       tries++;
@@ -184,3 +135,4 @@ console.log("✅ script.js cargó");
     }, 100);
   });
 })();
+
