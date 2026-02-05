@@ -114,3 +114,73 @@ console.log("✅ script.js cargó");
     { passive: true }
   );
 })();
+// === Header retráctil (robusto) ===
+(function initHideHeader() {
+  function setup() {
+    const header = document.querySelector(".site-header");
+    if (!header) return false;
+
+    let lastY = window.scrollY || 0;
+    let ticking = false;
+
+    const threshold = window.matchMedia("(max-width: 700px)").matches ? 3 : 6;
+
+    const show = () => {
+      header.classList.remove("is-hidden");
+      header.classList.add("is-shown");
+    };
+
+    const hide = () => {
+      header.classList.add("is-hidden");
+      header.classList.remove("is-shown");
+    };
+
+    const onScroll = () => {
+      const y = window.scrollY || 0;
+
+      if (y < 80) {
+        show();
+        lastY = y;
+        return;
+      }
+
+      if (y > lastY + threshold) hide();
+      else if (y < lastY - threshold) show();
+
+      lastY = y;
+    };
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            onScroll();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      },
+      { passive: true }
+    );
+
+    // Estado inicial
+    show();
+    return true;
+  }
+
+  // 1) Intento inmediato (por si ya está el DOM)
+  if (setup()) return;
+
+  // 2) Intento cuando el DOM esté listo
+  document.addEventListener("DOMContentLoaded", () => {
+    if (setup()) return;
+
+    // 3) Último recurso: reintentos cortos (por si algo se renderiza después)
+    let tries = 0;
+    const t = setInterval(() => {
+      tries++;
+      if (setup() || tries > 30) clearInterval(t);
+    }, 100);
+  });
+})();
