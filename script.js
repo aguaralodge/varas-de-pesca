@@ -1,3 +1,4 @@
+console.log("✅ script.js cargó");
 // Lightbox real-size viewer for all galleries
 (function(){
   'use strict';
