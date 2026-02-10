@@ -1,40 +1,40 @@
 [
   {
     "id": "reel_marine",
-    "nombre": "Reel Marine ",
+    "nombre": "Reel Marine",
     "precio": 45000,
     "stock": 3,
     "foto": "https://via.placeholder.com/600x400?text=Reel+Shimano+FX+2500"
-  }
+  },
   {
     "id": "senuelo_okuma_12",
     "nombre": "Señuelo Okuma 12 cm",
     "precio": 12000,
     "stock": 8,
     "foto": "https://via.placeholder.com/600x400?text=Se%C3%B1uelo+Rapala+X-Rap"
-  }
-   {
+  },
+  {
     "id": "senuelo_okuma_14",
     "nombre": "Señuelo Okuma 14 cm",
     "precio": 12000,
     "stock": 8,
     "foto": "https://via.placeholder.com/600x400?text=Se%C3%B1uelo+Rapala+X-Rap"
-  }
-   {
+  },
+  {
     "id": "senuelo_okuma_pq",
     "nombre": "Señuelo Okuma paleta quebrada",
     "precio": 12000,
     "stock": 8,
     "foto": "https://via.placeholder.com/600x400?text=Se%C3%B1uelo+Rapala+X-Rap"
-  }
-   {
+  },
+  {
     "id": "senuelo_okuma_mojarra",
     "nombre": "Señuelo Okuma mojarra",
     "precio": 12000,
     "stock": 8,
     "foto": "https://via.placeholder.com/600x400?text=Se%C3%B1uelo+Rapala+X-Rap"
-  }
-   {
+  },
+  {
     "id": "reel_colony",
     "nombre": "Reel Colony",
     "precio": 12000,
