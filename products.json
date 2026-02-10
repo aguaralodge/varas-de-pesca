@@ -4,7 +4,7 @@
     "nombre": "Reel Marine",
     "precio": 45000,
     "stock": 3,
-    "foto": "https://github.com/aguaralodge/varas-de-pesca/blob/main/assets/images/FOTO1.jpeg"
+    "foto": "assets/images/FOTO1.jpeg"
   },
   {
     "id": "senuelo_okuma_12",
