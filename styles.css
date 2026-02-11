@@ -724,6 +724,12 @@ button.btn-presupuesto:hover{
   border-radius: 12px;
 }
 .resultado p { font-size: 18px; margin: 8px 0; }
+/* ===== FIX: Colores del panel de precios ===== */
+
+.panel-precios,
+.panel-precios * {
+  color: #000 !important;
+}
 
 
 
