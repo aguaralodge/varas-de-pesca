@@ -611,6 +611,119 @@ button.btn-presupuesto:hover{
 }
 #btnUnlock:hover{ filter: brightness(1.06); 
 }
+/* ---- Gate ---- */
+.hide { display:none !important; }
+
+.lock{
+  position:fixed; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.65);
+  z-index:9999;
+  padding:16px;
+}
+.lockbox{
+  width:min(520px, 100%);
+  background:#0f1411;
+  color:#eaeaea;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:14px;
+  padding:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+.lockbox h2{ margin:0 0 8px; }
+.muted{ opacity:.85; font-size:14px; line-height:1.35; }
+
+.presu-row{
+  display:flex; gap:10px; margin-top:14px;
+}
+.presu-row input{
+  flex:1;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.15);
+  background:#111a14;
+  color:#fff;
+  outline:none;
+}
+.presu-row button{
+  padding:10px 14px;
+  border-radius:10px;
+  border:none;
+  background:#3a5f3d;
+  color:#fff;
+  cursor:pointer;
+}
+.presu-row button:hover{ background:#2f4c32; }
+
+.error{ margin-top:10px; color:#ffb3b3; }
+.error.hide{ display:none; }
+
+/* ---- Topbar ---- */
+.topbar{
+  max-width:900px;
+  margin:24px auto 0;
+  padding:0 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.btn-ghost{
+  background:transparent;
+  border:1px solid rgba(0,0,0,.2);
+  padding:8px 12px;
+  border-radius:10px;
+  cursor:pointer;
+}
+.btn-ghost:hover{ background:rgba(0,0,0,.06); }
+
+/* ---- Panel de precios ---- */
+.panel-precios {
+  max-width: 900px;
+  margin: 16px auto 40px;
+  padding: 22px;
+  background: #f6f6f6;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+}
+.panel-precios h2 { text-align:center; margin:0 0 18px; }
+
+.panel-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+@media (max-width: 720px){
+  .panel-grid{ grid-template-columns:1fr; }
+}
+
+.panel-grid label { font-weight: 700; display:block; margin-bottom:6px; }
+.panel-grid input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #bbb;
+  border-radius: 10px;
+}
+
+#calcBtn {
+  width: 100%;
+  margin-top: 18px;
+  padding: 12px;
+  background: #3a5f3d;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+#calcBtn:hover { background: #2f4c32; }
+
+.resultado {
+  margin-top: 18px;
+  background: #fff;
+  padding: 18px;
+  border-radius: 12px;
+}
+.resultado p { font-size: 18px; margin: 8px 0; }
 
 
 
