@@ -1,146 +1,84 @@
-// =========================
-// PANEL PROTEGIDO (FRONTEND)
-// =========================
+/* =========================
+   ADMIN PRECIOS (PROTEGIDO)
+   ========================= */
 
-// 1) Cambiá esta clave por la tuya (ej: "AGUARA2026!")
-const ADMIN_PASSWORD = "AGUARA25";
+(() => {
+  // Corre solo en admin-precios.html (tolerante a slash/query)
+  const path = location.pathname.toLowerCase();
+  if (!path.includes("admin-precios.html")) return;
 
-// 2) Key para recordar sesión (localStorage)
-const SESSION_KEY = "admin_prices_unlocked";
-
-const lock = document.getElementById("lock");
-const adminPanel = document.getElementById("adminPanel");
-const pwd = document.getElementById("pwd");
-const btnUnlock = document.getElementById("btnUnlock");
-const lockErr = document.getElementById("lockErr");
-const btnLogout = document.getElementById("btnLogout");
-
-// Mostrar/Ocultar panel
-function setUnlocked(isUnlocked){
-  if (isUnlocked){
-    lock?.classList.add("hide");
-    adminPanel?.classList.remove("hide");
-    localStorage.setItem(SESSION_KEY, "1");
-  } else {
-    lock?.classList.remove("hide");
-    adminPanel?.classList.add("hide");
-    localStorage.removeItem(SESSION_KEY);
-  }
-}
-
-// Auto login si ya desbloqueaste antes
-if (localStorage.getItem(SESSION_KEY) === "1") setUnlocked(true);
-
-// Entrar
-btnUnlock?.addEventListener("click", () => {
-  const value = (pwd?.value || "").trim();
-  const ok = value === ADMIN_PASSWORD;
-
-  if (!ok){
-    lockErr?.classList.remove("hide");
-    pwd?.focus();
-    return;
-  }
-  lockErr?.classList.add("hide");
-  setUnlocked(true);
-});
-
-// Enter para enviar
-pwd?.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") btnUnlock?.click();
-});
-
-// Salir
-btnLogout?.addEventListener("click", () => {
-  setUnlocked(false);
-  if (pwd) pwd.value = "";
-});
-
-
-// =========================
-// CALCULADORA DE PRECIOS
-// =========================
-document.getElementById('calcBtn')?.addEventListener('click', () => {
-  const costo = parseFloat(document.getElementById('costo')?.value);
-  const margen = parseFloat(document.getElementById('margen')?.value);
-  const comision = parseFloat(document.getElementById('comision')?.value);
-
-  if ([costo, margen, comision].some(v => Number.isNaN(v))) {
-    alert("Completá costo, margen y comisión.");
-    return;
-  }
-
-  const denom = 1 - margen - comision;
-  if (denom <= 0) {
-    alert("Margen + comisión es demasiado alto. Ajustá los valores.");
-    return;
-  }
-
-  const precioReal = costo / denom;
-  const precioRedondeado = Math.ceil(precioReal / 100) * 100; // a centenas
-  const precioPsico = Math.max(0, precioRedondeado - 100); // terminado en 900
-
-  document.getElementById('precioReal').textContent = Math.round(precioReal);
-  document.getElementById('precioRedondeado').textContent = precioRedondeado;
-  document.getElementById('precioPsico').textContent = precioPsico;
-}
-// =========================
-// SOLO EN admin-precios.html
-// =========================
-if (location.pathname.endsWith("/admin-precios.html")) {
-
-  const ADMIN_PASSWORD = "cambia-esta-clave";
+  // >>> TU CLAVE <<<
+  const ADMIN_PASSWORD = "AGUARA25";
   const SESSION_KEY = "admin_prices_unlocked";
 
-  const lock = document.getElementById("lock");
-  const adminPanel = document.getElementById("adminPanel");
-  const pwd = document.getElementById("pwd");
-  const btnUnlock = document.getElementById("btnUnlock");
-  const lockErr = document.getElementById("lockErr");
-  const btnLogout = document.getElementById("btnLogout");
+  const $ = (id) => document.getElementById(id);
 
-  function setUnlocked(isUnlocked){
-    if (isUnlocked){
-      lock?.classList.add("hide");
-      adminPanel?.classList.remove("hide");
+  const lock = $("lock");
+  const adminPanel = $("adminPanel");
+  const pwd = $("pwd");
+  const btnUnlock = $("btnUnlock");
+  const lockErr = $("lockErr");
+  const btnLogout = $("btnLogout");
+
+  // Si falta algo del DOM, no rompas el resto del sitio
+  if (!lock || !adminPanel || !pwd || !btnUnlock || !lockErr) {
+    console.warn("[admin-precios] faltan elementos en el DOM");
+    return;
+  }
+
+  function setUnlocked(isUnlocked) {
+    if (isUnlocked) {
+      lock.classList.add("hide");
+      adminPanel.classList.remove("hide");
       localStorage.setItem(SESSION_KEY, "1");
     } else {
-      lock?.classList.remove("hide");
-      adminPanel?.classList.add("hide");
+      lock.classList.remove("hide");
+      adminPanel.classList.add("hide");
       localStorage.removeItem(SESSION_KEY);
     }
   }
 
+  // Auto-login si ya estaba desbloqueado
   if (localStorage.getItem(SESSION_KEY) === "1") setUnlocked(true);
 
-  btnUnlock?.addEventListener("click", () => {
-    const value = (pwd?.value || "").trim();
+  // Entrar
+  btnUnlock.addEventListener("click", () => {
+    const value = (pwd.value || "").trim();
     const ok = value === ADMIN_PASSWORD;
 
-    if (!ok){
-      lockErr?.classList.remove("hide");
-      pwd?.focus();
+    if (!ok) {
+      lockErr.classList.remove("hide");
+      pwd.focus();
       return;
     }
-    lockErr?.classList.add("hide");
+
+    lockErr.classList.add("hide");
     setUnlocked(true);
   });
 
-  pwd?.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") btnUnlock?.click();
+  // Enter para enviar
+  pwd.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") btnUnlock.click();
   });
 
+  // Salir
   btnLogout?.addEventListener("click", () => {
     setUnlocked(false);
-    if (pwd) pwd.value = "";
+    pwd.value = "";
   });
 
-  document.getElementById('calcBtn')?.addEventListener('click', () => {
-    const costo = parseFloat(document.getElementById('costo')?.value);
-    const margen = parseFloat(document.getElementById('margen')?.value);
-    const comision = parseFloat(document.getElementById('comision')?.value);
+  // =========================
+  // CALCULADORA DE PRECIOS
+  // =========================
+  const calcBtn = $("calcBtn");
+  if (!calcBtn) return;
 
-    if ([costo, margen, comision].some(v => Number.isNaN(v))) {
+  calcBtn.addEventListener("click", () => {
+    const costo = parseFloat($("costo")?.value);
+    const margen = parseFloat($("margen")?.value);
+    const comision = parseFloat($("comision")?.value);
+
+    if ([costo, margen, comision].some((v) => Number.isNaN(v))) {
       alert("Completá costo, margen y comisión.");
       return;
     }
@@ -152,12 +90,12 @@ if (location.pathname.endsWith("/admin-precios.html")) {
     }
 
     const precioReal = costo / denom;
-    const precioRedondeado = Math.ceil(precioReal / 100) * 100;
-    const precioPsico = Math.max(0, precioRedondeado - 100);
+    const precioRedondeado = Math.ceil(precioReal / 100) * 100; // centenas
+    const precioPsico = Math.max(0, precioRedondeado - 100); // termina en 900
 
-    document.getElementById('precioReal').textContent = Math.round(precioReal);
-    document.getElementById('precioRedondeado').textContent = precioRedondeado;
-    document.getElementById('precioPsico').textContent = precioPsico;
+    $("precioReal").textContent = Math.round(precioReal);
+    $("precioRedondeado").textContent = precioRedondeado;
+    $("precioPsico").textContent = precioPsico;
   });
+})();
 
-}
