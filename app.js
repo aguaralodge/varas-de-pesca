@@ -3,7 +3,7 @@
 // =========================
 
 // 1) Cambiá esta clave por la tuya (ej: "AGUARA2026!")
-const ADMIN_PASSWORD = "cambia-esta-clave";
+const ADMIN_PASSWORD = "AGUARA25";
 
 // 2) Key para recordar sesión (localStorage)
 const SESSION_KEY = "admin_prices_unlocked";
