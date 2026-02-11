@@ -1,0 +1,60 @@
+<!-- Gate de contraseña -->
+<div id="lock" class="lock">
+  <div class="lockbox">
+    <h2>Acceso protegido</h2>
+    <div class="muted">
+      Ingresá la contraseña para acceder al panel de precios.
+    </div>
+
+    <div class="presu-row">
+      <input id="pwd" type="password" placeholder="Contraseña" autocomplete="off" />
+      <button id="btnUnlock">Entrar</button>
+    </div>
+
+    <div id="lockErr" class="error hide">Contraseña incorrecta.</div>
+
+    <div class="muted" style="margin-top:10px">
+      Tip: si te olvidás, cambiás la clave editando <b>app.js</b>.
+    </div>
+  </div>
+</div>
+
+<!-- Panel (oculto hasta desbloquear) -->
+<main id="adminPanel" class="hide">
+
+  <div class="topbar">
+    <h1>Panel de precios</h1>
+    <button id="btnLogout" class="btn-ghost">Salir</button>
+  </div>
+
+  <section class="panel-precios">
+    <h2>Calculadora de Precio de Venta</h2>
+
+    <div class="panel-grid">
+      <div>
+        <label>Costo del producto ($)</label>
+        <input id="costo" type="number" placeholder="Ej: 10800">
+      </div>
+
+      <div>
+        <label>Margen deseado (%)</label>
+        <input id="margen" type="number" step="0.01" placeholder="0.40">
+      </div>
+
+      <div>
+        <label>Comisión MP (%)</label>
+        <input id="comision" type="number" step="0.01" placeholder="0.12">
+      </div>
+    </div>
+
+    <button id="calcBtn">Calcular precio</button>
+
+    <div class="resultado">
+      <h3>Resultados</h3>
+      <p><strong>Precio real:</strong> $<span id="precioReal">0</span></p>
+      <p><strong>Precio redondeado:</strong> $<span id="precioRedondeado">0</span></p>
+      <p><strong>Precio psicológico:</strong> $<span id="precioPsico">0</span></p>
+    </div>
+  </section>
+
+</main>
