@@ -2,12 +2,9 @@
   const PASSWORD = "AGUARA25";
 
   // Ajustá esto al nombre real de tu logo dentro del sitio:
-  // Ejemplos: "img/logo.png", "assets/logo.png", "logo.png"
   const LOGO_PATH = "logo.png";
 
   // Tu WhatsApp (formato internacional sin +)
-  // Si querés que abra directo a tu número: 549 + número (Argentina)
-  // Ej: 5493482632269
   const WPP_PHONE = "5493482632269";
 
   const $ = (id) => document.getElementById(id);
@@ -59,6 +56,8 @@
   const mango = $("mango");
   const porta = $("porta");
   const calco = $("calco");
+
+  // NUEVOS
   const puntero = $("puntero");
   const portareel = $("portareel");
 
@@ -74,8 +73,8 @@
     return v.toLocaleString("es-AR");
   };
 
-  const parseIntSafe = (el) => Math.max(0, parseInt(el.value || "0", 10) || 0);
-  const parseMoneySafe = (el) => Math.max(0, parseInt(el.value || "0", 10) || 0);
+  const parseIntSafe = (el) => Math.max(0, parseInt(el?.value || "0", 10) || 0);
+  const parseMoneySafe = (el) => Math.max(0, parseInt(el?.value || "0", 10) || 0);
 
   const PRICES = {
     reel: 20000,
@@ -112,7 +111,7 @@
       return items;
     }
 
-    // cañas
+    // ---- Cañas ----
     const q1 = parseIntSafe(q_1p_rot);
     const q2 = parseIntSafe(q_3p_rot);
     const q3 = parseIntSafe(q_3p_fro);
@@ -138,6 +137,20 @@
     const c = parseMoneySafe(calco);
     if (c) items.push({ label: "Calco con nombre", qty: 1, unit: c, subtotal: c });
 
+    // ✅ NUEVO: Puntero/Pelo
+    const pu = parseMoneySafe(puntero);
+    if (pu) {
+      const name =
+        (pu === PRICES.puntero_carbono) ? "Puntero/Pelo (Carbono macizo)" :
+        (pu === PRICES.puntero_fibra) ? "Puntero/Pelo (Fibra maciza)" :
+        "Puntero/Pelo";
+      items.push({ label: name, qty: 1, unit: pu, subtotal: pu });
+    }
+
+    // ✅ NUEVO: Porta Reel
+    const pr = parseMoneySafe(portareel);
+    if (pr) items.push({ label: "Porta Reel", qty: 1, unit: pr, subtotal: pr });
+
     return items;
   };
 
@@ -157,18 +170,19 @@
     const tot = calcTotal(items);
     totalEl.textContent = `$${money(tot)}`;
 
-    // habilitar whatsapp solo si hay algo para presupuestar y cliente cargado
     const hasSomething = tot > 0;
     const hasName = (cliente.value || "").trim().length > 2;
     btnWpp.disabled = !(hasSomething && hasName);
   };
 
+  // ✅ IMPORTANTÍSIMO: agregar puntero y portareel a los listeners
   [
     servicio, cliente,
     cantReeles,
     q_1p_rot, q_3p_rot, q_3p_fro, q_puente_fro,
-    alargue, mango, porta, calco
-  ].forEach(el => el.addEventListener("input", updateUI));
+    alargue, mango, porta, calco,
+    puntero, portareel
+  ].forEach(el => el?.addEventListener("input", updateUI));
 
   servicio.addEventListener("change", updateUI);
 
@@ -241,9 +255,7 @@
     if (logo) {
       try {
         doc.addImage(logo, "PNG", margin, 34, 90, 90, undefined, "FAST");
-      } catch {
-        // si no es PNG o falla, ignoramos
-      }
+      } catch {}
     }
 
     doc.setFont("helvetica", "bold");
@@ -309,7 +321,6 @@
     doc.setFontSize(10);
     addLine("Este presupuesto es estimativo y corresponde a lo seleccionado. Para coordinar el trabajo, respondé por WhatsApp adjuntando este PDF.");
 
-    // Guardar + blob
     const safeName = nombreCliente
       .toLowerCase()
       .replace(/[^\p{L}\p{N}\s-]/gu, "")
@@ -321,19 +332,11 @@
     const pdfBlob = doc.output("blob");
     lastPdfBlob = pdfBlob;
 
-    // descarga
     doc.save(fileName);
 
-    // resumen para WhatsApp
     lastResumen = buildResumenText(nombreCliente, rawItems, total, tipo);
 
-    // habilitar botón WPP
     btnWpp.disabled = false;
-
-    // Intento de compartir archivo en móviles compatibles
-    if (navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], fileName, { type: "application/pdf" })] })) {
-      // no auto-compartimos para no ser invasivos, pero dejamos listo
-    }
   };
 
   btnPdf.addEventListener("click", generatePdf);
@@ -349,7 +352,6 @@
 
     const text = lastResumen || buildResumenText(nombreCliente, items, total, tipo);
 
-    // Si el navegador soporta compartir archivos, intentamos compartir el PDF
     if (lastPdfBlob && navigator.canShare) {
       try {
         const fileName = `presupuesto_${nombreCliente.replace(/\s+/g, "_")}.pdf`;
@@ -362,12 +364,9 @@
           });
           return;
         }
-      } catch {
-        // seguimos al WhatsApp con texto
-      }
+      } catch {}
     }
 
-    // Fallback: abrir WhatsApp con texto (el PDF ya lo descargaste y lo adjuntás)
     const url = `https://wa.me/${WPP_PHONE}?text=${encodeURIComponent(text)}`;
     window.open(url, "_blank", "noopener");
   };
@@ -377,3 +376,4 @@
   // init
   updateUI();
 })();
+
