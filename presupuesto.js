@@ -59,6 +59,8 @@
   const mango = $("mango");
   const porta = $("porta");
   const calco = $("calco");
+  const puntero = $("puntero");
+  const portareel = $("portareel");
 
   const totalEl = $("total");
   const btnPdf = $("btnPdf");
@@ -85,7 +87,10 @@
     mango_corcho: 40000,
     mango_termo: 20000,
     porta: 5000,
-    calco: 8000
+    calco: 8000,
+    portareel: 15000,
+    puntero_carbono: 35000,
+    puntero_fibra: 30000,
   };
 
   const getItems = () => {
