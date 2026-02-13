@@ -60,6 +60,7 @@
   // NUEVOS
   const puntero = $("puntero");
   const portareel = $("portareel");
+  const pintado = $("pintado");
 
   const totalEl = $("total");
   const btnPdf = $("btnPdf");
@@ -90,6 +91,7 @@
     portareel: 15000,
     puntero_carbono: 35000,
     puntero_fibra: 30000,
+    pintado: 25000,
   };
 
   const getItems = () => {
@@ -147,12 +149,18 @@
       items.push({ label: name, qty: 1, unit: pu, subtotal: pu });
     }
 
+    // ✅ Pintado de caña
+const pi = parseMoneySafe(pintado);
+if (pi) items.push({ label: "Pintado de caña", qty: 1, unit: pi, subtotal: pi });
+
+
     // ✅ NUEVO: Porta Reel
     const pr = parseMoneySafe(portareel);
     if (pr) items.push({ label: "Porta Reel", qty: 1, unit: pr, subtotal: pr });
 
     return items;
-  };
+   }
+  
 
   const calcTotal = (items) => items.reduce((acc, it) => acc + (it.subtotal || 0), 0);
 
@@ -181,7 +189,7 @@
     cantReeles,
     q_1p_rot, q_3p_rot, q_3p_fro, q_puente_fro,
     alargue, mango, porta, calco,
-    puntero, portareel
+    puntero, portareel, pintado
   ].forEach(el => el?.addEventListener("input", updateUI));
 
   servicio.addEventListener("change", updateUI);
