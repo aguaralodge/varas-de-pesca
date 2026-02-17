@@ -1,0 +1,58 @@
+<input id="pName" placeholder="Nombre" />
+<input id="pPrice" type="number" placeholder="Precio" />
+<input id="pStock" type="number" placeholder="Stock" />
+<input id="pCat" placeholder="Categoría" />
+<textarea id="pDesc" placeholder="Descripción completa"></textarea>
+<input id="pImg" type="file" accept="image/*" />
+<button id="btnSave">Guardar producto</button>
+<div id="msg"></div>
+
+<script>
+const ADMIN_PASSWORD = "AGUARA25"; // debe coincidir con Vercel ENV ADMIN_PASSWORD
+
+document.getElementById("btnSave").addEventListener("click", async (e) => {
+  e.preventDefault();
+  const msg = document.getElementById("msg");
+
+  const name = document.getElementById("pName").value.trim();
+  const price = document.getElementById("pPrice").value;
+  const stock = document.getElementById("pStock").value;
+  const category = document.getElementById("pCat").value.trim();
+  const description = document.getElementById("pDesc").value.trim();
+  const file = document.getElementById("pImg").files[0];
+
+  if (!name) { msg.textContent = "Falta nombre"; return; }
+
+  let imageBase64 = null, imageMime = null;
+  if (file) {
+    imageMime = file.type || "image/jpeg";
+    const dataUrl = await fileToBase64(file);
+    imageBase64 = dataUrl.split(",")[1];
+  }
+
+  msg.textContent = "Guardando...";
+
+  const r = await fetch("/api/products/create", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-admin-password": ADMIN_PASSWORD
+    },
+    body: JSON.stringify({ name, price, stock, category, description, imageBase64, imageMime })
+  });
+
+  const j = await r.json();
+  if (!r.ok) { msg.textContent = "Error: " + (j.error || ""); return; }
+
+  msg.textContent = "Producto cargado ✅";
+});
+
+function fileToBase64(file){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onload = ()=> resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+</script>
