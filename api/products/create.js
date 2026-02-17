@@ -1,15 +1,17 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
-  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "AGUARA25";
-  const provided = req.headers["x-admin-password"];
-  if (provided !== ADMIN_PASSWORD) return res.status(401).json({ error: "Unauthorized" });
-
-  const SUPABASE_URL = process.env.SUPABASE_URL;
-  const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!SUPABASE_URL || !SERVICE_KEY) return res.status(500).json({ error: "Missing env vars" });
-
   try {
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "AGUARA25";
+    const provided = req.headers["x-admin-password"];
+    if (provided !== ADMIN_PASSWORD) return res.status(401).json({ error: "Unauthorized" });
+
+    const SUPABASE_URL = process.env.SUPABASE_URL;
+    const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!SUPABASE_URL || !SERVICE_KEY) {
+      return res.status(500).json({ error: "Missing env vars", haveUrl: !!SUPABASE_URL, haveService: !!SERVICE_KEY });
+    }
+
     const body = await readJson(req);
     const { name, price, stock, category, description, imageBase64, imageMime } = body;
 
@@ -60,14 +62,19 @@ export default async function handler(req, res) {
       }]),
     });
 
-    const insertJson = await insertResp.json();
-    if (!insertResp.ok) return res.status(500).json({ error: "Insert failed", detail: insertJson });
+    const text = await insertResp.text();
+    let insertJson;
+    try { insertJson = JSON.parse(text); } catch { insertJson = text; }
+
+    if (!insertResp.ok) {
+      return res.status(500).json({ error: "Insert failed", status: insertResp.status, detail: insertJson });
+    }
 
     return res.status(200).json({ ok: true, product: insertJson[0] });
   } catch (e) {
-    return res.status(500).json({ error: "Server error", detail: String(e) });
+    return res.status(500).json({ error: "Function crashed", detail: String(e) });
   }
-}
+};
 
 function mimeToExt(mime) {
   if (mime === "image/png") return "png";
