@@ -1,0 +1,15 @@
+name: Ping Supabase (keep awake)
+
+on:
+  schedule:
+    # Cada 12 horas (UTC)
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping products list endpoint
+        run: |
+          curl -sS -m 25 "https://varas-de-pesca.vercel.app/api/products/list" >/dev/null
