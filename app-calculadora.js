@@ -17,7 +17,7 @@
 
   // Mapa de precios (ajustá montos si querés)
   const PRECIOS = {
-    tipoVara: { "Tournament": 30000, "ya tengo Vara": 0 },
+    tipoVara: { "Tournament": 45000, "ya tengo Vara": 0 },
     color: { "blanco": 20000, "negro": 0, "rojo": 25000, "azul": 25000, "verde": 25000 },
     largo: { "2,40": 0, "2,30": 0, "2,20": 0, "2,10": 0 },
     pasahilos: { "8 + puntera": 45000 , "9 + puntera": 50000, "10 + puntera": 55000, "11 + puntera": 60000 },
