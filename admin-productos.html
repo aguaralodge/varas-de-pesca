@@ -4,24 +4,36 @@
 <input id="pCat" placeholder="Categoría" />
 <textarea id="pDesc" placeholder="Descripción completa"></textarea>
 <input id="pImg" type="file" accept="image/*" />
-<button id="btnSave">Guardar producto</button>
-<div id="msg"></div>
+<button id="btnSave" type="button">Guardar producto</button>
+<div id="msg" style="margin-top:10px;"></div>
 
 <script>
-const ADMIN_PASSWORD = "EMIr1993"; 
+// Si ya tenés un lock, podés guardar la pass en sessionStorage con esta key.
+// Si no existe, usa la hardcodeada de abajo.
+const FALLBACK_PASSWORD = "EMIr1993";
+function getAdminPassword(){
+  try {
+    return sessionStorage.getItem("admin_password") || FALLBACK_PASSWORD;
+  } catch {
+    return FALLBACK_PASSWORD;
+  }
+}
 
-document.getElementById("btnSave").addEventListener("click", async (e) => {
-  e.preventDefault();
-  const msg = document.getElementById("msg");
+const $ = (id) => document.getElementById(id);
 
-  const name = document.getElementById("pName").value.trim();
-  const price = document.getElementById("pPrice").value;
-  const stock = document.getElementById("pStock").value;
-  const category = document.getElementById("pCat").value.trim();
-  const description = document.getElementById("pDesc").value.trim();
-  const file = document.getElementById("pImg").files[0];
+$("btnSave").addEventListener("click", async () => {
+  const msg = $("msg");
+
+  const name = $("pName").value.trim();
+  const price = Number($("pPrice").value || 0);
+  const stock = Number($("pStock").value || 0);
+  const category = $("pCat").value.trim();
+  const description = $("pDesc").value.trim();
+  const file = $("pImg").files[0];
 
   if (!name) { msg.textContent = "Falta nombre"; return; }
+  if (Number.isNaN(price) || price < 0) { msg.textContent = "Precio inválido"; return; }
+  if (!Number.isInteger(stock) || stock < 0) { msg.textContent = "Stock inválido"; return; }
 
   let imageBase64 = null, imageMime = null;
   if (file) {
@@ -32,19 +44,46 @@ document.getElementById("btnSave").addEventListener("click", async (e) => {
 
   msg.textContent = "Guardando...";
 
-  const r = await fetch("/api/products/create", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-admin-password": ADMIN_PASSWORD
-    },
-    body: JSON.stringify({ name, price, stock, category, description, imageBase64, imageMime })
-  });
+  let r, j;
+  try {
+    r = await fetch("/api/products/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-password": getAdminPassword()
+      },
+      body: JSON.stringify({ name, price, stock, category, description, imageBase64, imageMime })
+    });
+  } catch (e) {
+    msg.textContent = "Error de red al llamar a la API: " + String(e);
+    return;
+  }
 
-  const j = await r.json();
-  if (!r.ok) { msg.textContent = "Error: " + (j.error || ""); return; }
+  try {
+    j = await r.json();
+  } catch {
+    const t = await r.text().catch(()=> "");
+    msg.textContent = "Respuesta inválida del servidor. Status " + r.status + " " + t;
+    return;
+  }
+
+  if (!r.ok) {
+    const detail = j?.detail
+      ? (typeof j.detail === "string" ? j.detail : JSON.stringify(j.detail))
+      : "";
+    msg.textContent = `Error (${r.status}): ${j?.error || "Fallo"}${detail ? " | " + detail : ""}`;
+    return;
+  }
 
   msg.textContent = "Producto cargado ✅";
+
+  // Limpieza rápida
+  $("pName").value = "";
+  $("pPrice").value = "";
+  $("pStock").value = "";
+  $("pCat").value = "";
+  $("pDesc").value = "";
+  $("pImg").value = "";
 });
 
 function fileToBase64(file){
