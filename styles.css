@@ -730,6 +730,43 @@ button.btn-presupuesto:hover{
 .panel-precios * {
   color: #000 !important;
 }
+/* Modal Detalles */
+.modal{
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items:center;
+  justify-content:center;
+  background: rgba(0,0,0,.65);
+  z-index: 9999;
+  padding: 18px;
+}
+.modal.open{ display:flex; }
+
+.modal-box{
+  width: min(720px, 100%);
+  border-radius: 16px;
+  padding: 18px;
+  background: #0f1511;
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+.modal-close{
+  float:right;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color:#fff;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.modal-desc{ white-space: pre-wrap; line-height:1.55; margin-top: 10px; }
+.muted{ opacity: .8; 
+}
+
 
 
 
