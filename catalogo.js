@@ -12,6 +12,30 @@ const CART_KEY = "carrito_pesca_v1";
 let productos = [];
 let carrito = loadCart(); // { id: {cantidad, nombre, precio} }
 
+// Modal Detalles (asegurate de haber agregado el HTML del modal en catalogo.html)
+const modal = document.getElementById("modal");
+const modalTitle = document.getElementById("modalTitle");
+const modalPrice = document.getElementById("modalPrice");
+const modalDesc = document.getElementById("modalDesc");
+const modalClose = document.getElementById("modalClose");
+
+if (modal && modalClose) {
+  modalClose.addEventListener("click", closeModal);
+  modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+}
+
+function openDetails(p) {
+  if (!modal) return;
+  modalTitle.textContent = p.nombre;
+  modalPrice.textContent = `${money(p.precio)} | Stock: ${p.stock}`;
+  modalDesc.textContent = p.descripcion || "Sin descripción.";
+  modal.classList.add("open");
+}
+function closeModal() {
+  modal?.classList.remove("open");
+}
+
 init();
 
 async function init() {
@@ -44,9 +68,22 @@ function wire() {
 }
 
 async function fetchProductos() {
-  const res = await fetch("products.json", { cache: "no-store" });
-  if (!res.ok) throw new Error("No pude cargar products.json");
-  return await res.json();
+  // Ahora: Supabase vía tu endpoint Vercel
+  const res = await fetch("/api/products/list", { cache: "no-store" });
+  if (!res.ok) throw new Error("No pude cargar /api/products/list");
+
+  const rows = await res.json();
+
+  // Mapeo a tu formato viejo (para no tocar todo el código)
+  return (rows || []).map(r => ({
+    id: r.id,
+    nombre: r.name,
+    precio: Number(r.price || 0),
+    stock: Number(r.stock || 0),
+    foto: r.image_url || "img/placeholder.jpg",
+    descripcion: r.description || "",
+    categoria: r.category || ""
+  }));
 }
 
 function renderGrid() {
@@ -54,7 +91,7 @@ function renderGrid() {
   const soloStock = soloStockEl.checked;
 
   const list = productos.filter(p => {
-    const match = !q || p.nombre.toLowerCase().includes(q);
+    const match = !q || p.nombre.toLowerCase().includes(q) || (p.categoria || "").toLowerCase().includes(q);
     const stockOk = !soloStock || (p.stock > 0);
     return match && stockOk;
   });
@@ -64,6 +101,7 @@ function renderGrid() {
   list.forEach(p => {
     const chk = document.getElementById(`chk_${p.id}`);
     const qty = document.getElementById(`qty_${p.id}`);
+    const btnDet = document.getElementById(`det_${p.id}`);
 
     const inCart = carrito[p.id]?.cantidad || 0;
 
@@ -90,6 +128,9 @@ function renderGrid() {
         renderCarrito();
       }
     });
+
+    // Detalles
+    btnDet?.addEventListener("click", () => openDetails(p));
   });
 }
 
@@ -108,7 +149,11 @@ function cardHTML(p) {
         <span style="opacity:.85;">${stockTxt}</span>
       </div>
 
-      <div class="producto-acciones">
+      <div class="producto-acciones" style="gap:10px; flex-wrap: wrap;">
+        <button id="det_${p.id}" type="button" class="btn-primary subtle">
+          Detalles de producto
+        </button>
+
         <label style="display:flex;align-items:center;gap:8px;">
           <input id="chk_${p.id}" type="checkbox" ${p.stock <= 0 ? "disabled" : ""} />
           Agregar
@@ -221,6 +266,7 @@ function escapeHtml(s) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
+
 // HEADER QUE SE OCULTA AL BAJAR Y APARECE AL SUBIR
 (() => {
   const header = document.querySelector('.site-header');
@@ -242,16 +288,13 @@ function escapeHtml(s) {
   const onScroll = () => {
     const y = window.scrollY;
 
-    // Siempre visible cerca del inicio
     if (y < 80) {
       show();
       lastY = y;
       return;
     }
 
-    // Bajando → ocultar
     if (y > lastY + 6) hide();
-    // Subiendo → mostrar
     else if (y < lastY - 6) show();
 
     lastY = y;
@@ -271,3 +314,4 @@ function escapeHtml(s) {
     { passive: true }
   );
 })();
+
