@@ -766,6 +766,103 @@ button.btn-presupuesto:hover{
 .modal-desc{ white-space: pre-wrap; line-height:1.55; margin-top: 10px; }
 .muted{ opacity: .8; 
 }
+/* =========================== TECNOLOGÍA Y MATERIALES =========================== */
+
+.tech-wrap {
+  padding: 24px 0 48px;
+}
+
+/* Hero específico de esta página */
+.hero-tech {
+  padding-top: 34px;
+  padding-bottom: 28px;
+}
+
+.tech-hero-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Secciones de texto + tarjetas */
+.tech-section {
+  margin-top: 28px;
+  padding: 22px 0;
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+
+.tech-section-head h2 {
+  margin: 0 0 6px;
+  font-size: 1.5rem;
+}
+
+.tech-section-head .small {
+  max-width: 720px;
+}
+
+/* Grid de tarjetas (3 columnas en escritorio) */
+.tech-grid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.tech-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* Tarjetas con tu estilo “militar premium” */
+.tech-card {
+  background: rgba(255,255,255,.04);
+  border-radius: var(--radius);
+  border: 2px solid rgba(57,255,20,.35); /* fluor suave */
+  box-shadow: var(--shadow-strong);
+  padding: 14px 14px 16px;
+}
+
+.tech-card h3 {
+  margin: 10px 0 8px;
+  font-size: 1.15rem;
+}
+
+.tech-card p {
+  margin: 0 0 8px;
+  font-size: .96rem;
+}
+
+/* Imagen de referencia en cada tarjeta */
+.tech-figure {
+  margin: 0 0 10px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--gallery-blue);
+  border: 2px solid var(--fluor);
+}
+
+.tech-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+  .tech-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .hero-tech .hero-grid {
+    grid-template-columns: 1fr;
+  }
+  .tech-grid,
+  .tech-grid--two {
+    grid-template-columns: 1fr;
+  }
+}
 
 
 
