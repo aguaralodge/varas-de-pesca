@@ -135,4 +135,27 @@ console.log("✅ script.js cargó");
     }, 100);
   });
 })();
+// LIGHTBOX
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightbox-img");
+const lightboxClose = document.querySelector(".lightbox-close");
+
+// Cuando se cliquea una imagen técnica
+document.querySelectorAll(".tech-img").forEach(img => {
+  img.addEventListener("click", () => {
+    lightboxImg.src = img.src;
+    lightbox.classList.add("open");
+  });
+});
+
+// Cerrar lightbox al hacer click en la X o fondo
+lightboxClose.addEventListener("click", () => {
+  lightbox.classList.remove("open");
+});
+
+lightbox.addEventListener("click", (e) => {
+  if (e.target === lightbox) {
+    lightbox.classList.remove("open");
+  }
+});
 
