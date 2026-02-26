@@ -885,7 +885,7 @@ button.btn-presupuesto:hover{
 .tech-figure:hover img {
   transform: scale(1.04);   /* Suave animación premium */
 }
-/* LIGHTBOX */
+/* LIGHTBOX GENERAL PARA IMÁGENES TÉCNICAS */
 .lightbox {
   display: none;
   position: fixed;
@@ -909,6 +909,7 @@ button.btn-presupuesto:hover{
   box-shadow: 0 0 20px rgba(0,0,0,.5);
 }
 
+/* Botón de cerrado */
 .lightbox-close {
   position: absolute;
   top: 20px;
@@ -919,4 +920,8 @@ button.btn-presupuesto:hover{
   user-select: none;
 }
 
+/* Cursor de zoom para las imágenes clickeables */
+.tech-img {
+  cursor: zoom-in;
+}
 
