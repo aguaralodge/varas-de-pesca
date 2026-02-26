@@ -135,27 +135,43 @@ console.log("✅ script.js cargó");
     }, 100);
   });
 })();
-// LIGHTBOX
-const lightbox = document.getElementById("lightbox");
-const lightboxImg = document.getElementById("lightbox-img");
-const lightboxClose = document.querySelector(".lightbox-close");
+// LIGHTBOX PARA IMÁGENES TÉCNICAS
+(() => {
+  const techLightbox = document.getElementById("tech-lightbox");
+  const techLightboxImg = document.getElementById("tech-lightbox-img");
+  const techLightboxClose = techLightbox ? techLightbox.querySelector(".lightbox-close") : null;
 
-// Cuando se cliquea una imagen técnica
-document.querySelectorAll(".tech-img").forEach(img => {
-  img.addEventListener("click", () => {
-    lightboxImg.src = img.src;
-    lightbox.classList.add("open");
-  });
-});
-
-// Cerrar lightbox al hacer click en la X o fondo
-lightboxClose.addEventListener("click", () => {
-  lightbox.classList.remove("open");
-});
-
-lightbox.addEventListener("click", (e) => {
-  if (e.target === lightbox) {
-    lightbox.classList.remove("open");
+  if (!techLightbox || !techLightboxImg) {
+    return; // Si no existe el lightbox en esta página, no hacemos nada
   }
-});
 
+  // Abrir al clickear cualquier .tech-img
+  document.querySelectorAll(".tech-img").forEach(img => {
+    img.addEventListener("click", () => {
+      techLightboxImg.src = img.currentSrc || img.src;
+      techLightbox.classList.add("open");
+    });
+  });
+
+  // Cerrar al clickear la X
+  techLightboxClose?.addEventListener("click", () => {
+    techLightbox.classList.remove("open");
+    techLightboxImg.src = "";
+  });
+
+  // Cerrar al clickear fuera de la imagen
+  techLightbox.addEventListener("click", (e) => {
+    if (e.target === techLightbox) {
+      techLightbox.classList.remove("open");
+      techLightboxImg.src = "";
+    }
+  });
+
+  // Cerrar con tecla ESC
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && techLightbox.classList.contains("open")) {
+      techLightbox.classList.remove("open");
+      techLightboxImg.src = "";
+    }
+  });
+})();
