@@ -1,7 +1,7 @@
 (() => {
   const PASSWORD = "AGUARA25";
 
-  // Ruta final del logo usado en el PDF
+  // Ruta del logo que va en el PDF
   const LOGO_PATH = "logo-presu.png";
 
   // Tu WhatsApp (formato internacional sin +)
@@ -57,6 +57,7 @@
   const porta = $("porta");
   const calco = $("calco");
 
+  // NUEVOS
   const puntero = $("puntero");
   const portareel = $("portareel");
   const pintado = $("pintado");
@@ -112,6 +113,7 @@
       return items;
     }
 
+    // ---- Cañas ----
     const q1 = parseIntSafe(q_1p_rot);
     const q2 = parseIntSafe(q_3p_rot);
     const q3 = parseIntSafe(q_3p_fro);
@@ -137,6 +139,7 @@
     const c = parseMoneySafe(calco);
     if (c) items.push({ label: "Calco con nombre", qty: 1, unit: c, subtotal: c });
 
+    // Puntero/Pelo
     const pu = parseMoneySafe(puntero);
     if (pu) {
       const name =
@@ -146,9 +149,11 @@
       items.push({ label: name, qty: 1, unit: pu, subtotal: pu });
     }
 
+    // Pintado de caña
     const pi = parseMoneySafe(pintado);
     if (pi) items.push({ label: "Pintado de caña", qty: 1, unit: pi, subtotal: pi });
 
+    // Porta Reel
     const pr = parseMoneySafe(portareel);
     if (pr) items.push({ label: "Porta Reel", qty: 1, unit: pr, subtotal: pr });
 
@@ -186,7 +191,7 @@
 
   servicio.addEventListener("change", updateUI);
 
-  // ---- Logo a DataURL ----
+  // ---- Logo -> DataURL ----
   const fetchLogoDataURL = async () => {
     try {
       const res = await fetch(LOGO_PATH, { cache: "no-store" });
@@ -203,7 +208,7 @@
     }
   };
 
-  // ---- PDF ----
+  // ---- Texto resumen (para WhatsApp) ----
   const buildResumenText = (nombreCliente, items, total, tipo) => {
     const date = new Date().toLocaleString("es-AR");
     let lines = [];
@@ -227,6 +232,7 @@
     return lines.join("\n");
   };
 
+  // ---- Generar PDF ----
   const generatePdf = async () => {
     const nombreCliente = (cliente.value || "").trim();
     const tipo = servicio.value;
@@ -248,32 +254,43 @@
 
     const pageW = doc.internal.pageSize.getWidth();
     const margin = 40;
-    let y = 52;
 
-    // ---- LOGO IZQUIERDA ----
+    // ---- LOGO ARRIBA A LA DERECHA ----
+    const logoWidth = 170;
+    const logoHeight = 95;
+    const logoX = pageW - margin - logoWidth;
+    const logoY = 25;
+
     const logo = await fetchLogoDataURL();
     if (logo) {
       try {
-        doc.addImage(logo, "PNG", margin, 25, 170, 95, undefined, "FAST");
+        doc.addImage(logo, "PNG", logoX, logoY, logoWidth, logoHeight, undefined, "FAST");
       } catch (e) {
         console.error("Error cargando logo:", e);
       }
     }
 
+    // ---- TEXTO A LA IZQUIERDA ----
     doc.setFont("helvetica", "bold");
     doc.setFontSize(18);
-    doc.text("Presupuesto", margin + (logo ? 190 : 0), y);
+    doc.text("Presupuesto", margin, 60);
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(11);
-    y += 18;
-    doc.text(`Cliente: ${nombreCliente}`, margin + (logo ? 190 : 0), y);
-    y += 14;
-    doc.text(`Servicio: ${tipo === "reeles" ? "Mantenimiento de reeles" : "Reparación de cañas"}`, margin + (logo ? 190 : 0), y);
-    y += 14;
-    doc.text(`Fecha: ${new Date().toLocaleString("es-AR")}`, margin + (logo ? 190 : 0), y);
+    doc.text(`Cliente: ${nombreCliente}`, margin, 60 + 18);
+    doc.text(
+      `Servicio: ${tipo === "reeles" ? "Mantenimiento de reeles" : "Reparación de cañas"}`,
+      margin,
+      60 + 18 + 14
+    );
+    doc.text(
+      `Fecha: ${new Date().toLocaleString("es-AR")}`,
+      margin,
+      60 + 18 + 14 + 14
+    );
 
-    y = Math.max(y, 140);
+    // Línea separadora y arranque de detalle
+    let y = 140;
     doc.setDrawColor(180);
     doc.line(margin, y, pageW - margin, y);
     y += 18;
@@ -343,6 +360,7 @@
 
   btnPdf.addEventListener("click", generatePdf);
 
+  // ---- WhatsApp ----
   const openWhatsapp = async () => {
     const nombreCliente = (cliente.value || "").trim();
     const tipo = servicio.value;
@@ -374,6 +392,6 @@
 
   btnWpp.addEventListener("click", openWhatsapp);
 
+  // init
   updateUI();
 })();
-
