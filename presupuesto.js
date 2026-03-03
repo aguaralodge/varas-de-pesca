@@ -1,8 +1,8 @@
 (() => {
   const PASSWORD = "AGUARA25";
 
-  // Ajustá esto al nombre real de tu logo dentro del sitio:
-  const LOGO_PATH = "logo.png";
+  // Ruta final del logo usado en el PDF
+  const LOGO_PATH = "logo-presu.png";
 
   // Tu WhatsApp (formato internacional sin +)
   const WPP_PHONE = "5493482632269";
@@ -57,7 +57,6 @@
   const porta = $("porta");
   const calco = $("calco");
 
-  // NUEVOS
   const puntero = $("puntero");
   const portareel = $("portareel");
   const pintado = $("pintado");
@@ -113,7 +112,6 @@
       return items;
     }
 
-    // ---- Cañas ----
     const q1 = parseIntSafe(q_1p_rot);
     const q2 = parseIntSafe(q_3p_rot);
     const q3 = parseIntSafe(q_3p_fro);
@@ -139,7 +137,6 @@
     const c = parseMoneySafe(calco);
     if (c) items.push({ label: "Calco con nombre", qty: 1, unit: c, subtotal: c });
 
-    // ✅ NUEVO: Puntero/Pelo
     const pu = parseMoneySafe(puntero);
     if (pu) {
       const name =
@@ -149,18 +146,14 @@
       items.push({ label: name, qty: 1, unit: pu, subtotal: pu });
     }
 
-    // ✅ Pintado de caña
-const pi = parseMoneySafe(pintado);
-if (pi) items.push({ label: "Pintado de caña", qty: 1, unit: pi, subtotal: pi });
+    const pi = parseMoneySafe(pintado);
+    if (pi) items.push({ label: "Pintado de caña", qty: 1, unit: pi, subtotal: pi });
 
-
-    // ✅ NUEVO: Porta Reel
     const pr = parseMoneySafe(portareel);
     if (pr) items.push({ label: "Porta Reel", qty: 1, unit: pr, subtotal: pr });
 
     return items;
-   }
-  
+  };
 
   const calcTotal = (items) => items.reduce((acc, it) => acc + (it.subtotal || 0), 0);
 
@@ -183,7 +176,6 @@ if (pi) items.push({ label: "Pintado de caña", qty: 1, unit: pi, subtotal: pi }
     btnWpp.disabled = !(hasSomething && hasName);
   };
 
-  // ✅ IMPORTANTÍSIMO: agregar puntero y portareel a los listeners
   [
     servicio, cliente,
     cantReeles,
@@ -194,7 +186,7 @@ if (pi) items.push({ label: "Pintado de caña", qty: 1, unit: pi, subtotal: pi }
 
   servicio.addEventListener("change", updateUI);
 
-  // ---- Logo -> DataURL ----
+  // ---- Logo a DataURL ----
   const fetchLogoDataURL = async () => {
     try {
       const res = await fetch(LOGO_PATH, { cache: "no-store" });
@@ -258,26 +250,28 @@ if (pi) items.push({ label: "Pintado de caña", qty: 1, unit: pi, subtotal: pi }
     const margin = 40;
     let y = 52;
 
-    // Logo
+    // ---- LOGO IZQUIERDA ----
     const logo = await fetchLogoDataURL();
     if (logo) {
       try {
-        doc.addImage(logo, "PNG", margin, 34, 90, 90, undefined, "FAST");
-      } catch {}
+        doc.addImage(logo, "PNG", margin, 25, 170, 95, undefined, "FAST");
+      } catch (e) {
+        console.error("Error cargando logo:", e);
+      }
     }
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(18);
-    doc.text("Presupuesto", margin + (logo ? 110 : 0), y);
+    doc.text("Presupuesto", margin + (logo ? 190 : 0), y);
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(11);
     y += 18;
-    doc.text(`Cliente: ${nombreCliente}`, margin + (logo ? 110 : 0), y);
+    doc.text(`Cliente: ${nombreCliente}`, margin + (logo ? 190 : 0), y);
     y += 14;
-    doc.text(`Servicio: ${tipo === "reeles" ? "Mantenimiento de reeles" : "Reparación de cañas"}`, margin + (logo ? 110 : 0), y);
+    doc.text(`Servicio: ${tipo === "reeles" ? "Mantenimiento de reeles" : "Reparación de cañas"}`, margin + (logo ? 190 : 0), y);
     y += 14;
-    doc.text(`Fecha: ${new Date().toLocaleString("es-AR")}`, margin + (logo ? 110 : 0), y);
+    doc.text(`Fecha: ${new Date().toLocaleString("es-AR")}`, margin + (logo ? 190 : 0), y);
 
     y = Math.max(y, 140);
     doc.setDrawColor(180);
@@ -349,7 +343,6 @@ if (pi) items.push({ label: "Pintado de caña", qty: 1, unit: pi, subtotal: pi }
 
   btnPdf.addEventListener("click", generatePdf);
 
-  // ---- WhatsApp ----
   const openWhatsapp = async () => {
     const nombreCliente = (cliente.value || "").trim();
     const tipo = servicio.value;
@@ -381,7 +374,6 @@ if (pi) items.push({ label: "Pintado de caña", qty: 1, unit: pi, subtotal: pi }
 
   btnWpp.addEventListener("click", openWhatsapp);
 
-  // init
   updateUI();
 })();
 
