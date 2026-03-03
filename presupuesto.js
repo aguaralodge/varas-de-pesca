@@ -256,8 +256,8 @@
     const margin = 40;
 
     // ---- LOGO ARRIBA A LA DERECHA ----
-    const logoWidth = 170;
-    const logoHeight = 95;
+    const logoWidth = 200;
+    const logoHeight = 110;
     const logoX = pageW - margin - logoWidth;
     const logoY = 25;
 
