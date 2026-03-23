@@ -29,47 +29,49 @@
   </section>
 </div>
 
-<!-- VISOR DE IMAGEN -->
+<!-- MODAL PARA VER IMAGEN GRANDE -->
 <div id="imgModal" style="
   display:none;
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.75);
-  z-index:9999;
+  background:rgba(0,0,0,.78);
+  z-index:99999;
   align-items:center;
   justify-content:center;
   padding:20px;
 ">
   <div style="
     position:relative;
-    max-width:90vw;
-    max-height:90vh;
+    max-width:92vw;
+    max-height:92vh;
     background:#fff;
     border-radius:14px;
     padding:14px;
-    box-shadow:0 10px 30px rgba(0,0,0,.35);
+    box-shadow:0 12px 40px rgba(0,0,0,.35);
   ">
     <button id="imgModalClose" type="button" style="
       position:absolute;
       top:8px;
       right:8px;
-      width:34px;
-      height:34px;
+      width:36px;
+      height:36px;
       border:none;
       border-radius:50%;
       cursor:pointer;
-      font-size:18px;
+      font-size:20px;
       font-weight:bold;
       background:#111;
       color:#fff;
+      line-height:1;
     ">×</button>
 
     <img id="imgModalImage" src="" alt="Vista ampliada" style="
       display:block;
-      max-width:80vw;
-      max-height:80vh;
+      max-width:85vw;
+      max-height:85vh;
       object-fit:contain;
       border-radius:10px;
+      background:#fff;
     ">
   </div>
 </div>
@@ -80,10 +82,11 @@ function getAdminPassword() {
 }
 
 const $ = (id) => document.getElementById(id);
-
 let editingProductId = null;
 
-// GUARDAR / ACTUALIZAR
+/* =========================
+   GUARDAR / ACTUALIZAR
+========================= */
 $("btnSave").addEventListener("click", async () => {
   const msg = $("msg");
 
@@ -94,9 +97,20 @@ $("btnSave").addEventListener("click", async () => {
   const description = $("pDesc").value.trim();
   const file = $("pImg").files[0];
 
-  if (!name) return msg.textContent = "Falta nombre";
-  if (price < 0) return msg.textContent = "Precio inválido";
-  if (stock < 0) return msg.textContent = "Stock inválido";
+  if (!name) {
+    msg.textContent = "Falta nombre";
+    return;
+  }
+
+  if (Number.isNaN(price) || price < 0) {
+    msg.textContent = "Precio inválido";
+    return;
+  }
+
+  if (!Number.isInteger(stock) || stock < 0) {
+    msg.textContent = "Stock inválido";
+    return;
+  }
 
   let imageBase64 = null;
   let imageMime = null;
@@ -110,18 +124,23 @@ $("btnSave").addEventListener("click", async () => {
   msg.textContent = editingProductId ? "Actualizando..." : "Guardando...";
 
   const payload = {
-    name, price, stock, category, description
+    name,
+    price,
+    stock,
+    category,
+    description
   };
 
   if (editingProductId) {
     payload.id = editingProductId;
     payload.keepExistingImage = true;
-    if (imageBase64) {
+
+    if (imageBase64 && imageMime) {
       payload.imageBase64 = imageBase64;
       payload.imageMime = imageMime;
     }
   } else {
-    if (imageBase64) {
+    if (imageBase64 && imageMime) {
       payload.imageBase64 = imageBase64;
       payload.imageMime = imageMime;
     }
@@ -131,16 +150,28 @@ $("btnSave").addEventListener("click", async () => {
     ? "/api/products/update"
     : "/api/products/create";
 
-  const r = await fetch(endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-admin-password": getAdminPassword()
-    },
-    body: JSON.stringify(payload)
-  });
+  let r, j;
 
-  const j = await r.json();
+  try {
+    r = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-password": getAdminPassword()
+      },
+      body: JSON.stringify(payload)
+    });
+  } catch (e) {
+    msg.textContent = "Error de red: " + String(e);
+    return;
+  }
+
+  try {
+    j = await r.json();
+  } catch {
+    msg.textContent = "La respuesta del servidor no se pudo leer";
+    return;
+  }
 
   if (!r.ok) {
     msg.textContent = "Error: " + (j.error || "falló");
@@ -152,105 +183,153 @@ $("btnSave").addEventListener("click", async () => {
     : "Producto creado ✅";
 
   resetForm();
-  loadProducts();
+  await loadProducts();
 });
 
-// CANCELAR EDICIÓN
+/* =========================
+   CANCELAR EDICIÓN
+========================= */
 $("btnCancelEdit").addEventListener("click", () => {
   resetForm();
   $("msg").textContent = "Edición cancelada";
 });
 
-// LISTAR PRODUCTOS
+/* =========================
+   LISTAR PRODUCTOS
+========================= */
 async function loadProducts() {
   const box = $("productosAdminList");
-  box.innerHTML = "Cargando...";
+  box.innerHTML = "<p>Cargando productos...</p>";
 
-  const r = await fetch("/api/products/list");
-  const j = await r.json();
+  let r, j;
+
+  try {
+    r = await fetch("/api/products/list");
+  } catch (e) {
+    box.innerHTML = `<p>Error de red al cargar productos: ${escapeHtml(String(e))}</p>`;
+    return;
+  }
+
+  try {
+    j = await r.json();
+  } catch {
+    box.innerHTML = "<p>No se pudo leer la respuesta de productos</p>";
+    return;
+  }
 
   const products = Array.isArray(j) ? j : (j.data || j.products || []);
 
   if (!products.length) {
-    box.innerHTML = "No hay productos";
+    box.innerHTML = "<p>No hay productos</p>";
     return;
   }
 
-  box.innerHTML = products.map(p => `
-    <div style="
-      border:1px solid #ddd;
-      padding:12px;
-      margin-bottom:12px;
-      border-radius:12px;
-      display:flex;
-      gap:14px;
-      align-items:flex-start;
-      flex-wrap:wrap;
-    ">
-      <div
-        onclick="${p.image_url ? `openImageModal('${String(p.image_url).replaceAll("\\", "\\\\").replaceAll("'", "\\'")}')` : ""}"
-        style="
-          width:120px;
-          height:120px;
-          border:1px solid #ddd;
-          border-radius:10px;
-          background:#f7f7f7;
-          display:flex;
-          align-items:center;
-          justify-content:center;
-          overflow:hidden;
-          cursor:${p.image_url ? "pointer" : "default"};
-          flex-shrink:0;
-        "
-        title="${p.image_url ? "Click para ampliar" : "Sin imagen"}"
-      >
-        ${
-          p.image_url
-            ? `<img
-                src="${p.image_url}"
-                alt="${escapeHtml(p.name)}"
-                style="
-                  width:100%;
-                  height:100%;
-                  object-fit:contain;
-                  display:block;
-                  background:#fff;
-                "
-              >`
-            : `<span style="font-size:12px; color:#666;">Sin imagen</span>`
-        }
-      </div>
+  box.innerHTML = products.map(p => {
+    const id = String(p.id ?? "");
+    const name = escapeHtml(p.name || "");
+    const price = Number(p.price || 0).toLocaleString("es-AR");
+    const stock = escapeHtml(String(p.stock ?? 0));
+    const category = escapeHtml(p.category || "-");
+    const description = escapeHtml(p.description || "-");
+    const imageUrl = p.image_url || "";
 
-      <div style="flex:1; min-width:220px;">
-        <strong>${escapeHtml(p.name)}</strong><br>
-        $${Number(p.price).toLocaleString()}<br>
-        Stock: ${p.stock}<br>
-        Categoría: ${escapeHtml(p.category || "-")}<br>
-        Descripción: ${escapeHtml(p.description || "-")}
-      </div>
+    return `
+      <div style="
+        border:1px solid #ddd;
+        padding:12px;
+        margin-bottom:12px;
+        border-radius:12px;
+        display:flex;
+        gap:14px;
+        align-items:flex-start;
+        flex-wrap:wrap;
+      ">
+        <div
+          class="product-thumb"
+          data-img="${escapeAttr(imageUrl)}"
+          style="
+            width:120px;
+            height:120px;
+            border:1px solid #ddd;
+            border-radius:10px;
+            background:#f7f7f7;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            overflow:hidden;
+            cursor:${imageUrl ? "pointer" : "default"};
+            flex-shrink:0;
+          "
+          title="${imageUrl ? "Click para ampliar" : "Sin imagen"}"
+        >
+          ${
+            imageUrl
+              ? `<img
+                  src="${escapeAttr(imageUrl)}"
+                  alt="${escapeAttr(p.name || "Producto")}"
+                  style="
+                    width:100%;
+                    height:100%;
+                    object-fit:contain;
+                    display:block;
+                    background:#fff;
+                  "
+                >`
+              : `<span style="font-size:12px; color:#666;">Sin imagen</span>`
+          }
+        </div>
 
-      <div style="display:flex; flex-direction:column; gap:8px;">
-        <button onclick="editProduct('${p.id}')" type="button">Editar</button>
-        <button onclick="deleteProduct('${p.id}')" type="button">Borrar</button>
+        <div style="flex:1; min-width:220px;">
+          <strong>${name}</strong><br>
+          $${price}<br>
+          Stock: ${stock}<br>
+          Categoría: ${category}<br>
+          Descripción: ${description}
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <button type="button" onclick="editProduct('${escapeJs(id)}')">Editar</button>
+          <button type="button" onclick="deleteProduct('${escapeJs(id)}')">Borrar</button>
+        </div>
       </div>
-    </div>
-  `).join("");
+    `;
+  }).join("");
+
+  document.querySelectorAll(".product-thumb").forEach(el => {
+    el.addEventListener("click", () => {
+      const src = el.dataset.img;
+      if (src) openImageModal(src);
+    });
+  });
 }
 
-// EDITAR
+/* =========================
+   EDITAR
+========================= */
 window.editProduct = async function(id) {
-  const r = await fetch("/api/products/list");
-  const j = await r.json();
+  let r, j;
+
+  try {
+    r = await fetch("/api/products/list");
+    j = await r.json();
+  } catch {
+    $("msg").textContent = "No se pudo cargar el producto para editar";
+    return;
+  }
+
   const products = Array.isArray(j) ? j : (j.data || j.products || []);
   const p = products.find(x => String(x.id) === String(id));
 
-  if (!p) return;
+  if (!p) {
+    $("msg").textContent = "No se encontró el producto";
+    return;
+  }
 
   editingProductId = p.id;
 
-  $("pName").value = p.name;
-  $("pPrice").value = p.price;
-  $("pStock").value = p.stock;
+  $("pName").value = p.name || "";
+  $("pPrice").value = p.price || 0;
+  $("pStock").value = p.stock || 0;
   $("pCat").value = p.category || "";
   $("pDesc").value = p.description || "";
   $("pImg").value = "";
@@ -258,35 +337,78 @@ window.editProduct = async function(id) {
   $("btnSave").textContent = "Actualizar producto";
   $("btnCancelEdit").style.display = "inline-block";
   $("editBadge").style.display = "block";
+  $("msg").textContent = "Modo edición activado";
 
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
-// BORRAR
+/* =========================
+   BORRAR
+========================= */
 window.deleteProduct = async function(id) {
-  if (!confirm("¿Borrar producto?")) return;
+  const confirmar = confirm("¿Borrar producto?");
+  if (!confirmar) return;
 
-  const r = await fetch("/api/products/delete", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-admin-password": getAdminPassword()
-    },
-    body: JSON.stringify({ id })
-  });
+  let r, j;
 
-  const j = await r.json();
-
-  if (!r.ok) {
-    $("msg").textContent = "Error al borrar";
+  try {
+    r = await fetch("/api/products/delete", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-password": getAdminPassword()
+      },
+      body: JSON.stringify({ id })
+    });
+  } catch (e) {
+    $("msg").textContent = "Error de red al borrar: " + String(e);
     return;
   }
 
+  try {
+    j = await r.json();
+  } catch {
+    $("msg").textContent = "No se pudo leer la respuesta al borrar";
+    return;
+  }
+
+  if (!r.ok) {
+    $("msg").textContent = "Error al borrar: " + (j.error || "falló");
+    return;
+  }
+
+  if (String(editingProductId) === String(id)) {
+    resetForm();
+  }
+
   $("msg").textContent = "Producto borrado ✅";
-  loadProducts();
+  await loadProducts();
 };
 
-// RESET
+/* =========================
+   MODAL DE IMAGEN
+========================= */
+function openImageModal(src) {
+  $("imgModalImage").src = src;
+  $("imgModal").style.display = "flex";
+}
+
+function closeImageModal() {
+  $("imgModal").style.display = "none";
+  $("imgModalImage").src = "";
+}
+
+$("imgModalClose").addEventListener("click", closeImageModal);
+
+$("imgModal").addEventListener("click", (e) => {
+  if (e.target.id === "imgModal") {
+    closeImageModal();
+  }
+});
+
+/* =========================
+   RESET
+========================= */
 function resetForm() {
   editingProductId = null;
 
@@ -302,30 +424,14 @@ function resetForm() {
   $("editBadge").style.display = "none";
 }
 
-// MODAL DE IMAGEN
-window.openImageModal = function(src) {
-  $("imgModalImage").src = src;
-  $("imgModal").style.display = "flex";
-};
-
-function closeImageModal() {
-  $("imgModal").style.display = "none";
-  $("imgModalImage").src = "";
-}
-
-$("imgModalClose").addEventListener("click", closeImageModal);
-
-$("imgModal").addEventListener("click", (e) => {
-  if (e.target.id === "imgModal") {
-    closeImageModal();
-  }
-});
-
-// UTIL
+/* =========================
+   UTILS
+========================= */
 function fileToBase64(file) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
     reader.readAsDataURL(file);
   });
 }
@@ -339,6 +445,23 @@ function escapeHtml(str) {
     .replaceAll("'", "&#039;");
 }
 
-// INICIO
+function escapeAttr(str) {
+  return String(str)
+    .replaceAll("&", "&amp;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll("'", "&#039;");
+}
+
+function escapeJs(str) {
+  return String(str)
+    .replaceAll("\\", "\\\\")
+    .replaceAll("'", "\\'");
+}
+
+/* =========================
+   INICIO
+========================= */
 loadProducts();
 </script>
