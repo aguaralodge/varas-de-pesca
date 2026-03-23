@@ -51,7 +51,7 @@ async function init() {
     renderCarrito();
   } catch (err) {
     console.error(err);
-    grid.innerHTML = `<p style="grid-column:1/-1;">No se pudieron cargar los productos.</p>`;
+    grid.innerHTML = `<p style="grid-column:1/-1; color:white;">No se pudieron cargar los productos.</p>`;
   }
 }
 
@@ -111,7 +111,7 @@ function renderGrid() {
   });
 
   if (!list.length) {
-    grid.innerHTML = `<p style="grid-column:1/-1;">No encontré productos con ese filtro.</p>`;
+    grid.innerHTML = `<p style="grid-column:1/-1; color:white;">No encontré productos con ese filtro.</p>`;
     return;
   }
 
@@ -161,13 +161,15 @@ function renderGrid() {
     });
 
     card?.addEventListener("mouseenter", () => {
-      card.style.transform = "translateY(-4px)";
-      card.style.boxShadow = "0 14px 34px rgba(0,0,0,.10)";
+      card.style.transform = "translateY(-6px)";
+      card.style.boxShadow = "0 18px 42px rgba(0,0,0,.28)";
+      card.style.borderColor = "rgba(255,255,255,.18)";
     });
 
     card?.addEventListener("mouseleave", () => {
       card.style.transform = "translateY(0)";
-      card.style.boxShadow = "0 8px 24px rgba(0,0,0,.06)";
+      card.style.boxShadow = "0 14px 36px rgba(0,0,0,.22)";
+      card.style.borderColor = "rgba(255,255,255,.10)";
     });
   });
 }
@@ -175,35 +177,37 @@ function renderGrid() {
 function cardHTML(p) {
   const price = money(p.precio);
   const stockTxt = p.stock > 0 ? `Stock: ${p.stock}` : "Sin stock";
-  const stockColor = p.stock > 0 ? "#3f6b44" : "#a33a3a";
+  const stockColor = p.stock > 0 ? "#c8f7d1" : "#ffc4c4";
 
   return `
     <article
       id="card_${escapeAttr(String(p.id))}"
       class="producto-card"
       style="
-        background:rgba(255,255,255,0.04);
-backdrop-filter: blur(6px);
-        border:1px solid rgba(0,0,0,.08);
-        border-radius:18px;
-        overflow:hidden;
-        box-shadow:0 8px 24px rgba(0,0,0,.06);
-        transition:transform .18s ease, box-shadow .18s ease;
+        background: linear-gradient(180deg, rgba(12,28,56,.78) 0%, rgba(8,20,42,.88) 100%);
+        border: 1px solid rgba(255,255,255,.10);
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: 0 14px 36px rgba(0,0,0,.22);
+        transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+        backdrop-filter: blur(8px);
       "
     >
       <div
         id="img_${escapeAttr(String(p.id))}"
         class="producto-thumb"
         style="
-          width:100%;
-          height:240px;
-          background:linear-gradient(180deg, #fafafa 0%, #f1f1f1 100%);
-          display:flex;
-          align-items:center;
-          justify-content:center;
-          overflow:hidden;
-          cursor:pointer;
-          position:relative;
+          width: 100%;
+          height: 250px;
+          background: linear-gradient(180deg, rgba(255,255,255,.07) 0%, rgba(255,255,255,.02) 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          cursor: pointer;
+          position: relative;
+          padding: 16px;
+          border-bottom: 1px solid rgba(255,255,255,.08);
         "
         title="Click para ampliar"
       >
@@ -212,45 +216,54 @@ backdrop-filter: blur(6px);
           alt="${escapeAttr(p.nombre)}"
           loading="lazy"
           style="
-            width:100%;
-            height:100%;
-            object-fit:contain;
-            display:block;
-            transition:transform .28s ease;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            transition: transform .28s ease;
+            filter: drop-shadow(0 10px 18px rgba(0,0,0,.22));
           "
           onmouseenter="this.style.transform='scale(1.04)'"
           onmouseleave="this.style.transform='scale(1)'"
         />
+
         <div
           style="
-            position:absolute;
-            right:10px;
-            bottom:10px;
-            background:rgba(17,17,17,.72);
-            color:#fff;
-            font-size:.78rem;
-            padding:6px 10px;
-            border-radius:999px;
-            pointer-events:none;
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            background: rgba(6,14,28,.72);
+            color: #eef4ff;
+            font-size: .78rem;
+            font-weight: 600;
+            letter-spacing: .02em;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,.10);
+            pointer-events: none;
+            backdrop-filter: blur(6px);
           "
         >
           Ver imagen
         </div>
       </div>
 
-      <div class="producto-info" style="padding:16px;">
+      <div class="producto-info" style="padding: 18px;">
         <div style="
-          display:flex;
-          justify-content:space-between;
-          align-items:flex-start;
-          gap:12px;
-          margin-bottom:10px;
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 12px;
+          margin-bottom: 10px;
         ">
           <h3 style="
-            margin:0;
-            font-size:1.06rem;
-            line-height:1.3;
-            color:#1b1b1b;
+            margin: 0;
+            font-size: 1.10rem;
+            line-height: 1.3;
+            color: #ffffff;
+            font-weight: 800;
+            letter-spacing: .01em;
+            text-shadow: 0 1px 0 rgba(0,0,0,.18);
           ">
             ${escapeHtml(p.nombre)}
           </h3>
@@ -258,39 +271,45 @@ backdrop-filter: blur(6px);
           ${
             p.categoria
               ? `<span style="
-                  flex-shrink:0;
-                  font-size:.76rem;
-                  padding:6px 10px;
-                  border-radius:999px;
-                  background:#f2f2f2;
-                  color:#555;
-                  white-space:nowrap;
+                  flex-shrink: 0;
+                  font-size: .76rem;
+                  font-weight: 700;
+                  letter-spacing: .03em;
+                  padding: 6px 10px;
+                  border-radius: 999px;
+                  background: rgba(255,255,255,.08);
+                  color: #e7f0ff;
+                  border: 1px solid rgba(255,255,255,.10);
+                  white-space: nowrap;
                 ">${escapeHtml(p.categoria)}</span>`
               : ""
           }
         </div>
 
         <div class="producto-meta" style="
-          display:flex;
-          justify-content:space-between;
-          gap:10px;
-          align-items:center;
-          margin-bottom:12px;
-          flex-wrap:wrap;
+          display: flex;
+          justify-content: space-between;
+          gap: 10px;
+          align-items: center;
+          margin-bottom: 12px;
+          flex-wrap: wrap;
         ">
           <span class="precio" style="
-            font-weight:800;
-            font-size:1.12rem;
-            color:#101010;
+            font-weight: 900;
+            font-size: 1.16rem;
+            color: #ffffff;
+            letter-spacing: .01em;
+            text-shadow: 0 1px 0 rgba(0,0,0,.18);
           ">
             ${price}
           </span>
 
           <span style="
-            opacity:.95;
-            font-size:.92rem;
-            color:${stockColor};
-            font-weight:600;
+            opacity: .98;
+            font-size: .93rem;
+            color: ${stockColor};
+            font-weight: 800;
+            letter-spacing: .02em;
           ">
             ${stockTxt}
           </span>
@@ -299,10 +318,12 @@ backdrop-filter: blur(6px);
         ${
           p.descripcion
             ? `<p style="
-                margin:0 0 14px 0;
-                font-size:.93rem;
-                line-height:1.45;
-                color:#5a5a5a;
+                margin: 0 0 15px 0;
+                font-size: .95rem;
+                line-height: 1.55;
+                color: #e3ecfb;
+                font-weight: 500;
+                letter-spacing: .005em;
               ">
                 ${escapeHtml(truncateText(p.descripcion, 110))}
               </p>`
@@ -310,41 +331,55 @@ backdrop-filter: blur(6px);
         }
 
         <div class="producto-acciones" style="
-          display:flex;
-          gap:10px;
-          flex-wrap:wrap;
-          align-items:center;
+          display: flex;
+          gap: 10px;
+          flex-wrap: wrap;
+          align-items: center;
         ">
           <button
             id="det_${escapeAttr(String(p.id))}"
             type="button"
             class="btn-primary subtle"
             style="
-              border-radius:10px;
+              border-radius: 12px;
+              background: rgba(255,255,255,.10);
+              border: 1px solid rgba(255,255,255,.12);
+              color: #ffffff;
+              font-weight: 700;
+              letter-spacing: .02em;
+              box-shadow: 0 6px 16px rgba(0,0,0,.12);
             "
           >
             Detalles
           </button>
 
           <label style="
-            display:flex;
-            align-items:center;
-            gap:8px;
-            background:#fafafa;
-            padding:8px 10px;
-            border-radius:10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,.06);
+            color: #ffffff;
+            font-weight: 600;
+            letter-spacing: .01em;
+            padding: 9px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,.08);
           ">
             <input id="chk_${escapeAttr(String(p.id))}" type="checkbox" ${p.stock <= 0 ? "disabled" : ""} />
             Agregar
           </label>
 
           <label style="
-            display:flex;
-            align-items:center;
-            gap:8px;
-            background:#fafafa;
-            padding:8px 10px;
-            border-radius:10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,.06);
+            color: #ffffff;
+            font-weight: 600;
+            letter-spacing: .01em;
+            padding: 9px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,.08);
           ">
             Cant:
             <input
@@ -355,10 +390,13 @@ backdrop-filter: blur(6px);
               value="1"
               ${p.stock <= 0 ? "disabled" : ""}
               style="
-                width:72px;
-                border-radius:8px;
-                border:1px solid #d7d7d7;
-                padding:6px 8px;
+                width: 72px;
+                border-radius: 9px;
+                border: 1px solid rgba(255,255,255,.12);
+                background: rgba(7,15,30,.55);
+                color: #ffffff;
+                font-weight: 700;
+                padding: 6px 8px;
               "
             />
           </label>
