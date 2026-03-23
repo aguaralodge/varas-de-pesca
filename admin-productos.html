@@ -1,11 +1,33 @@
-<input id="pName" placeholder="Nombre" />
-<input id="pPrice" type="number" placeholder="Precio" />
-<input id="pStock" type="number" placeholder="Stock" />
-<input id="pCat" placeholder="Categoría" />
-<textarea id="pDesc" placeholder="Descripción completa"></textarea>
-<input id="pImg" type="file" accept="image/*" />
-<button id="btnSave" type="button">Guardar producto</button>
-<div id="msg" style="margin-top:10px;"></div>
+<div class="admin-productos-wrap">
+  <h2>Administrar productos</h2>
+
+  <div id="editBadge" style="display:none; margin-bottom:10px; font-weight:bold;">
+    Estás editando un producto
+  </div>
+
+  <input id="pName" placeholder="Nombre" />
+  <input id="pPrice" type="number" placeholder="Precio" />
+  <input id="pStock" type="number" placeholder="Stock" />
+  <input id="pCat" placeholder="Categoría" />
+  <textarea id="pDesc" placeholder="Descripción completa"></textarea>
+  <input id="pImg" type="file" accept="image/*" />
+
+  <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+    <button id="btnSave" type="button">Guardar producto</button>
+    <button id="btnCancelEdit" type="button" style="display:none;">Cancelar edición</button>
+  </div>
+
+  <div id="msg" style="margin-top:10px;"></div>
+
+  <hr style="margin:30px 0;">
+
+  <section id="productosAdminSection">
+    <h3>Productos cargados</h3>
+    <div id="productosAdminList">
+      <p>Cargando productos...</p>
+    </div>
+  </section>
+</div>
 
 <script>
 // Si ya tenés un lock, podés guardar la pass en sessionStorage con esta key.
