@@ -71,19 +71,67 @@
       </p>
     </aside>
   </main>
-<!-- Modal Detalles de producto -->
-<div id="modal" class="modal">
-  <div class="modal-box">
-    <button id="modalClose" class="modal-close" type="button">×</button>
-    <h2 id="modalTitle"></h2>
-    <div id="modalPrice" class="muted"></div>
-    <p id="modalDesc" class="modal-desc"></p>
+
+  <!-- Modal Detalles de producto -->
+  <div id="modal" class="modal">
+    <div class="modal-box">
+      <button id="modalClose" class="modal-close" type="button">×</button>
+      <h2 id="modalTitle"></h2>
+      <div id="modalPrice" class="muted"></div>
+      <p id="modalDesc" class="modal-desc"></p>
+    </div>
   </div>
-</div>
+
+  <!-- Modal Imagen ampliada -->
+  <div id="imgModal" class="modal" style="display:none;">
+    <div class="modal-box" style="max-width: 900px; width: 95%;">
+      <button id="imgModalClose" class="modal-close" type="button">×</button>
+      <img
+        id="imgModalImage"
+        src=""
+        alt="Imagen ampliada"
+        style="
+          width: 100%;
+          max-height: 80vh;
+          object-fit: contain;
+          display: block;
+          border-radius: 12px;
+          background: #fff;
+        "
+      />
+    </div>
+  </div>
+
   <script>
     window.WHATSAPP_NUMBER = "5493482632269";
+
+    window.openImageModal = function(src) {
+      const modal = document.getElementById("imgModal");
+      const img = document.getElementById("imgModalImage");
+      if (!src || !modal || !img) return;
+      img.src = src;
+      modal.style.display = "flex";
+    };
+
+    window.closeImageModal = function() {
+      const modal = document.getElementById("imgModal");
+      const img = document.getElementById("imgModalImage");
+      if (!modal || !img) return;
+      modal.style.display = "none";
+      img.src = "";
+    };
+
+    document.addEventListener("click", (e) => {
+      if (e.target && e.target.id === "imgModalClose") {
+        window.closeImageModal();
+      }
+      if (e.target && e.target.id === "imgModal") {
+        window.closeImageModal();
+      }
+    });
   </script>
-<script src="catalogo.js"></script>
-<script src="script.js?v=999"></script>
+
+  <script src="catalogo.js"></script>
+  <script src="script.js?v=999"></script>
 </body>
 </html>
