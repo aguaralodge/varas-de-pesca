@@ -21,7 +21,7 @@
 
   <hr style="margin:30px 0;">
 
-  <section id="productosAdminSection">
+  <section>
     <h3>Productos cargados</h3>
     <div id="productosAdminList">
       <p>Cargando productos...</p>
@@ -30,22 +30,15 @@
 </div>
 
 <script>
-const FALLBACK_PASSWORD = "AGUARA26";
-
 function getAdminPassword() {
-  try {
-    return sessionStorage.getItem("admin_password") || FALLBACK_PASSWORD;
-  } catch {
-    return FALLBACK_PASSWORD;
-  }
+  return "AGUARA26";
 }
 
 const $ = (id) => document.getElementById(id);
 
 let editingProductId = null;
-let currentImageUrl = null;
-let currentImagePath = null;
 
+// GUARDAR / ACTUALIZAR
 $("btnSave").addEventListener("click", async () => {
   const msg = $("msg");
 
@@ -56,20 +49,9 @@ $("btnSave").addEventListener("click", async () => {
   const description = $("pDesc").value.trim();
   const file = $("pImg").files[0];
 
-  if (!name) {
-    msg.textContent = "Falta nombre";
-    return;
-  }
-
-  if (Number.isNaN(price) || price < 0) {
-    msg.textContent = "Precio inválido";
-    return;
-  }
-
-  if (!Number.isInteger(stock) || stock < 0) {
-    msg.textContent = "Stock inválido";
-    return;
-  }
+  if (!name) return msg.textContent = "Falta nombre";
+  if (price < 0) return msg.textContent = "Precio inválido";
+  if (stock < 0) return msg.textContent = "Stock inválido";
 
   let imageBase64 = null;
   let imageMime = null;
@@ -83,255 +65,135 @@ $("btnSave").addEventListener("click", async () => {
   msg.textContent = editingProductId ? "Actualizando..." : "Guardando...";
 
   const payload = {
-    name,
-    price,
-    stock,
-    category,
-    description
+    name, price, stock, category, description
   };
 
   if (editingProductId) {
     payload.id = editingProductId;
     payload.keepExistingImage = true;
-
-    if (imageBase64 && imageMime) {
+    if (imageBase64) {
       payload.imageBase64 = imageBase64;
       payload.imageMime = imageMime;
     }
   } else {
-    if (imageBase64 && imageMime) {
+    if (imageBase64) {
       payload.imageBase64 = imageBase64;
       payload.imageMime = imageMime;
     }
   }
 
-  let endpoint = editingProductId ? "/api/products/update" : "/api/products/create";
+  const endpoint = editingProductId
+    ? "/api/products/update"
+    : "/api/products/create";
 
-  let r, j;
-  try {
-    r = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-admin-password": getAdminPassword()
-      },
-      body: JSON.stringify(payload)
-    });
-  } catch (e) {
-    msg.textContent = "Error de red al llamar a la API: " + String(e);
-    return;
-  }
+  const r = await fetch(endpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-admin-password": getAdminPassword()
+    },
+    body: JSON.stringify(payload)
+  });
 
-  try {
-    j = await r.json();
-  } catch {
-    const t = await r.text().catch(() => "");
-    msg.textContent = "Respuesta inválida del servidor. Status " + r.status + " " + t;
-    return;
-  }
+  const j = await r.json();
 
   if (!r.ok) {
-    const detail = j?.detail
-      ? (typeof j.detail === "string" ? j.detail : JSON.stringify(j.detail))
-      : "";
-    msg.textContent = `Error (${r.status}): ${j?.error || "Fallo"}${detail ? " | " + detail : ""}`;
+    msg.textContent = "Error: " + (j.error || "falló");
     return;
   }
 
   msg.textContent = editingProductId
     ? "Producto actualizado ✅"
-    : "Producto cargado ✅";
+    : "Producto creado ✅";
 
   resetForm();
-  await loadProducts();
+  loadProducts();
 });
 
+// CANCELAR EDICIÓN
 $("btnCancelEdit").addEventListener("click", () => {
   resetForm();
   $("msg").textContent = "Edición cancelada";
 });
 
+// LISTAR PRODUCTOS
 async function loadProducts() {
   const box = $("productosAdminList");
-  box.innerHTML = "<p>Cargando productos...</p>";
+  box.innerHTML = "Cargando...";
 
-  let r, j;
-  try {
-    r = await fetch("/api/products/list", { method: "GET" });
-  } catch (e) {
-    box.innerHTML = `<p>Error de red al cargar productos: ${escapeHtml(String(e))}</p>`;
+  const r = await fetch("/api/products/list");
+  const j = await r.json();
+
+  const products = Array.isArray(j) ? j : (j.data || j.products || []);
+
+  if (!products.length) {
+    box.innerHTML = "No hay productos";
     return;
   }
 
-  try {
-    j = await r.json();
-  } catch {
-    const t = await r.text().catch(() => "");
-    box.innerHTML = `<p>Respuesta inválida del servidor. Status ${r.status} ${escapeHtml(t)}</p>`;
-    return;
-  }
-
-  if (!r.ok) {
-    const detail = j?.detail
-      ? (typeof j.detail === "string" ? j.detail : JSON.stringify(j.detail))
-      : "";
-    box.innerHTML = `<p>Error (${r.status}): ${escapeHtml(j?.error || "Fallo")} ${detail ? "| " + escapeHtml(detail) : ""}</p>`;
-    return;
-  }
-
-  const products = normalizeProductsResponse(j);
-
-  if (!Array.isArray(products) || products.length === 0) {
-    box.innerHTML = "<p>No hay productos cargados todavía.</p>";
-    return;
-  }
-
-  box.innerHTML = products.map((p) => {
-    const id = p.id ?? "";
-    const name = p.name ?? "";
-    const price = Number(p.price || 0);
-    const stock = Number(p.stock || 0);
-    const category = p.category ?? "";
-    const description = p.description ?? "";
-    const imageUrl = p.image_url || "";
-    const imagePath = p.image_path || "";
-
-    return `
-      <div class="admin-product-card" style="border:1px solid #ddd; border-radius:12px; padding:14px; margin-bottom:14px; display:grid; gap:12px;">
-        <div style="display:flex; gap:14px; align-items:flex-start; flex-wrap:wrap;">
-          <div style="width:110px; height:110px; border:1px solid #ddd; border-radius:10px; overflow:hidden; background:#f7f7f7; display:flex; align-items:center; justify-content:center;">
-            ${
-              imageUrl
-                ? `<img src="${escapeAttr(imageUrl)}" alt="${escapeAttr(name)}" style="width:100%; height:100%; object-fit:cover;">`
-                : `<span style="font-size:12px; color:#666;">Sin imagen</span>`
-            }
-          </div>
-
-          <div style="flex:1; min-width:220px;">
-            <h4 style="margin:0 0 8px 0;">${escapeHtml(name)}</h4>
-            <div style="margin:4px 0;"><strong>Precio:</strong> $${price.toLocaleString("es-AR")}</div>
-            <div style="margin:4px 0;"><strong>Stock:</strong> ${stock}</div>
-            <div style="margin:4px 0;"><strong>Categoría:</strong> ${escapeHtml(category || "-")}</div>
-            <div style="margin:4px 0;"><strong>Descripción:</strong> ${escapeHtml(description || "-")}</div>
-          </div>
-
-          <div style="display:flex; flex-direction:column; gap:8px; min-width:120px;">
-            <button type="button" onclick="startEditProduct('${escapeJsString(String(id))}')" style="padding:10px; border:none; border-radius:10px; cursor:pointer;">
-              Editar
-            </button>
-            <button type="button" onclick="deleteProduct('${escapeJsString(String(id))}')" style="padding:10px; border:none; border-radius:10px; cursor:pointer;">
-              Borrar
-            </button>
-          </div>
-        </div>
-
-        <div style="display:none;"
-          data-product-id="${escapeAttr(String(id))}"
-          data-image-url="${escapeAttr(imageUrl)}"
-          data-image-path="${escapeAttr(imagePath)}">
-        </div>
-      </div>
-    `;
-  }).join("");
+  box.innerHTML = products.map(p => `
+    <div style="border:1px solid #ddd; padding:10px; margin-bottom:10px; border-radius:10px;">
+      <strong>${p.name}</strong><br>
+      $${Number(p.price).toLocaleString()}<br>
+      Stock: ${p.stock}<br>
+      <button onclick="editProduct('${p.id}')">Editar</button>
+      <button onclick="deleteProduct('${p.id}')">Borrar</button>
+    </div>
+  `).join("");
 }
 
-function normalizeProductsResponse(j) {
-  if (Array.isArray(j)) return j;
-  if (Array.isArray(j.products)) return j.products;
-  if (Array.isArray(j.items)) return j.items;
-  if (Array.isArray(j.data)) return j.data;
-  if (Array.isArray(j.rows)) return j.rows;
-  return [];
-}
+// EDITAR
+window.editProduct = async function(id) {
+  const r = await fetch("/api/products/list");
+  const j = await r.json();
+  const products = Array.isArray(j) ? j : (j.data || j.products || []);
+  const p = products.find(x => String(x.id) === String(id));
 
-window.startEditProduct = async function(id) {
-  const products = await fetchProductsForEdit();
-  const product = products.find(p => String(p.id) === String(id));
+  if (!p) return;
 
-  if (!product) {
-    $("msg").textContent = "No se encontró el producto para editar";
-    return;
-  }
+  editingProductId = p.id;
 
-  editingProductId = product.id;
-  currentImageUrl = product.image_url || null;
-  currentImagePath = product.image_path || null;
-
-  $("pName").value = product.name || "";
-  $("pPrice").value = Number(product.price || 0);
-  $("pStock").value = Number(product.stock || 0);
-  $("pCat").value = product.category || "";
-  $("pDesc").value = product.description || "";
+  $("pName").value = p.name;
+  $("pPrice").value = p.price;
+  $("pStock").value = p.stock;
+  $("pCat").value = p.category || "";
+  $("pDesc").value = p.description || "";
   $("pImg").value = "";
 
   $("btnSave").textContent = "Actualizar producto";
   $("btnCancelEdit").style.display = "inline-block";
   $("editBadge").style.display = "block";
-  $("msg").textContent = "Modo edición activado";
 
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
+// BORRAR
 window.deleteProduct = async function(id) {
-  const ok = confirm("¿Seguro que querés borrar este producto?");
-  if (!ok) return;
+  if (!confirm("¿Borrar producto?")) return;
 
-  $("msg").textContent = "Borrando producto...";
+  const r = await fetch("/api/products/delete", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-admin-password": getAdminPassword()
+    },
+    body: JSON.stringify({ id })
+  });
 
-  let r, j;
-  try {
-    r = await fetch("/api/products/delete", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-admin-password": getAdminPassword()
-      },
-      body: JSON.stringify({ id })
-    });
-  } catch (e) {
-    $("msg").textContent = "Error de red al borrar: " + String(e);
-    return;
-  }
-
-  try {
-    j = await r.json();
-  } catch {
-    const t = await r.text().catch(() => "");
-    $("msg").textContent = "Respuesta inválida del servidor. Status " + r.status + " " + t;
-    return;
-  }
+  const j = await r.json();
 
   if (!r.ok) {
-    const detail = j?.detail
-      ? (typeof j.detail === "string" ? j.detail : JSON.stringify(j.detail))
-      : "";
-    $("msg").textContent = `Error (${r.status}): ${j?.error || "Fallo"}${detail ? " | " + detail : ""}`;
+    $("msg").textContent = "Error al borrar";
     return;
-  }
-
-  if (String(editingProductId) === String(id)) {
-    resetForm();
   }
 
   $("msg").textContent = "Producto borrado ✅";
-  await loadProducts();
+  loadProducts();
 };
 
-async function fetchProductsForEdit() {
-  let r, j;
-  try {
-    r = await fetch("/api/products/list", { method: "GET" });
-    j = await r.json();
-  } catch {
-    return [];
-  }
-  return normalizeProductsResponse(j);
-}
-
+// RESET
 function resetForm() {
   editingProductId = null;
-  currentImageUrl = null;
-  currentImagePath = null;
 
   $("pName").value = "";
   $("pPrice").value = "";
@@ -345,33 +207,15 @@ function resetForm() {
   $("editBadge").style.display = "none";
 }
 
+// UTIL
 function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
     reader.readAsDataURL(file);
   });
 }
 
-function escapeHtml(str) {
-  return String(str)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
-}
-
-function escapeAttr(str) {
-  return escapeHtml(str);
-}
-
-function escapeJsString(str) {
-  return String(str)
-    .replaceAll("\\", "\\\\")
-    .replaceAll("'", "\\'");
-}
-
+// INICIO
 loadProducts();
 </script>
