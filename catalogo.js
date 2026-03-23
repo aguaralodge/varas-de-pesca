@@ -182,7 +182,8 @@ function cardHTML(p) {
       id="card_${escapeAttr(String(p.id))}"
       class="producto-card"
       style="
-        background:#ffffff;
+        background:rgba(255,255,255,0.04);
+backdrop-filter: blur(6px);
         border:1px solid rgba(0,0,0,.08);
         border-radius:18px;
         overflow:hidden;
