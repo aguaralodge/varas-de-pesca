@@ -1,7 +1,7 @@
 <div class="admin-productos-wrap">
   <h2>Administrar productos</h2>
 
-  <div id="editBadge" style="display:none; margin-bottom:10px; font-weight:bold;">
+  <div id="editBadge" style="display:none; margin-bottom:10px; font-weight:bold; color:#b45309;">
     Estás editando un producto
   </div>
 
@@ -30,10 +30,9 @@
 </div>
 
 <script>
-// Si ya tenés un lock, podés guardar la pass en sessionStorage con esta key.
-// Si no existe, usa la hardcodeada de abajo.
-const FALLBACK_PASSWORD = "EMIr1993";
-function getAdminPassword(){
+const FALLBACK_PASSWORD = "AGUARA25";
+
+function getAdminPassword() {
   try {
     return sessionStorage.getItem("admin_password") || FALLBACK_PASSWORD;
   } catch {
@@ -42,6 +41,10 @@ function getAdminPassword(){
 }
 
 const $ = (id) => document.getElementById(id);
+
+let editingProductId = null;
+let currentImageUrl = null;
+let currentImagePath = null;
 
 $("btnSave").addEventListener("click", async () => {
   const msg = $("msg");
@@ -53,28 +56,66 @@ $("btnSave").addEventListener("click", async () => {
   const description = $("pDesc").value.trim();
   const file = $("pImg").files[0];
 
-  if (!name) { msg.textContent = "Falta nombre"; return; }
-  if (Number.isNaN(price) || price < 0) { msg.textContent = "Precio inválido"; return; }
-  if (!Number.isInteger(stock) || stock < 0) { msg.textContent = "Stock inválido"; return; }
+  if (!name) {
+    msg.textContent = "Falta nombre";
+    return;
+  }
 
-  let imageBase64 = null, imageMime = null;
+  if (Number.isNaN(price) || price < 0) {
+    msg.textContent = "Precio inválido";
+    return;
+  }
+
+  if (!Number.isInteger(stock) || stock < 0) {
+    msg.textContent = "Stock inválido";
+    return;
+  }
+
+  let imageBase64 = null;
+  let imageMime = null;
+
   if (file) {
     imageMime = file.type || "image/jpeg";
     const dataUrl = await fileToBase64(file);
     imageBase64 = dataUrl.split(",")[1];
   }
 
-  msg.textContent = "Guardando...";
+  msg.textContent = editingProductId ? "Actualizando..." : "Guardando...";
+
+  const payload = {
+    name,
+    price,
+    stock,
+    category,
+    description
+  };
+
+  if (editingProductId) {
+    payload.id = editingProductId;
+    payload.keepExistingImage = true;
+
+    if (imageBase64 && imageMime) {
+      payload.imageBase64 = imageBase64;
+      payload.imageMime = imageMime;
+    }
+  } else {
+    if (imageBase64 && imageMime) {
+      payload.imageBase64 = imageBase64;
+      payload.imageMime = imageMime;
+    }
+  }
+
+  let endpoint = editingProductId ? "/api/products/update" : "/api/products/create";
 
   let r, j;
   try {
-    r = await fetch("/api/products/create", {
+    r = await fetch(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "x-admin-password": getAdminPassword()
       },
-      body: JSON.stringify({ name, price, stock, category, description, imageBase64, imageMime })
+      body: JSON.stringify(payload)
     });
   } catch (e) {
     msg.textContent = "Error de red al llamar a la API: " + String(e);
@@ -84,7 +125,7 @@ $("btnSave").addEventListener("click", async () => {
   try {
     j = await r.json();
   } catch {
-    const t = await r.text().catch(()=> "");
+    const t = await r.text().catch(() => "");
     msg.textContent = "Respuesta inválida del servidor. Status " + r.status + " " + t;
     return;
   }
@@ -97,23 +138,240 @@ $("btnSave").addEventListener("click", async () => {
     return;
   }
 
-  msg.textContent = "Producto cargado ✅";
+  msg.textContent = editingProductId
+    ? "Producto actualizado ✅"
+    : "Producto cargado ✅";
 
-  // Limpieza rápida
+  resetForm();
+  await loadProducts();
+});
+
+$("btnCancelEdit").addEventListener("click", () => {
+  resetForm();
+  $("msg").textContent = "Edición cancelada";
+});
+
+async function loadProducts() {
+  const box = $("productosAdminList");
+  box.innerHTML = "<p>Cargando productos...</p>";
+
+  let r, j;
+  try {
+    r = await fetch("/api/products/list", { method: "GET" });
+  } catch (e) {
+    box.innerHTML = `<p>Error de red al cargar productos: ${escapeHtml(String(e))}</p>`;
+    return;
+  }
+
+  try {
+    j = await r.json();
+  } catch {
+    const t = await r.text().catch(() => "");
+    box.innerHTML = `<p>Respuesta inválida del servidor. Status ${r.status} ${escapeHtml(t)}</p>`;
+    return;
+  }
+
+  if (!r.ok) {
+    const detail = j?.detail
+      ? (typeof j.detail === "string" ? j.detail : JSON.stringify(j.detail))
+      : "";
+    box.innerHTML = `<p>Error (${r.status}): ${escapeHtml(j?.error || "Fallo")} ${detail ? "| " + escapeHtml(detail) : ""}</p>`;
+    return;
+  }
+
+  const products = normalizeProductsResponse(j);
+
+  if (!Array.isArray(products) || products.length === 0) {
+    box.innerHTML = "<p>No hay productos cargados todavía.</p>";
+    return;
+  }
+
+  box.innerHTML = products.map((p) => {
+    const id = p.id ?? "";
+    const name = p.name ?? "";
+    const price = Number(p.price || 0);
+    const stock = Number(p.stock || 0);
+    const category = p.category ?? "";
+    const description = p.description ?? "";
+    const imageUrl = p.image_url || "";
+    const imagePath = p.image_path || "";
+
+    return `
+      <div class="admin-product-card" style="border:1px solid #ddd; border-radius:12px; padding:14px; margin-bottom:14px; display:grid; gap:12px;">
+        <div style="display:flex; gap:14px; align-items:flex-start; flex-wrap:wrap;">
+          <div style="width:110px; height:110px; border:1px solid #ddd; border-radius:10px; overflow:hidden; background:#f7f7f7; display:flex; align-items:center; justify-content:center;">
+            ${
+              imageUrl
+                ? `<img src="${escapeAttr(imageUrl)}" alt="${escapeAttr(name)}" style="width:100%; height:100%; object-fit:cover;">`
+                : `<span style="font-size:12px; color:#666;">Sin imagen</span>`
+            }
+          </div>
+
+          <div style="flex:1; min-width:220px;">
+            <h4 style="margin:0 0 8px 0;">${escapeHtml(name)}</h4>
+            <div style="margin:4px 0;"><strong>Precio:</strong> $${price.toLocaleString("es-AR")}</div>
+            <div style="margin:4px 0;"><strong>Stock:</strong> ${stock}</div>
+            <div style="margin:4px 0;"><strong>Categoría:</strong> ${escapeHtml(category || "-")}</div>
+            <div style="margin:4px 0;"><strong>Descripción:</strong> ${escapeHtml(description || "-")}</div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:8px; min-width:120px;">
+            <button type="button" onclick="startEditProduct('${escapeJsString(String(id))}')" style="padding:10px; border:none; border-radius:10px; cursor:pointer;">
+              Editar
+            </button>
+            <button type="button" onclick="deleteProduct('${escapeJsString(String(id))}')" style="padding:10px; border:none; border-radius:10px; cursor:pointer;">
+              Borrar
+            </button>
+          </div>
+        </div>
+
+        <div style="display:none;"
+          data-product-id="${escapeAttr(String(id))}"
+          data-image-url="${escapeAttr(imageUrl)}"
+          data-image-path="${escapeAttr(imagePath)}">
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function normalizeProductsResponse(j) {
+  if (Array.isArray(j)) return j;
+  if (Array.isArray(j.products)) return j.products;
+  if (Array.isArray(j.items)) return j.items;
+  if (Array.isArray(j.data)) return j.data;
+  if (Array.isArray(j.rows)) return j.rows;
+  return [];
+}
+
+window.startEditProduct = async function(id) {
+  const products = await fetchProductsForEdit();
+  const product = products.find(p => String(p.id) === String(id));
+
+  if (!product) {
+    $("msg").textContent = "No se encontró el producto para editar";
+    return;
+  }
+
+  editingProductId = product.id;
+  currentImageUrl = product.image_url || null;
+  currentImagePath = product.image_path || null;
+
+  $("pName").value = product.name || "";
+  $("pPrice").value = Number(product.price || 0);
+  $("pStock").value = Number(product.stock || 0);
+  $("pCat").value = product.category || "";
+  $("pDesc").value = product.description || "";
+  $("pImg").value = "";
+
+  $("btnSave").textContent = "Actualizar producto";
+  $("btnCancelEdit").style.display = "inline-block";
+  $("editBadge").style.display = "block";
+  $("msg").textContent = "Modo edición activado";
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+window.deleteProduct = async function(id) {
+  const ok = confirm("¿Seguro que querés borrar este producto?");
+  if (!ok) return;
+
+  $("msg").textContent = "Borrando producto...";
+
+  let r, j;
+  try {
+    r = await fetch("/api/products/delete", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-password": getAdminPassword()
+      },
+      body: JSON.stringify({ id })
+    });
+  } catch (e) {
+    $("msg").textContent = "Error de red al borrar: " + String(e);
+    return;
+  }
+
+  try {
+    j = await r.json();
+  } catch {
+    const t = await r.text().catch(() => "");
+    $("msg").textContent = "Respuesta inválida del servidor. Status " + r.status + " " + t;
+    return;
+  }
+
+  if (!r.ok) {
+    const detail = j?.detail
+      ? (typeof j.detail === "string" ? j.detail : JSON.stringify(j.detail))
+      : "";
+    $("msg").textContent = `Error (${r.status}): ${j?.error || "Fallo"}${detail ? " | " + detail : ""}`;
+    return;
+  }
+
+  if (String(editingProductId) === String(id)) {
+    resetForm();
+  }
+
+  $("msg").textContent = "Producto borrado ✅";
+  await loadProducts();
+};
+
+async function fetchProductsForEdit() {
+  let r, j;
+  try {
+    r = await fetch("/api/products/list", { method: "GET" });
+    j = await r.json();
+  } catch {
+    return [];
+  }
+  return normalizeProductsResponse(j);
+}
+
+function resetForm() {
+  editingProductId = null;
+  currentImageUrl = null;
+  currentImagePath = null;
+
   $("pName").value = "";
   $("pPrice").value = "";
   $("pStock").value = "";
   $("pCat").value = "";
   $("pDesc").value = "";
   $("pImg").value = "";
-});
 
-function fileToBase64(file){
-  return new Promise((resolve,reject)=>{
+  $("btnSave").textContent = "Guardar producto";
+  $("btnCancelEdit").style.display = "none";
+  $("editBadge").style.display = "none";
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = ()=> resolve(reader.result);
+    reader.onload = () => resolve(reader.result);
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
 }
+
+function escapeHtml(str) {
+  return String(str)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function escapeAttr(str) {
+  return escapeHtml(str);
+}
+
+function escapeJsString(str) {
+  return String(str)
+    .replaceAll("\\", "\\\\")
+    .replaceAll("'", "\\'");
+}
+
+loadProducts();
 </script>
