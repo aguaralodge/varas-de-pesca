@@ -88,7 +88,9 @@
     mango_termo: 20000,
     porta: 5000,
     calco: 8000,
-    portareel: 15000,
+    portareel_generico: 15000,
+    portareel_fuji_sin_gatillo: 35000,
+    portareel_tubular_con_gatillo: 25000,
     puntero_carbono: 35000,
     puntero_fibra: 30000,
     pintado: 25000,
@@ -155,7 +157,11 @@
 
     // Porta Reel
     const pr = parseMoneySafe(portareel);
-    if (pr) items.push({ label: "Porta Reel", qty: 1, unit: pr, subtotal: pr });
+    if (pr) {
+      const txt = portareel?.options?.[portareel.selectedIndex]?.textContent || "Porta Reel";
+      const name = txt.replace(/\s*\(\+\$[\d.]+\)\s*$/i, "").trim();
+      items.push({ label: name, qty: 1, unit: pr, subtotal: pr });
+    }
 
     return items;
   };

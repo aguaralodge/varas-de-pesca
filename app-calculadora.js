@@ -21,7 +21,7 @@
     color: { "blanco": 20000, "negro": 0, "rojo": 25000, "azul": 25000, "verde": 25000 },
     largo: { "2,40": 0, "2,30": 0, "2,20": 0, "2,10": 0 },
     pasahilos: { "8 + puntera": 45000 , "9 + puntera": 50000, "10 + puntera": 55000, "11 + puntera": 60000 },
-    portaReel: { "fuji (Japon)": 30000, "Masterguil": 10000, "Con Gatillo(Generico)": 15000 },
+    portaReel: { "portareel generico": 15000, "portareel Fuji sin gatillo": 35000, "portareel tubular con gatillo": 25000 },
     portaAnzuelo: { "con porta anzuelo": 5000, "sin porta anzuelo": 0 },
     nombreLogo: { "nombre + logo": 8000, "nombre o logo solo": 5000 , "sin nombre o logo" : 0 },
     tipoMango: { "soga": 8000, "termocontraible sin relleno": 15000, "termocontraible con relleno": 20000, "corcho aglomerado": 35000 },
