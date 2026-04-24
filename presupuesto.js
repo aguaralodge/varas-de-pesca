@@ -46,6 +46,8 @@
   const secCanas = $("secCanas");
 
   const cantReeles = $("cantReeles");
+  const dolarInfo = $("dolarInfo");
+  const repuestosReel = $("repuestosReel");
 
   const q_1p_rot = $("q_1p_rot");
   const q_3p_rot = $("q_3p_rot");
@@ -69,6 +71,30 @@
   let lastPdfBlob = null;
   let lastResumen = "";
 
+  const DOLAR_FALLBACK = 1200; // Valor de emergencia si la API no responde.
+  let dolarBlueVenta = DOLAR_FALLBACK;
+  let dolarBlueFecha = "";
+  let dolarBlueFuente = "valor de emergencia";
+
+  const REPUESTOS_REEL = [
+    { id: "antireverse_caster_power", nombre: "Antireverse Caster Power", usd: 18.33 },
+    { id: "antireverse_titan_pro", nombre: "Antireverse Titan Pro", usd: 21.45 },
+    { id: "una_caster_power", nombre: "Uña Caster Power", usd: 13.56 },
+    { id: "una_fierro_titan", nombre: "Uña Fierro Titan", usd: 14.43 },
+    { id: "engranaje_sin_fin_fierro_magna", nombre: "Engranaje Sin Fin Fierro Magna", usd: 12.42 },
+    { id: "engranaje_sin_fin_caster_power", nombre: "Engranaje Sin Fin Caster Power", usd: 12.42 },
+    { id: "engranaje_chicharra_titan_300", nombre: "Engranaje chicharra Titan 300", usd: 11.88 },
+    { id: "sin_fin_caster_power", nombre: "Sin Fin Caster Power", usd: 15.57 },
+    { id: "sin_fin_caster_power_plus", nombre: "Sin fin Caster Power Plus", usd: 17.70 },
+    { id: "levanta_pinon_abu_garcia", nombre: "Levanta Piñon Abu Garcia", usd: 23.10 },
+    { id: "sin_fin_6500_abu_garcia", nombre: "Sin fin 6500 Abu Garcia", usd: 62.10 },
+    { id: "sin_fin_5500_abu_garcia", nombre: "Sin fin 5500 Abu Garcia", usd: 44.73 },
+    { id: "una_abu_garcia", nombre: "Uña Abu Garcia", usd: 15.30 },
+    { id: "corona_bronce_abu_garcia", nombre: "Corona Bronce Abu Garcia", usd: 75.00 },
+    { id: "pinon_bronce_abu_garcia", nombre: "Piñon Bronce Abu Garcia", usd: 65.00 },
+    { id: "engranaje_sin_fin_abu_garcia", nombre: "Engranaje Sin Fin Abu Garcia", usd: 20.00 },
+  ];
+
   const money = (n) => {
     const v = Math.round(Number(n || 0));
     return v.toLocaleString("es-AR");
@@ -76,6 +102,8 @@
 
   const parseIntSafe = (el) => Math.max(0, parseInt(el?.value || "0", 10) || 0);
   const parseMoneySafe = (el) => Math.max(0, parseInt(el?.value || "0", 10) || 0);
+  const usdMoney = (n) => Number(n || 0).toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const usdToArs = (usd) => Math.round(Number(usd || 0) * Number(dolarBlueVenta || DOLAR_FALLBACK));
 
   const PRICES = {
     reel: 20000,
@@ -96,6 +124,93 @@
     pintado: 25000,
   };
 
+  const renderRepuestos = () => {
+    if (!repuestosReel) return;
+
+    repuestosReel.innerHTML = REPUESTOS_REEL.map((r) => {
+      const ars = usdToArs(r.usd);
+      return [
+        '<label class="repuesto-item" for="rep_' + r.id + '">',
+        '  <input id="rep_' + r.id + '" data-repuesto-id="' + r.id + '" type="checkbox" />',
+        '  <span class="repuesto-info">',
+        '    <strong>' + r.nombre + '</strong>',
+        '    <small>US$ ' + usdMoney(r.usd) + ' · $' + money(ars) + '</small>',
+        '  </span>',
+        '  <input class="repuesto-cantidad" id="qty_' + r.id + '" data-repuesto-qty="' + r.id + '" type="number" min="1" step="1" value="1" disabled />',
+        '</label>'
+      ].join('');
+    }).join("");
+
+    repuestosReel.querySelectorAll("input").forEach((el) => {
+      el.addEventListener("input", () => {
+        if (el.matches("[data-repuesto-id]")) {
+          const qty = $("qty_" + el.dataset.repuestoId);
+          if (qty) qty.disabled = !el.checked;
+        }
+        updateUI();
+      });
+      el.addEventListener("change", () => {
+        if (el.matches("[data-repuesto-id]")) {
+          const qty = $("qty_" + el.dataset.repuestoId);
+          if (qty) qty.disabled = !el.checked;
+        }
+        updateUI();
+      });
+    });
+  };
+
+  const updateDolarInfo = () => {
+    if (!dolarInfo) return;
+    const fecha = dolarBlueFecha ? " · actualizado: " + dolarBlueFecha : "";
+    dolarInfo.innerHTML = "<strong>Dólar blue venta usado:</strong> $" + money(dolarBlueVenta) + fecha + ". Los repuestos se cargan en USD y se convierten automáticamente a pesos.";
+    if (dolarBlueFuente !== "DolarApi") {
+      dolarInfo.innerHTML += '<br><span style="color:#ffd3d3">No se pudo consultar la cotización online. Se usa valor de emergencia: $' + money(DOLAR_FALLBACK) + '.</span>';
+    }
+  };
+
+  const fetchDolarBlue = async () => {
+    try {
+      const res = await fetch("https://dolarapi.com/v1/dolares/blue", { cache: "no-store" });
+      if (!res.ok) throw new Error("No se pudo consultar DolarApi");
+      const data = await res.json();
+      const venta = Number(data?.venta || 0);
+      if (!venta) throw new Error("Cotización inválida");
+
+      dolarBlueVenta = venta;
+      dolarBlueFecha = data?.fechaActualizacion
+        ? new Date(data.fechaActualizacion).toLocaleString("es-AR")
+        : "";
+      dolarBlueFuente = "DolarApi";
+    } catch (err) {
+      console.warn("No se pudo obtener dólar blue, se usa fallback", err);
+      dolarBlueVenta = DOLAR_FALLBACK;
+      dolarBlueFuente = "valor de emergencia";
+    } finally {
+      updateDolarInfo();
+      renderRepuestos();
+      updateUI();
+    }
+  };
+
+  const getRepuestosSeleccionados = () => {
+    if (!repuestosReel) return [];
+    return REPUESTOS_REEL.filter((r) => {
+      const chk = $("rep_" + r.id);
+      return chk?.checked;
+    }).map((r) => {
+      const qty = Math.max(1, parseIntSafe($("qty_" + r.id)) || 1);
+      const unit = usdToArs(r.usd);
+      return {
+        label: "Repuesto: " + r.nombre,
+        qty,
+        unit,
+        subtotal: qty * unit,
+        usd: r.usd,
+        dolarRate: dolarBlueVenta
+      };
+    });
+  };
+
   const getItems = () => {
     const items = [];
     const tipo = servicio.value;
@@ -108,8 +223,13 @@
         unit: PRICES.reel,
         subtotal: q * PRICES.reel
       });
+      getRepuestosSeleccionados().forEach(item => items.push(item));
       items.push({
         label: "Incluye: desarme íntegro, ultrasonido + agentes de limpieza, ensamble y lubricación",
+        note: true
+      });
+      items.push({
+        label: "Repuestos cotizados con dólar blue venta: $" + money(dolarBlueVenta) + (dolarBlueFuente === "DolarApi" ? "" : " (valor de emergencia)"),
         note: true
       });
       return items;
@@ -226,7 +346,8 @@
       const qty = i.qty ? `x${i.qty}` : "";
       const unit = i.unit ? `$${money(i.unit)}` : "";
       const sub = i.subtotal ? `$${money(i.subtotal)}` : "";
-      lines.push(`- ${i.label} ${qty} ${unit} => ${sub}`.replace(/\s+/g, " ").trim());
+      const usdInfo = i.usd ? `(US$ ${usdMoney(i.usd)} c/u)` : "";
+      lines.push(`- ${i.label} ${qty} ${unit} ${usdInfo} => ${sub}`.replace(/\s+/g, " ").trim());
     });
     const note = items.find(i => i.note);
     if (note) {
@@ -328,7 +449,8 @@
         y += 6;
         return;
       }
-      const row = `• ${it.label}  x${it.qty}  ($${money(it.unit)} c/u)  =  $${money(it.subtotal)}`;
+      const usdInfo = it.usd ? ` · US$ ${usdMoney(it.usd)} c/u · dólar $${money(it.dolarRate)}` : "";
+      const row = `• ${it.label}  x${it.qty}  ($${money(it.unit)} c/u${usdInfo})  =  $${money(it.subtotal)}`;
       addLine(row);
     });
 
@@ -399,5 +521,8 @@
   btnWpp.addEventListener("click", openWhatsapp);
 
   // init
+  updateDolarInfo();
+  renderRepuestos();
   updateUI();
+  fetchDolarBlue();
 })();

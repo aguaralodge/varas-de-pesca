@@ -925,3 +925,51 @@ button.btn-presupuesto:hover{
   cursor: zoom-in;
 }
 
+
+/* Repuestos opcionales en presupuesto de reeles */
+.repuestos-lista{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap:10px;
+}
+
+.repuesto-item{
+  display:grid;
+  grid-template-columns:auto 1fr 70px;
+  align-items:center;
+  gap:10px;
+  padding:10px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:14px;
+  background:rgba(0,0,0,.18);
+}
+
+.repuesto-item input[type="checkbox"]{
+  width:18px;
+  height:18px;
+  accent-color:#39FF14;
+}
+
+.repuesto-info{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+
+.repuesto-info strong{
+  color:#fff;
+  font-size:.92rem;
+}
+
+.repuesto-info small{
+  color:#cbd5e1;
+}
+
+.repuesto-cantidad{
+  min-width:0;
+  text-align:center;
+}
+
+@media (max-width:820px){
+  .repuestos-lista{ grid-template-columns:1fr; }
+}
